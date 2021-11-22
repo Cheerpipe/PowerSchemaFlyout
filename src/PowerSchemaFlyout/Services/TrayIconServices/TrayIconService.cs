@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
+using Avalonia.Threading;
 using AvaloniaTrayIcon = Avalonia.Controls.TrayIcon;
 
 namespace PowerSchemaFlyout.Services
@@ -36,12 +37,12 @@ namespace PowerSchemaFlyout.Services
         {
             var assets = AvaloniaLocator.Current.GetService<IAssetLoader>();
             var icon = new WindowIcon(assets.Open(new Uri(@$"resm:PowerSchemaFlyout.Assets.{iconName}")));
-            _trayIcon.Icon = icon;
+            Dispatcher.UIThread.Post(() => { _trayIcon.Icon = icon; });
         }
 
         public void UpdateTooltip(string tooltipText)
         {
-            _trayIcon.ToolTipText = tooltipText;
+            Dispatcher.UIThread.Post(() => { _trayIcon.ToolTipText = tooltipText; });
         }
 
         private void ExitMenu_Click(object sender, EventArgs e)

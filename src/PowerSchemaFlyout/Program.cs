@@ -49,7 +49,7 @@ namespace PowerSchemaFlyout
             // Do you startup code here
             Kernel.Initialize(new Bindings());
 
-            GameDetectionService gs = new GameDetectionService(50000);
+            GameDetectionService gs = new GameDetectionService(5000);
             gs.ProcessStateChanged += Gs_ProcessStateChanged;
             gs.RegisterDetector(new BlackListDetector());
             gs.RegisterDetector(new WhiteListDetector());
