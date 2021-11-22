@@ -1,0 +1,126 @@
+<reactiveUi:ReactiveWindow      x:TypeArguments="screens:FlyoutContainerViewModel" xmlns="https://github.com/avaloniaui"
+                                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+                                xmlns:reactiveUi="http://reactiveui.net"
+                                xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+                                xmlns:screens="clr-namespace:PowerSchemaFlyout.Screens"
+                                mc:Ignorable="d" d:DesignWidth="290" d:DesignHeight="530"
+                                x:Class="PowerSchemaFlyout.Screens.FlyoutContainer"
+                                Title="Base Flyout"
+                                ShowInTaskbar="false"
+                                CanResize="False"
+                                Topmost="True"
+                                SystemDecorations="BorderOnly"
+                                TransparencyLevelHint="Transparent"
+                                ExtendClientAreaToDecorationsHint="True"
+                                ExtendClientAreaChromeHints="NoChrome"
+                                ExtendClientAreaTitleBarHeightHint="-1"
+                                Background="Transparent"
+                                UseLayoutRounding="False"
+                                CornerRadius="10 10 10 10"
+                                Height="{Binding FlyoutWindowHeight}"
+                                Width="{Binding FlyoutWindowWidth}"
+                                x:Name="FlyoutWindow">
+	<Panel
+	  HorizontalAlignment="Left"
+	  VerticalAlignment="Top"
+	  Name="FlyoutPanelContainer"
+	  Width="{Binding FlyoutWidth}"
+	  Height="{Binding FlyoutHeight}">
+		<ExperimentalAcrylicBorder IsHitTestVisible="True" CornerRadius="10">
+			<ExperimentalAcrylicBorder.Material>
+				<ExperimentalAcrylicMaterial
+					BackgroundSource="Digger"
+					TintColor="Black"
+					TintOpacity="0.8"
+					MaterialOpacity="0.85"/>
+			</ExperimentalAcrylicBorder.Material>
+			<Border CornerRadius="10 10 10 10"
+					BorderBrush="#414141"
+					BorderThickness="1"
+					ClipToBounds="False"
+					Background="{Binding BackgroundBrush}"
+					BoxShadow="3 4 0 0 #64000000">
+				<Border.Transitions>
+					<Transitions>
+						<BrushTransition  Property="Background" Duration="0:0:1"/>
+					</Transitions>
+				</Border.Transitions>
+				
+				<Panel Margin="0 10 0 0 ">					
+					<StackPanel>
+						<!-- Global toggle Start -->
+
+						<StackPanel Orientation="Horizontal" Margin="10 0 0 5"
+							 VerticalAlignment="Center" HorizontalAlignment="Right">
+							<TextBlock VerticalAlignment="Center" Margin="0 0 10 0">Automatic mode</TextBlock>
+							<ToggleSwitch
+							  IsChecked="{Binding AutomaticModeEnabled}"
+							  Content=""
+							  OffContent=""
+							  OnContent=""
+							  HorizontalAlignment="Right"
+							  MinWidth ="0"
+							  MinHeight="0"/>
+						</StackPanel>
+						<!-- Global toggle End -->
+						<!-- Flyout content Start -->
+						<Panel DockPanel.Dock="Top" Margin="0 0 0 0">
+							<ListBox Items="{Binding PowerSchemas}"  SelectedItem="{Binding SelectedPowerSchema}" >
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border  CornerRadius="4" Padding="4" >
+											<StackPanel Orientation="Horizontal" Spacing="10">
+												<TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Panel>
+						<!-- Flyout content End-->
+					</StackPanel>
+					<Border CornerRadius="0 0 10 10"
+							BorderBrush="#414141"
+							BorderThickness="0"
+							ClipToBounds="True"
+							Background="Transparent"
+							VerticalAlignment="Bottom"
+							DockPanel.Dock="Bottom"
+							IsVisible="{Binding CommandBarVisibleState}">
+						<DockPanel Background="#40000000" Height="48">
+							<StackPanel
+								Margin="10 0 0 0"
+								DockPanel.Dock="Left"
+								Orientation="Horizontal"
+								HorizontalAlignment="Left"
+								Height="48">
+								<!-- Bottom command bar Start -->
+								<!-- Left buttons here -->
+							</StackPanel>
+							<StackPanel
+										Margin="0 0 10 0"
+										DockPanel.Dock="Right"
+										Orientation="Horizontal"
+										HorizontalAlignment="Right">
+								<controls:Button HorizontalAlignment="Right"
+										Name="BtnRestart"
+										Height="36"
+										Width="36"
+										Background="Transparent"
+										Command="{Binding GoSettingsCommand}">
+									<controls:SymbolIcon Symbol="Settings" Width="16" Height="16"/>
+									
+								</controls:Button>
+							</StackPanel>
+							<!-- Bottom command bar End -->
+						</DockPanel>
+					</Border>
+				</Panel>
+			</Border>
+		</ExperimentalAcrylicBorder>
+
+	</Panel>
+</reactiveUi:ReactiveWindow>
