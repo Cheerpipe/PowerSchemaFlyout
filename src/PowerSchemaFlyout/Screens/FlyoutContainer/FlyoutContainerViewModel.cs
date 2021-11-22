@@ -43,13 +43,12 @@ namespace PowerSchemaFlyout.Screens
             pw = new Win32PowSchemasWrapper();
 
             _powerSchemas = pw.GetCurrentSchemas().ToList();
-
-
             _selectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
+            AutomaticModeEnabled = Program.AutomaticModeEnabled;
             BackgroundBrush = CreateBackgroundBrush(GetBackgroundBrushColor());
             FlyoutWindowWidth = MainPageWidth;
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 90;
-            AutomaticModeEnabled=Program.AutomaticModeEnabled;      
+
 
         }
 
@@ -66,21 +65,25 @@ namespace PowerSchemaFlyout.Screens
                 StartPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
                 EndPoint = new RelativePoint(0, 0, RelativeUnit.Relative)
             };
-            brush.GradientStops.Add(new GradientStop(Color.FromArgb(50, (byte)(color.R/2), (byte)(color.G / 2), (byte)(color.B / 2)), 0d));
+            brush.GradientStops.Add(new GradientStop(Color.FromArgb(50, (byte)(color.R / 2), (byte)(color.G / 2), (byte)(color.B / 2)), 0d));
             brush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 0, 0, 0), 1d));
             return brush;
         }
 
         private Color GetBackgroundBrushColor()
         {
-            if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver || 
+            if (!AutomaticModeEnabled)
+            {
+                return Colors.Transparent;
+            }
+            else if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver ||
                 _selectedPowerSchema.Name!.ToLower().Contains("econom") ||
                 _selectedPowerSchema.Name.ToLower().Contains("saver"))
                 return Colors.Green;
             else if (_selectedPowerSchema.Guid == PowerSchema.BalancedSchemaGuid ||
                 _selectedPowerSchema.Name.ToLower().Contains("balanc"))
                 return Colors.Yellow;
-            else if (_selectedPowerSchema.Guid == PowerSchema.MaximumPerformanceSchemaGuid || 
+            else if (_selectedPowerSchema.Guid == PowerSchema.MaximumPerformanceSchemaGuid ||
                 _selectedPowerSchema.Name.ToLower().Contains("rend") ||
                 _selectedPowerSchema.Name.ToLower().Contains("perf") ||
                 _selectedPowerSchema.Name.ToLower().Contains("ultimat") ||
@@ -171,6 +174,7 @@ namespace PowerSchemaFlyout.Screens
             {
                 this.RaiseAndSetIfChanged(ref _automaticModeEnabled, value);
                 Program.AutomaticModeEnabled = value;
+                BackgroundBrush = CreateBackgroundBrush(GetBackgroundBrushColor());
             }
         }
 
