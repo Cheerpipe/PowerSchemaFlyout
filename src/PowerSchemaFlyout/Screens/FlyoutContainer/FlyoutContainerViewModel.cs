@@ -9,23 +9,32 @@ using Avalonia.Threading;
 using PowerSchemaFlyout.Models;
 using PowerSchemaFlyout.PowerManagement;
 using PowerSchemaFlyout.Services;
+using PowerSchemaFlyout.Services.GameDetectionService;
+using PowerSchemaFlyout.Services.PowerSchemaWatcherService;
 using PowerSchemaFlyout.ViewModels;
 using ReactiveUI;
+using TypeSupport.Extensions;
 
 namespace PowerSchemaFlyout.Screens
 {
     public class FlyoutContainerViewModel : ViewModelBase
     {
         private readonly IFlyoutService _flyoutService;
+        private readonly IGameDetectionService _gameDetectionService;
         private Timer _backgroundBrushRefreshTimer;
 
         //private const int MainPageHeight = 530;
         private const int MainPageWidth = 290;
         Win32PowSchemasWrapper pw;
 
-        public FlyoutContainerViewModel(IFlyoutService flyoutService)
+        public FlyoutContainerViewModel(
+            IFlyoutService flyoutService,
+            IGameDetectionService gameDetectionService,
+            IPowerSchemaWatcherService powerSchemaWatcherService)
         {
             _flyoutService = flyoutService;
+            _gameDetectionService = gameDetectionService;
+            powerSchemaWatcherService.PowerPlanChanged += _powerSchemaWatcherService_PowerPlanChanged;
 
             this.WhenActivated(disposables =>
             {
@@ -44,12 +53,14 @@ namespace PowerSchemaFlyout.Screens
 
             _powerSchemas = pw.GetCurrentSchemas().ToList();
             _selectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
-            AutomaticModeEnabled = Program.AutomaticModeEnabled;
             BackgroundBrush = CreateBackgroundBrush(GetBackgroundBrushColor());
             FlyoutWindowWidth = MainPageWidth;
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 90;
+        }
 
-
+        private void _powerSchemaWatcherService_PowerPlanChanged(object sender, System.EventArgs e)
+        {
+           //SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
         }
 
         private void UpdateColorBrush()
@@ -166,15 +177,19 @@ namespace PowerSchemaFlyout.Screens
             }
         }
 
-        private bool _automaticModeEnabled;
         public bool AutomaticModeEnabled
         {
-            get => _automaticModeEnabled;
+            get => _gameDetectionService.IsRunning();
             set
             {
-                this.RaiseAndSetIfChanged(ref _automaticModeEnabled, value);
-                Program.AutomaticModeEnabled = value;
-                BackgroundBrush = CreateBackgroundBrush(GetBackgroundBrushColor());
+                if (value)
+                    _gameDetectionService.Start();
+                else
+                    _gameDetectionService.Stop();
+
+                UpdateColorBrush();
+
+                this.RaisePropertyChanged(nameof(AutomaticModeEnabled));
             }
         }
 
@@ -183,8 +198,8 @@ namespace PowerSchemaFlyout.Screens
         {
             Windows.Run("cmd", " /k start powercfg.cpl && exit");
         }
-
     }
+
     public class Windows
     {
         public static void Run(string commandLine, string arguments = "")

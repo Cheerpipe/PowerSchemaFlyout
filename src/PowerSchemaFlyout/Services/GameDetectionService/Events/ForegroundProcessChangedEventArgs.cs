@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace PowerSchemaFlyout.GameDetection.Events
+namespace PowerSchemaFlyout.Services.GameDetectionService.Events
 {
     public class ForegroundProcessChangedEventArgs : EventArgs
     {

@@ -1,4 +1,4 @@
-﻿namespace PowerSchemaFlyout.GameDetection.Enums
+﻿namespace PowerSchemaFlyout.Services.GameDetectionService.Enums
 {
     public enum ProcessType
     {

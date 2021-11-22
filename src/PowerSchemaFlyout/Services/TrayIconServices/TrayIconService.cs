@@ -7,7 +7,7 @@ using AvaloniaTrayIcon = Avalonia.Controls.TrayIcon;
 
 namespace PowerSchemaFlyout.Services
 {
-    public class TrayIconService : ITrayIconService
+    public class TrayIconService : ITrayIconService, IDisposable
     {
         private readonly IFlyoutService _flyoutService;
         private readonly AvaloniaTrayIcon _trayIcon;
@@ -53,6 +53,11 @@ namespace PowerSchemaFlyout.Services
         private void TrayIcon_Clicked(object sender, EventArgs e)
         {
             _flyoutService.Toggle();
+        }
+
+        public void Dispose()
+        {
+            _trayIcon?.Dispose();
         }
     }
 }

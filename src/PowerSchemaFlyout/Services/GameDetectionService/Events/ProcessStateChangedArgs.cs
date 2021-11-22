@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PowerSchemaFlyout.GameDetection.Events
+namespace PowerSchemaFlyout.Services.GameDetectionService.Events
 {
     public class ProcessStateChangedArgs : EventArgs
     {

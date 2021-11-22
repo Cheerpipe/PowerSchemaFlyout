@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using PowerSchemaFlyout.GameDetection.Events;
+using PowerSchemaFlyout.Services.GameDetectionService.Events;
 
-namespace PowerSchemaFlyout.GameDetection.Native
+namespace PowerSchemaFlyout.Services.GameDetectionService.Native
 {
     public class ForegroundWindowWatcher
     {
@@ -14,6 +14,9 @@ namespace PowerSchemaFlyout.GameDetection.Native
 
         [DllImport("user32.dll")]
         private static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+
+        [DllImport("user32.dll")]
+        private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
@@ -40,11 +43,14 @@ namespace PowerSchemaFlyout.GameDetection.Native
         public void Start()
         {
             winEventDelegate = new WinEventDelegate(WinEventProc);
-            IntPtr m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+            m_hhook = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
         }
+
+        private IntPtr m_hhook;
 
         public void Stop()
         {
+            UnhookWinEvent(m_hhook);
             winEventDelegate = null;
         }
 
@@ -52,6 +58,7 @@ namespace PowerSchemaFlyout.GameDetection.Native
         {
             ForegroundProcessChanged?.Invoke(this, new ForegroundProcessChangedEventArgs(GetForegroundProcess()));
         }
+
         public event EventHandler<ForegroundProcessChangedEventArgs> ForegroundProcessChanged;
     }
 }

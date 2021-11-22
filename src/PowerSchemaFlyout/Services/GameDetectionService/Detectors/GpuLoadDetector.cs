@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Management;
-using System.Threading;
-using PowerSchemaFlyout.GameDetection.Enums;
+using PowerSchemaFlyout.Services.GameDetectionService.Enums;
 
-namespace PowerSchemaFlyout.GameDetection.Detectors
+namespace PowerSchemaFlyout.Services.GameDetectionService.Detectors
 {
     internal class GpuLoadDetector : IProcessTypeDetector
     {

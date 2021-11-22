@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Timers;
-using PowerSchemaFlyout.GameDetection.Detectors;
-using PowerSchemaFlyout.GameDetection.Enums;
-using PowerSchemaFlyout.GameDetection.Events;
-using PowerSchemaFlyout.GameDetection.Native;
+using PowerSchemaFlyout.Services.GameDetectionService.Detectors;
+using PowerSchemaFlyout.Services.GameDetectionService.Enums;
+using PowerSchemaFlyout.Services.GameDetectionService.Events;
+using PowerSchemaFlyout.Services.GameDetectionService.Native;
 
-namespace PowerSchemaFlyout.GameDetection
+namespace PowerSchemaFlyout.Services.GameDetectionService
 {
     public class GameDetectionService : IGameDetectionService, IDisposable
     {
@@ -17,6 +17,7 @@ namespace PowerSchemaFlyout.GameDetection
         private ForegroundWindowWatcher _foregroundWindowWatcher;
         private Process _currentForegroundProcess;
         private ProcessDetectionResult _processDetectionResult;
+        private bool _isRunning;
 
         public GameDetectionService(int scanInterval = 1000)
         {
@@ -52,7 +53,7 @@ namespace PowerSchemaFlyout.GameDetection
 
         private ProcessDetectionResult CheckCurrentForegroundProcess(Process process)
         {
-            if (_processDetectionResult.ScanIsDefinitive || process.Id == _currentProcess.Id)
+            if (_processDetectionResult.ScanIsDefinitive || process?.Id == _currentProcess?.Id || !_isRunning)
                 return _processDetectionResult;
 
             ProcessDetectionResult result = new ProcessDetectionResult(ProcessType.Unknown, false);
@@ -72,22 +73,36 @@ namespace PowerSchemaFlyout.GameDetection
             _processTypeDetectors.Add(processTypeDetector);
         }
 
+        public bool IsRunning() => _isRunning;
+
         public event EventHandler<ProcessStateChangedArgs> ProcessStateChanged;
+        public event EventHandler Started;
+        public event EventHandler Stoped;
 
         public void Start()
         {
-            _scannerTimer.Start();
+            if (_isRunning)
+                return;
 
+            _scannerTimer.Start();
             _foregroundWindowWatcher = new ForegroundWindowWatcher();
             _foregroundWindowWatcher.ForegroundProcessChanged += _foregroundWindowWatcher_ForegroundProcessChanged;
             _foregroundWindowWatcher.Start();
+            _isRunning = true && _scannerTimer.Enabled;
+            Started?.Invoke(this, EventArgs.Empty);
+            RaiseAndSetPowerStateChangeIfChanged(new ProcessDetectionResult(ProcessType.Unknown, false));
         }
         public void Stop()
         {
-            _scannerTimer.Stop();
+            if (!_isRunning)
+                return;
 
+            _scannerTimer.Stop();
             _foregroundWindowWatcher.ForegroundProcessChanged -= _foregroundWindowWatcher_ForegroundProcessChanged;
+            _foregroundWindowWatcher.Stop();
             _foregroundWindowWatcher = null;
+            _isRunning = false || _scannerTimer.Enabled;
+            Stoped?.Invoke(this, EventArgs.Empty);
         }
 
         public void Dispose()

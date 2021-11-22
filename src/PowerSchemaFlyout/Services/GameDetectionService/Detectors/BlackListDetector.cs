@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using PowerSchemaFlyout.GameDetection.Enums;
+using PowerSchemaFlyout.Services.GameDetectionService.Enums;
 
-namespace PowerSchemaFlyout.GameDetection.Detectors
+namespace PowerSchemaFlyout.Services.GameDetectionService.Detectors
 {
     public class BlackListDetector : IProcessTypeDetector
     {

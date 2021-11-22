@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Management;
 
-namespace PowerSchemaFlyout.PowerManagement
+namespace PowerSchemaFlyout.Services.PowerSchemaWatcherService
 {
-    public class PowerSchemaWatcher : IDisposable
+    public class PowerSchemaWatcherService : IPowerSchemaWatcherService, IDisposable
     {
         private const string ActivePlanKeyName = @"SYSTEM\\CurrentControlSet\\Control\\Power\\User\\PowerSchemes";
         private const string ActivePlanKeyValueName = "ActivePowerScheme";
@@ -38,6 +38,7 @@ namespace PowerSchemaFlyout.PowerManagement
         public void Dispose()
         {
             StopPlanWatcher();
+            _currentPowerPlanWatcher.Dispose();
         }
     }
 }

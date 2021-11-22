@@ -6,7 +6,7 @@ using PowerSchemaFlyout.Screens;
 
 namespace PowerSchemaFlyout.Services
 {
-    public class FlyoutService : IFlyoutService
+    public class FlyoutService : IFlyoutService, IDisposable
     {
         public static FlyoutContainer FlyoutWindowInstance { get; private set; }
         private readonly IKernel _kernel;
@@ -95,6 +95,11 @@ namespace PowerSchemaFlyout.Services
             GC.WaitForPendingFinalizers();
             GC.Collect();
             _closing = false;
+        }
+
+        public void Dispose()
+        {
+            _kernel?.Dispose();
         }
     }
 }
