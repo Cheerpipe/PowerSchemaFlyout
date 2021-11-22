@@ -13,7 +13,6 @@ using PowerSchemaFlyout.Services.GameDetectionService;
 using PowerSchemaFlyout.Services.PowerSchemaWatcherService;
 using PowerSchemaFlyout.ViewModels;
 using ReactiveUI;
-using TypeSupport.Extensions;
 
 namespace PowerSchemaFlyout.Screens
 {
@@ -58,9 +57,12 @@ namespace PowerSchemaFlyout.Screens
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 90;
         }
 
+        // Workaround to avoid cyclic redundancy 
+        private bool _dontChangePowerPlan;
         private void _powerSchemaWatcherService_PowerPlanChanged(object sender, System.EventArgs e)
         {
-           //SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
+            _dontChangePowerPlan = true;
+            SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
         }
 
         private void UpdateColorBrush()
@@ -163,7 +165,6 @@ namespace PowerSchemaFlyout.Screens
 
         private List<PowerSchema> _powerSchemas;
         private PowerSchema _selectedPowerSchema;
-
         public List<PowerSchema> PowerSchemas => _powerSchemas;
         public PowerSchema SelectedPowerSchema
         {
@@ -171,8 +172,9 @@ namespace PowerSchemaFlyout.Screens
             set
             {
                 this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
-                pw.SetActiveGuid(value.Guid);
                 UpdateColorBrush();
+                if (_dontChangePowerPlan) return;
+                pw.SetActiveGuid(value.Guid);
                 AutomaticModeEnabled = false;
             }
         }

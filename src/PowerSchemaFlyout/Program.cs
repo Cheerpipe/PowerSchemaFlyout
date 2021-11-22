@@ -53,6 +53,14 @@ namespace PowerSchemaFlyout
             IGameDetectionService gameDetectionService = Kernel.Get<IGameDetectionService>();
             IPowerSchemaWatcherService _powerSchemaWatcher = Kernel.Get<IPowerSchemaWatcherService>();
 
+            gameDetectionService.Started += (_, _) =>
+             {
+                 Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.MaximumPerformanceSchemaGuid);
+                 Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.BalancedSchemaGuid);
+             };
+
+
+
             trayIconService.Show();
             trayIconService.UpdateIcon("Flyout.ico");
 
