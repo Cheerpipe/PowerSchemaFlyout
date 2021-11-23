@@ -54,7 +54,7 @@ namespace PowerSchemaFlyout.Screens
             _powerSchemas = new List<PowerSchemaViewModel>();
             foreach (PowerSchema ps in pw.GetCurrentSchemas().ToList())
             {
-                _powerSchemas!.Add(new PowerSchemaViewModel(ps.Name, ps.Guid, ps.IsActive, Colors.Transparent));
+                _powerSchemas!.Add(new PowerSchemaViewModel(ps.Name, ps.Guid, ps.IsActive));
             }
 
             _selectedPowerSchema = _powerSchemas!.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
@@ -95,9 +95,10 @@ namespace PowerSchemaFlyout.Screens
             {
                 return Colors.Transparent;
             }
-            else */if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver ||
-                _selectedPowerSchema.Name!.ToLower().Contains("econom") ||
-                _selectedPowerSchema.Name.ToLower().Contains("saver"))
+            else */
+            if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver ||
+         _selectedPowerSchema.Name!.ToLower().Contains("econom") ||
+         _selectedPowerSchema.Name.ToLower().Contains("saver"))
                 return Colors.Green;
             else if (_selectedPowerSchema.Guid == PowerSchema.BalancedSchemaGuid ||
                 _selectedPowerSchema.Name.ToLower().Contains("balanc"))
@@ -194,11 +195,11 @@ namespace PowerSchemaFlyout.Screens
             foreach (var ps in PowerSchemas)
             {
                 if (ps.Guid == PowerSchema.BalancedSchemaGuid)
-                    ps.Color = Colors.Yellow;
+                    ps.PowerSchemaRol = PowerSchemaRol.Desktop;
                 else if (ps.Guid == PowerSchema.MaximumPerformanceSchemaGuid)
-                    ps.Color = Colors.Red;
+                    ps.PowerSchemaRol = PowerSchemaRol.Gaming;
                 else
-                    ps.Color = Colors.Transparent;
+                    ps.PowerSchemaRol = PowerSchemaRol.Unknown;
             }
         }
 
