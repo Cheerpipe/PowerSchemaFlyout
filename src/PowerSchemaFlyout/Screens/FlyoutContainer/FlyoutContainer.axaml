@@ -111,6 +111,7 @@
 										Height="36"
 										Width="36"
 										Background="Transparent"
+										BorderBrush="Transparent"
 										Command="{Binding GoSettingsCommand}">
 									<controls:SymbolIcon Symbol="Settings" Width="16" Height="16"/>
 								</controls:Button>
