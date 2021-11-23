@@ -51,9 +51,14 @@ namespace PowerSchemaFlyout.Screens
             });
 
             pw = new Win32PowSchemasWrapper();
+            _powerSchemas = new List<PowerSchemaViewModel>();
+            foreach (PowerSchema ps in pw.GetCurrentSchemas().ToList())
+            {
+                _powerSchemas!.Add(new PowerSchemaViewModel(ps.Name, ps.Guid, ps.IsActive, Colors.Transparent));
+            }
 
-            _powerSchemas = pw.GetCurrentSchemas().ToList();
-            _selectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
+            _selectedPowerSchema = _powerSchemas!.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
+            UpdatePowerSchemasIndicator();
             BackgroundBrush = CreateBackgroundBrush(GetBackgroundBrushColor());
             FlyoutWindowWidth = MainPageWidth;
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 90;
@@ -78,18 +83,19 @@ namespace PowerSchemaFlyout.Screens
                 StartPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
                 EndPoint = new RelativePoint(0, 0, RelativeUnit.Relative)
             };
-            brush.GradientStops.Add(new GradientStop(Color.FromArgb(50, (byte)(color.R / 2), (byte)(color.G / 2), (byte)(color.B / 2)), 0d));
+            brush.GradientStops.Add(new GradientStop(Color.FromArgb(50, (byte)(color.R / 1d), (byte)(color.G / 1d), (byte)(color.B / 1d)), 0d));
             brush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 0, 0, 0), 1d));
             return brush;
         }
 
         private Color GetBackgroundBrushColor()
         {
+            /*
             if (!AutomaticModeEnabled)
             {
                 return Colors.Transparent;
             }
-            else if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver ||
+            else */if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver ||
                 _selectedPowerSchema.Name!.ToLower().Contains("econom") ||
                 _selectedPowerSchema.Name.ToLower().Contains("saver"))
                 return Colors.Green;
@@ -163,10 +169,10 @@ namespace PowerSchemaFlyout.Screens
 
         public int FlyoutSpacing => 12;
 
-        private List<PowerSchema> _powerSchemas;
-        private PowerSchema _selectedPowerSchema;
-        public List<PowerSchema> PowerSchemas => _powerSchemas;
-        public PowerSchema SelectedPowerSchema
+        private List<PowerSchemaViewModel> _powerSchemas;
+        private PowerSchemaViewModel _selectedPowerSchema;
+        public List<PowerSchemaViewModel> PowerSchemas => _powerSchemas;
+        public PowerSchemaViewModel SelectedPowerSchema
         {
             get => _selectedPowerSchema;
             set
@@ -179,6 +185,20 @@ namespace PowerSchemaFlyout.Screens
                     AutomaticModeEnabled = false;
                 }
                 _uiChangeOnly = false;
+            }
+        }
+
+        // TODO: Use settings
+        private void UpdatePowerSchemasIndicator()
+        {
+            foreach (var ps in PowerSchemas)
+            {
+                if (ps.Guid == PowerSchema.BalancedSchemaGuid)
+                    ps.Color = Colors.Yellow;
+                else if (ps.Guid == PowerSchema.MaximumPerformanceSchemaGuid)
+                    ps.Color = Colors.Red;
+                else
+                    ps.Color = Colors.Transparent;
             }
         }
 

@@ -71,9 +71,10 @@
 							<ListBox Items="{Binding PowerSchemas}"  SelectedItem="{Binding SelectedPowerSchema}" >
 								<ListBox.ItemTemplate>
 									<DataTemplate>
-										<Border  CornerRadius="4" Padding="4" >
+										<Border CornerRadius="4" >
 											<StackPanel Orientation="Horizontal" Spacing="10">
-												<TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                                <Ellipse Width="4" Height="4" Fill="{Binding Brush}" Margin="4 0 0 0"/>
+                                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
 											</StackPanel>
 										</Border>
 									</DataTemplate>

@@ -11,7 +11,7 @@ namespace PowerSchemaFlyout.Models
         public Guid Guid { get; init; }
         public string Name { get; init; }
         public bool IsActive { get; init; }
-        public Color Color { get; init; }
+        public Color Color { get; set; }
 
         public PowerSchema(string name, Guid guid, bool isActive)
         {
