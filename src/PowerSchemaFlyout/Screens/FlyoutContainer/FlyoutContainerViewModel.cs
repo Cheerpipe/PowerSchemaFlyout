@@ -22,7 +22,9 @@ namespace PowerSchemaFlyout.Screens
         private readonly IGameDetectionService _gameDetectionService;
         private Timer _backgroundBrushRefreshTimer;
 
-        //private const int MainPageHeight = 530;
+        // Workaround to avoid cyclic redundancy 
+        private bool _uiChangeOnly;
+
         private const int MainPageWidth = 290;
         Win32PowSchemasWrapper pw;
 
@@ -57,11 +59,9 @@ namespace PowerSchemaFlyout.Screens
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 90;
         }
 
-        // Workaround to avoid cyclic redundancy 
-        private bool _dontChangePowerPlan;
         private void _powerSchemaWatcherService_PowerPlanChanged(object sender, System.EventArgs e)
         {
-            _dontChangePowerPlan = true;
+            _uiChangeOnly = true;
             SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
         }
 
@@ -173,9 +173,12 @@ namespace PowerSchemaFlyout.Screens
             {
                 this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
                 UpdateColorBrush();
-                if (_dontChangePowerPlan) return;
-                pw.SetActiveGuid(value.Guid);
-                AutomaticModeEnabled = false;
+                if (!_uiChangeOnly)
+                {
+                    pw.SetActiveGuid(value.Guid);
+                    AutomaticModeEnabled = false;
+                }
+                _uiChangeOnly = false;
             }
         }
 
