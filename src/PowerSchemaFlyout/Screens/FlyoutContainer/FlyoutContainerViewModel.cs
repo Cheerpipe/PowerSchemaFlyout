@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using PowerSchemaFlyout.Models;
 using PowerSchemaFlyout.PowerManagement;
 using PowerSchemaFlyout.Services;
+using PowerSchemaFlyout.Services.CaffeineService;
 using PowerSchemaFlyout.Services.GameDetectionService;
 using PowerSchemaFlyout.Services.PowerSchemaWatcherService;
 using PowerSchemaFlyout.ViewModels;
@@ -20,21 +21,25 @@ namespace PowerSchemaFlyout.Screens
     {
         private readonly IFlyoutService _flyoutService;
         private readonly IGameDetectionService _gameDetectionService;
+        private readonly ICaffeineService _caffeineService;
         private Timer _backgroundBrushRefreshTimer;
 
         // Workaround to avoid cyclic redundancy 
         private bool _uiChangeOnly;
 
-        private const int MainPageWidth = 290;
+        private const int MainPageWidth = 300;
         Win32PowSchemasWrapper pw;
 
         public FlyoutContainerViewModel(
             IFlyoutService flyoutService,
             IGameDetectionService gameDetectionService,
-            IPowerSchemaWatcherService powerSchemaWatcherService)
+            IPowerSchemaWatcherService powerSchemaWatcherService,
+            ICaffeineService cafeCaffeineService)
         {
             _flyoutService = flyoutService;
             _gameDetectionService = gameDetectionService;
+            _caffeineService = cafeCaffeineService;
+
             powerSchemaWatcherService.PowerPlanChanged += _powerSchemaWatcherService_PowerPlanChanged;
 
             this.WhenActivated(disposables =>
@@ -61,7 +66,7 @@ namespace PowerSchemaFlyout.Screens
             UpdatePowerSchemasIndicator();
             BackgroundBrush = CreateBackgroundBrush(GetBackgroundBrushColor());
             FlyoutWindowWidth = MainPageWidth;
-            FlyoutWindowHeight = _powerSchemas.Count * 52 + 90;
+            FlyoutWindowHeight = _powerSchemas.Count * 52 + 165;
         }
 
         private void _powerSchemaWatcherService_PowerPlanChanged(object sender, System.EventArgs e)
@@ -90,6 +95,7 @@ namespace PowerSchemaFlyout.Screens
 
         private Color GetBackgroundBrushColor()
         {
+            return Colors.Black;
             /*
             if (!AutomaticModeEnabled)
             {
@@ -138,6 +144,17 @@ namespace PowerSchemaFlyout.Screens
             {
                 _backgroundBrush = value;
                 this.RaisePropertyChanged(nameof(BackgroundBrush));
+            }
+        }
+        public bool Caffeine
+        {
+            get => _caffeineService.IsActive();
+            set
+            {
+                if (value)
+                    _caffeineService.Start();
+                else
+                    _caffeineService.Stop();
             }
         }
 

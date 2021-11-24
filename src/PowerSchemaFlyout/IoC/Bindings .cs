@@ -1,5 +1,6 @@
 ﻿using Ninject.Modules;
 using PowerSchemaFlyout.Services;
+using PowerSchemaFlyout.Services.CaffeineService;
 using PowerSchemaFlyout.Services.GameDetectionService;
 using PowerSchemaFlyout.Services.PowerSchemaWatcherService;
 
@@ -13,6 +14,7 @@ namespace PowerSchemaFlyout.IoC
             Bind<IFlyoutService>().To<FlyoutService>().InSingletonScope();
             Bind<IGameDetectionService>().To<GameDetectionService>().InSingletonScope();
             Bind<IPowerSchemaWatcherService>().To<PowerSchemaWatcherService>().InSingletonScope();
+            Bind<ICaffeineService>().To<CaffeineService>().InSingletonScope();
         }
     }
 }

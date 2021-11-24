@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using PowerSchemaFlyout.Services.GameDetectionService.Enums;
@@ -18,12 +19,9 @@ namespace PowerSchemaFlyout.Services.GameDetectionService.Detectors
             if (process == null)
                 return new ProcessDetectionResult(ProcessType.Unknown, false);
 
-            foreach (string wlPath in _whiteList)
+            if (_whiteList.Any(wlPath => process.MainModule!.FileName!.ToLower().Contains(wlPath)))
             {
-                if (process.MainModule!.FileName!.ToLower().Contains(wlPath))
-                {
-                    return new ProcessDetectionResult(ProcessType.GameProcess, true);
-                }
+                return new ProcessDetectionResult(ProcessType.GameProcess, true);
             }
             return new ProcessDetectionResult(ProcessType.DesktopProcess, false);
         }

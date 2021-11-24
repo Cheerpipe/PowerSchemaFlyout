@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace PowerSchemaFlyout.PowerManagement
 {
-    public class PowerSchemasWrapperNative
+    public static class PowerSchemasWrapperNative
     {
         #region DLL imports
 

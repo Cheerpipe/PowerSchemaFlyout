@@ -51,23 +51,9 @@
 
 				<Panel Margin="0 10 0 0 ">
 					<StackPanel>
-						<!-- Global toggle Start -->
 
-						<StackPanel Orientation="Horizontal" Margin="10 0 0 5"
-							 VerticalAlignment="Center" HorizontalAlignment="Right">
-							<TextBlock VerticalAlignment="Center" Margin="0 0 10 0">Automatic mode</TextBlock>
-							<ToggleSwitch
-							  IsChecked="{Binding AutomaticModeEnabled}"
-							  Content=""
-							  OffContent=""
-							  OnContent=""
-							  HorizontalAlignment="Right"
-							  MinWidth ="0"
-							  MinHeight="0"/>
-						</StackPanel>
-						<!-- Global toggle End -->
 						<!-- Flyout content Start -->
-						<Panel DockPanel.Dock="Top" Margin="0 0 0 0">
+						<Panel DockPanel.Dock="Top" Margin="0 15 0 0">
 							<ListBox Items="{Binding PowerSchemas}"  SelectedItem="{Binding SelectedPowerSchema}" >
 								<ListBox.ItemTemplate>
 									<DataTemplate>
@@ -82,6 +68,52 @@
 							</ListBox>
 						</Panel>
 						<!-- Flyout content End-->
+                        <!-- Action buttons -->
+                        <StackPanel Margin="15 30 15 0">
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,40,Auto,Auto">
+                                <ToggleButton
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Width="110"
+                                    Height="48"
+                                    HorizontalAlignment="Center"
+                                    IsChecked="{Binding AutomaticModeEnabled}">
+                                    <avalonia:MaterialIcon
+                                        Kind="Speedometer"
+                                        Width="44"
+                                        Height="44"/>
+                                </ToggleButton>
+                                <ToggleButton
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Width="110"
+                                    Height="48"
+                                    HorizontalAlignment="Center"
+                                    IsChecked="{Binding Caffeine}">
+                                    <avalonia:MaterialIcon
+                                        Kind="Coffee"
+                                        Width="24"
+                                        Height="24"/>
+                                </ToggleButton>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Center"
+                                    Padding="0 5 0 0"
+                                    FontSize="12">
+                                    Automatic mode
+                                </TextBlock>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center"
+                                    Padding="0 5 0 0"
+                                    FontSize="12">
+                                    Caffeine
+                                </TextBlock>
+                            </Grid>
+                        </StackPanel>
+                        <!-- Action buttons -->
 					</StackPanel>
 					<Border CornerRadius="0 0 10 10"
 							BorderBrush="#414141"
@@ -113,7 +145,7 @@
 										Background="Transparent"
 										BorderBrush="Transparent"
 										Command="{Binding GoSettingsCommand}">
-									<controls:SymbolIcon Symbol="Settings" Width="16" Height="16"/>
+									<controls:SymbolIcon Symbol="Setting" Width="16" Height="16"/>
 								</controls:Button>
 							</StackPanel>
 							<!-- Bottom command bar End -->

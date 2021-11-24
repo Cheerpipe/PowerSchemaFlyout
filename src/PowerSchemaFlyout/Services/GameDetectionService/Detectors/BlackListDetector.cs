@@ -18,12 +18,9 @@ namespace PowerSchemaFlyout.Services.GameDetectionService.Detectors
             if (process == null)
                 return new ProcessDetectionResult(ProcessType.Unknown, false);
 
-            foreach (string wlPath in _blackList)
+            if (_blackList.Any(wlPath => process.MainModule!.FileName!.ToLower().Contains(wlPath)))
             {
-                if (process.MainModule!.FileName!.ToLower().Contains(wlPath))
-                {
-                    return new ProcessDetectionResult(ProcessType.DesktopProcess, true);
-                }
+                return new ProcessDetectionResult(ProcessType.DesktopProcess, true);
             }
             return new ProcessDetectionResult(ProcessType.DesktopProcess, false);
         }

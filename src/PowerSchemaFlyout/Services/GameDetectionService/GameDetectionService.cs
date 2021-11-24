@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Timers;
 using PowerSchemaFlyout.Services.GameDetectionService.Detectors;
 using PowerSchemaFlyout.Services.GameDetectionService.Enums;
@@ -17,7 +18,6 @@ namespace PowerSchemaFlyout.Services.GameDetectionService
         private ForegroundWindowWatcher _foregroundWindowWatcher;
         private Process _currentForegroundProcess;
         private ProcessDetectionResult _processDetectionResult;
-        private bool _isRunning;
 
         public GameDetectionService(int scanInterval = 1000)
         {
@@ -53,18 +53,26 @@ namespace PowerSchemaFlyout.Services.GameDetectionService
 
         private ProcessDetectionResult CheckCurrentForegroundProcess(Process process)
         {
-            if (_processDetectionResult.ScanIsDefinitive || process?.Id == _currentProcess?.Id || !_isRunning)
+            if (_processDetectionResult.ScanIsDefinitive || process?.Id == _currentProcess?.Id || !IsRunning())
                 return _processDetectionResult;
-
             ProcessDetectionResult result = new ProcessDetectionResult(ProcessType.Unknown, false);
-            foreach (IProcessTypeDetector detector in _processTypeDetectors)
+
+            try
             {
-                ProcessDetectionResult localResult = detector.DetectProcessType(process);
-                result.ScanIsDefinitive = result.ScanIsDefinitive || localResult.ScanIsDefinitive;
-                result.ProcessType = localResult.ProcessType > result.ProcessType ? localResult.ProcessType : result.ProcessType;
-                if (result.ScanIsDefinitive)
-                    break;
+                foreach (var localResult in _processTypeDetectors.Select(detector => detector.DetectProcessType(process)))
+                {
+                    result.ScanIsDefinitive = result.ScanIsDefinitive || localResult.ScanIsDefinitive;
+                    result.ProcessType = localResult.ProcessType > result.ProcessType ? localResult.ProcessType : result.ProcessType;
+                    if (result.ScanIsDefinitive)
+                        break;
+                }
             }
+            catch
+            {
+                // A lot od things can go wrong
+                // ignored
+            }
+
             return result;
         }
 
@@ -73,7 +81,7 @@ namespace PowerSchemaFlyout.Services.GameDetectionService
             _processTypeDetectors.Add(processTypeDetector);
         }
 
-        public bool IsRunning() => _isRunning;
+        public bool IsRunning() => _scannerTimer.Enabled;
 
         public event EventHandler<ProcessStateChangedArgs> ProcessStateChanged;
         public event EventHandler Started;
@@ -81,27 +89,25 @@ namespace PowerSchemaFlyout.Services.GameDetectionService
 
         public void Start()
         {
-            if (_isRunning)
+            if (IsRunning())
                 return;
 
             _scannerTimer.Start();
             _foregroundWindowWatcher = new ForegroundWindowWatcher();
             _foregroundWindowWatcher.ForegroundProcessChanged += _foregroundWindowWatcher_ForegroundProcessChanged;
             _foregroundWindowWatcher.Start();
-            _isRunning = true && _scannerTimer.Enabled;
             Started?.Invoke(this, EventArgs.Empty);
             RaiseAndSetPowerStateChangeIfChanged(new ProcessDetectionResult(ProcessType.Unknown, false));
         }
         public void Stop()
         {
-            if (!_isRunning)
+            if (!IsRunning())
                 return;
 
             _scannerTimer.Stop();
             _foregroundWindowWatcher.ForegroundProcessChanged -= _foregroundWindowWatcher_ForegroundProcessChanged;
             _foregroundWindowWatcher.Stop();
             _foregroundWindowWatcher = null;
-            _isRunning = false || _scannerTimer.Enabled;
             Stoped?.Invoke(this, EventArgs.Empty);
         }
 

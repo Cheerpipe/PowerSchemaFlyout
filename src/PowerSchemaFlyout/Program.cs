@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
@@ -8,6 +7,7 @@ using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models;
 using PowerSchemaFlyout.PowerManagement;
 using PowerSchemaFlyout.Services;
+using PowerSchemaFlyout.Services.CaffeineService;
 using PowerSchemaFlyout.Services.GameDetectionService;
 using PowerSchemaFlyout.Services.GameDetectionService.Detectors;
 using PowerSchemaFlyout.Services.GameDetectionService.Enums;
@@ -51,53 +51,67 @@ namespace PowerSchemaFlyout
 
             ITrayIconService trayIconService = Kernel.Get<ITrayIconService>();
             IGameDetectionService gameDetectionService = Kernel.Get<IGameDetectionService>();
-            IPowerSchemaWatcherService _powerSchemaWatcher = Kernel.Get<IPowerSchemaWatcherService>();
+            IPowerSchemaWatcherService powerSchemaWatcher = Kernel.Get<IPowerSchemaWatcherService>();
+            ICaffeineService caffeineService = Kernel.Get<ICaffeineService>();
+
+            caffeineService.Stop();
 
             gameDetectionService.Started += (_, _) =>
-             {
-                 Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.MaximumPerformanceSchemaGuid);
-                 Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.BalancedSchemaGuid);
-             };
+            {
+                lock (powerSchemaWatcher)
+                {
+                    Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.MaximumPerformanceSchemaGuid);
+                    Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.BalancedSchemaGuid);
+                }
+            };
 
 
 
             trayIconService.Show();
             trayIconService.UpdateIcon("Flyout.ico");
 
-            _powerSchemaWatcher.StartPlanWatcher();
-            _powerSchemaWatcher.PowerPlanChanged += (_, _) =>
+            powerSchemaWatcher.StartPlanWatcher();
+            powerSchemaWatcher.PowerPlanChanged += (_, _) =>
             {
-                Guid newSchema = Win32PowSchemasWrapper.GetActiveGuid();
+                lock (powerSchemaWatcher)
+                {
+                    Guid newSchema = Win32PowSchemasWrapper.GetActiveGuid();
 
-                if (newSchema == PowerSchema.MaximumPerformanceSchemaGuid)
-                {
-                    trayIconService.UpdateIcon("power_gaming.ico");
-                }
-                else if (newSchema == PowerSchema.BalancedSchemaGuid)
-                {
-                    trayIconService.UpdateIcon("power_balanced.ico");
-                }
-                else if (newSchema == PowerSchema.PowerSchemaSaver)
-                {
-                    trayIconService.UpdateIcon("power_saver.ico");
-                }
-                else
-                {
-                    trayIconService.UpdateIcon("power_automatic_mode_off.ico");
+                    if (newSchema == PowerSchema.MaximumPerformanceSchemaGuid)
+                    {
+                        trayIconService.UpdateIcon("power_gaming.ico");
+                    }
+                    else if (newSchema == PowerSchema.BalancedSchemaGuid)
+                    {
+                        trayIconService.UpdateIcon("power_balanced.ico");
+                    }
+                    else if (newSchema == PowerSchema.PowerSchemaSaver)
+                    {
+                        trayIconService.UpdateIcon("power_saver.ico");
+                    }
+                    else
+                    {
+                        trayIconService.UpdateIcon("power_automatic_mode_off.ico");
+                    }
                 }
             };
 
-            gameDetectionService.ProcessStateChanged += (o, e) =>
+            gameDetectionService.ProcessStateChanged += (_, e) =>
             {
-                switch (e.ProcessDetectionResult.ProcessType)
+                lock (powerSchemaWatcher)
                 {
-                    case ProcessType.GameProcess:
-                        Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.MaximumPerformanceSchemaGuid);
+                    switch (e.ProcessDetectionResult.ProcessType)
+                    {
+                        case ProcessType.GameProcess:
+                            Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.MaximumPerformanceSchemaGuid);
 
-                        break;
-                    default:
-                        Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.BalancedSchemaGuid);
-                        break;
+                            break;
+                        case ProcessType.Unknown:
+                        case ProcessType.DesktopProcess:
+                        default:
+                            Win32PowSchemasWrapper.SetActiveGuid(PowerSchema.BalancedSchemaGuid);
+                            break;
+                    }
                 }
             };
             gameDetectionService.RegisterDetector(new BlackListDetector());
@@ -110,7 +124,7 @@ namespace PowerSchemaFlyout
 
             // Stop things
             trayIconService.Hide();
-            _powerSchemaWatcher.StopPlanWatcher();
+            powerSchemaWatcher.StopPlanWatcher();
             gameDetectionService.Stop();
         }
     }
