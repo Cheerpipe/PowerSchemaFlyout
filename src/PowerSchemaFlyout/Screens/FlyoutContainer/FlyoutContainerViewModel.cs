@@ -95,6 +95,8 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
 
         private Color GetBackgroundBrushColor()
         {
+            return Colors.Black;
+
             if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver ||
          _selectedPowerSchema.Name!.ToLower().Contains("econom") ||
          _selectedPowerSchema.Name.ToLower().Contains("saver"))

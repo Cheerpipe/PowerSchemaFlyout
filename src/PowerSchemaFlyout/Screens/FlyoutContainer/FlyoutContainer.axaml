@@ -31,13 +31,13 @@
 	  Name="FlyoutPanelContainer"
 	  Width="{Binding FlyoutWidth}"
 	  Height="{Binding FlyoutHeight}">
-		<ExperimentalAcrylicBorder IsHitTestVisible="True" CornerRadius="10" >
+		<ExperimentalAcrylicBorder IsHitTestVisible="False" CornerRadius="10" >
             <ExperimentalAcrylicBorder.Material>
 				<ExperimentalAcrylicMaterial
 					BackgroundSource="Digger"
-					TintColor="Black" 
-					TintOpacity="0.65"
-					MaterialOpacity="0.65"/>
+                    TintColor="#99000000"
+                    TintOpacity="0.65"
+                    MaterialOpacity="0.65"/>
 			</ExperimentalAcrylicBorder.Material>
 			<Border CornerRadius="10 10 10 10"
 					BorderBrush="#414141"
