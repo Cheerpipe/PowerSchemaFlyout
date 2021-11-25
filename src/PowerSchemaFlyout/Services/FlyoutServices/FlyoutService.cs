@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Ninject;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Screens;
+using PowerSchemaFlyout.Screens.FlyoutContainer;
 
 namespace PowerSchemaFlyout.Services
 {

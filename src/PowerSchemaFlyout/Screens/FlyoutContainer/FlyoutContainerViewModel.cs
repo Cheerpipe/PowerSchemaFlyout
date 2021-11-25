@@ -15,7 +15,7 @@ using PowerSchemaFlyout.Services.PowerSchemaWatcherService;
 using PowerSchemaFlyout.ViewModels;
 using ReactiveUI;
 
-namespace PowerSchemaFlyout.Screens
+namespace PowerSchemaFlyout.Screens.FlyoutContainer
 {
     public class FlyoutContainerViewModel : ViewModelBase
     {
@@ -27,7 +27,7 @@ namespace PowerSchemaFlyout.Screens
         // Workaround to avoid cyclic redundancy 
         private bool _uiChangeOnly;
 
-        private const int MainPageWidth = 300;
+        private const int MainPageWidth = 270;
         Win32PowSchemasWrapper pw;
 
         public FlyoutContainerViewModel(
@@ -88,20 +88,13 @@ namespace PowerSchemaFlyout.Screens
                 StartPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
                 EndPoint = new RelativePoint(0, 0, RelativeUnit.Relative)
             };
-            brush.GradientStops.Add(new GradientStop(Color.FromArgb(50, (byte)(color.R / 1d), (byte)(color.G / 1d), (byte)(color.B / 1d)), 0d));
+            brush.GradientStops.Add(new GradientStop(Color.FromArgb(35, (byte)(color.R / 1d), (byte)(color.G / 1d), (byte)(color.B / 1d)), 0d));
             brush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 0, 0, 0), 1d));
             return brush;
         }
 
         private Color GetBackgroundBrushColor()
         {
-            return Colors.Black;
-            /*
-            if (!AutomaticModeEnabled)
-            {
-                return Colors.Transparent;
-            }
-            else */
             if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver ||
          _selectedPowerSchema.Name!.ToLower().Contains("econom") ||
          _selectedPowerSchema.Name.ToLower().Contains("saver"))

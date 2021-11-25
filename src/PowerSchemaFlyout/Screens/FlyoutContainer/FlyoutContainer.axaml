@@ -1,4 +1,4 @@
-<reactiveUi:ReactiveWindow      x:TypeArguments="screens:FlyoutContainerViewModel" xmlns="https://github.com/avaloniaui"
+<reactiveUi:ReactiveWindow      x:TypeArguments="flyoutContainer:FlyoutContainerViewModel" xmlns="https://github.com/avaloniaui"
                                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -6,8 +6,9 @@
                                 xmlns:reactiveUi="http://reactiveui.net"
                                 xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
                                 xmlns:screens="clr-namespace:PowerSchemaFlyout.Screens"
+                                xmlns:flyoutContainer="clr-namespace:PowerSchemaFlyout.Screens.FlyoutContainer"
                                 mc:Ignorable="d" d:DesignWidth="290" d:DesignHeight="530"
-                                x:Class="PowerSchemaFlyout.Screens.FlyoutContainer"
+                                x:Class="PowerSchemaFlyout.Screens.FlyoutContainer.FlyoutContainer"
                                 Title="Base Flyout"
                                 ShowInTaskbar="false"
                                 CanResize="False"
@@ -53,7 +54,7 @@
 				<Panel Margin="0 10 0 0 ">
 					<StackPanel>
 						<!-- Flyout content Start -->
-						<Panel DockPanel.Dock="Top" Margin="0 15 0 0">
+						<Panel DockPanel.Dock="Top" Margin="15 15 15 0">
 							<ListBox Items="{Binding PowerSchemas}"  SelectedItem="{Binding SelectedPowerSchema}" >
 								<ListBox.ItemTemplate>
 									<DataTemplate>

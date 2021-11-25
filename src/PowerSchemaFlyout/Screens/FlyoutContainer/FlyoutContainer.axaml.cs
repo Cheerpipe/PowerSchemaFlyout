@@ -6,7 +6,6 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
@@ -14,7 +13,7 @@ using ReactiveUI;
 
 // ReSharper disable UnusedParameter.Local
 
-namespace PowerSchemaFlyout.Screens
+namespace PowerSchemaFlyout.Screens.FlyoutContainer
 {
     public class FlyoutContainer : ReactiveWindow<FlyoutContainerViewModel>
     {
@@ -44,16 +43,12 @@ namespace PowerSchemaFlyout.Screens
 
         public int FlyoutSpacing { get; set; } = 12;
 
-        Panel _flyoutPanelContainer;
 
         public async Task ShowAnimated(bool isPreload = false)
         {
-
-
-            _flyoutPanelContainer = this.Find<Panel>("FlyoutPanelContainer");
-            _flyoutPanelContainer.PointerPressed += FlyoutPanelContainer_PointerPressed;
-            _flyoutPanelContainer.PointerReleased += FlyoutPanelContainer_PointerReleased;
-            _flyoutPanelContainer.PointerMoved += FlyoutPanelContainer_PointerMoved;
+            PointerPressed += FlyoutPanelContainer_PointerPressed;
+            PointerReleased += FlyoutPanelContainer_PointerReleased;
+            PointerMoved += FlyoutPanelContainer_PointerMoved;
 
             PropertyChanged += FlyoutWindow_PropertyChanged;
 
@@ -87,11 +82,10 @@ namespace PowerSchemaFlyout.Screens
         private async void FlyoutPanelContainer_PointerReleased(object sender, PointerReleasedEventArgs e)
         {
             _isOnDrag = false;
-
-            if (HorizontalPosition >= Width / 2)
-                await CloseAnimated(CloseAnimationDelay * 0.25d);
+            if (VerticalPosition >= GetTargetVerticalPosition() + GetTargetVerticalPosition() * 0.1f)
+                await CloseAnimated(CloseAnimationDelay);
             else
-                HorizontalPosition = 0;
+                VerticalPosition = GetTargetVerticalPosition();
         }
 
         private double _previousPosition;
@@ -100,22 +94,28 @@ namespace PowerSchemaFlyout.Screens
         {
             if (!_isOnDrag)
             {
-                _previousPosition = e.GetPosition(this).X;
+                _previousPosition = e.GetPosition(this).Y;
                 return;
             }
 
             if (e.Pointer.IsPrimary)
             {
-                _currentPosition = e.GetPosition(this).X;
+                _currentPosition = this.PointToScreen(e.GetPosition(this)).Y;
                 double delta = _previousPosition - _currentPosition;
                 _previousPosition = _currentPosition;
 
-                if ((_currentPosition < 0) || (HorizontalPosition <= 0 && delta > 0))
+                if (VerticalPosition <= GetTargetVerticalPosition() && delta > 0)
+                {
+                    VerticalPosition = GetTargetVerticalPosition();
                     return;
-                HorizontalPosition = HorizontalPosition - (int)delta;
-            }
+                }
 
+
+                VerticalPosition -= (int)delta;
+            }
         }
+
+        public int GetTargetVerticalPosition() => _screenHeight - (int)(Height + FlyoutSpacing);
 
         private bool _isOnDrag;
         private void FlyoutPanelContainer_PointerPressed(object sender, PointerPressedEventArgs e)
@@ -128,7 +128,7 @@ namespace PowerSchemaFlyout.Screens
                 case TextBlock:
                     return;
                 default:
-                    _previousPosition = e.GetPosition(this).X;
+                    _previousPosition = this.PointToScreen(e.GetPosition(this)).Y;
                     _isOnDrag = true;
                     break;
             }
@@ -145,7 +145,7 @@ namespace PowerSchemaFlyout.Screens
                 Easing = new CircularEaseIn(),
             };
 
-            closeTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, _screenHeight - (int)(Height + FlyoutSpacing), _screenHeight);
+            closeTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, VerticalPosition, _screenHeight);
             await Task.Delay(CloseAnimationDelay);
             Close();
         }
