@@ -6,6 +6,7 @@ using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.ReactiveUI;
@@ -38,8 +39,8 @@ namespace PowerSchemaFlyout.Screens
         private readonly int _screenWidth;
 
         public int ShowAnimationDelay { get; set; } = 250;
-        public int CloseAnimationDelay { get; set; } = 150;
-        public int ResizeAnimationDelay { get; set; } = 150;
+        public int CloseAnimationDelay { get; set; } = 200;
+        public int ResizeAnimationDelay { get; set; } = 200;
 
         public int FlyoutSpacing { get; set; } = 12;
 
@@ -69,7 +70,7 @@ namespace PowerSchemaFlyout.Screens
             }
 
             Show();
-            this.Opacity = 0.5;
+
             Clock = Avalonia.Animation.Clock.GlobalClock;
             var showTransition = new IntegerTransition()
             {
