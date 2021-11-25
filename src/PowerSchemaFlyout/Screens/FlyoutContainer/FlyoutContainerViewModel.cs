@@ -132,7 +132,7 @@ namespace PowerSchemaFlyout.Screens
             {
                 _flyoutService.SetWidth(value);
                 _flyoutWindowWidth = value;
-                FlyoutWidth = _flyoutWindowWidth - FlyoutSpacing;
+                FlyoutWidth = _flyoutWindowWidth;
             }
         }
 
@@ -174,7 +174,7 @@ namespace PowerSchemaFlyout.Screens
             {
                 _flyoutService.SetHeight(value);
                 _flyoutWindowHeight = value;
-                FlyoutHeight = _flyoutWindowHeight - FlyoutSpacing;
+                FlyoutHeight = _flyoutWindowHeight;
             }
         }
 
@@ -185,8 +185,6 @@ namespace PowerSchemaFlyout.Screens
             set => this.RaiseAndSetIfChanged(ref _flyoutHeight, value);
         }
 
-        public int FlyoutSpacing => 12;
-
         private List<PowerSchemaViewModel> _powerSchemas;
         private PowerSchemaViewModel _selectedPowerSchema;
         public List<PowerSchemaViewModel> PowerSchemas => _powerSchemas;
@@ -195,6 +193,9 @@ namespace PowerSchemaFlyout.Screens
             get => _selectedPowerSchema;
             set
             {
+                if (value == null)
+                    return;
+
                 this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
                 UpdateColorBrush();
                 if (!_uiChangeOnly)

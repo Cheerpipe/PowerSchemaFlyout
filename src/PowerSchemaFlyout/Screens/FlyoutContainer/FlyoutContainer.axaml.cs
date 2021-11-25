@@ -32,15 +32,16 @@ namespace PowerSchemaFlyout.Screens
             _screenWidth = Screens.Primary.WorkingArea.Width;
             _screenHeight = Screens.Primary.WorkingArea.Height;
 
-            RevealAnimationDelay = 250;
-            ResizeAnimationDelay = 150;
         }
 
         private readonly int _screenHeight;
         private readonly int _screenWidth;
 
-        public int RevealAnimationDelay { get; set; }
-        public int ResizeAnimationDelay { get; set; }
+        public int ShowAnimationDelay { get; set; } = 250;
+        public int CloseAnimationDelay { get; set; } = 150;
+        public int ResizeAnimationDelay { get; set; } = 150;
+
+        public int FlyoutSpacing { get; set; } = 12;
 
         Panel _flyoutPanelContainer;
 
@@ -62,19 +63,23 @@ namespace PowerSchemaFlyout.Screens
                 this.WindowState = WindowState.Minimized;
                 HorizontalPosition = Screens.All.Sum(s => s.WorkingArea.Width);
             }
+            else
+            {
+                Position = new PixelPoint(_screenWidth - (int)(Width + 12), Position.Y);
+            }
 
             Show();
-
+            this.Opacity = 0.5;
             Clock = Avalonia.Animation.Clock.GlobalClock;
             var showTransition = new IntegerTransition()
             {
-                Property = FlyoutContainer.HorizontalPositionProperty,
-                Duration = TimeSpan.FromMilliseconds(RevealAnimationDelay),
+                Property = FlyoutContainer.VerticalPositionProperty,
+                Duration = TimeSpan.FromMilliseconds(ShowAnimationDelay),
                 Easing = new CircularEaseOut()
             };
 
-            showTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, (int)Width, HorizontalPosition);
-            await Task.Delay(RevealAnimationDelay);
+            showTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, _screenHeight, (_screenHeight - (int)(Height + FlyoutSpacing)));
+            await Task.Delay(ShowAnimationDelay);
         }
 
         #region Drag to move
@@ -82,8 +87,8 @@ namespace PowerSchemaFlyout.Screens
         {
             _isOnDrag = false;
 
-            if (HorizontalPosition >= (this.Width + ViewModel!.FlyoutSpacing) / 2)
-                await CloseAnimated(RevealAnimationDelay * 0.25d);
+            if (HorizontalPosition >= Width / 2)
+                await CloseAnimated(CloseAnimationDelay * 0.25d);
             else
                 HorizontalPosition = 0;
         }
@@ -134,19 +139,19 @@ namespace PowerSchemaFlyout.Screens
         {
             var closeTransition = new IntegerTransition()
             {
-                Property = FlyoutContainer.HorizontalPositionProperty,
+                Property = FlyoutContainer.VerticalPositionProperty,
                 Duration = TimeSpan.FromMilliseconds(animationDuration),
                 Easing = new CircularEaseIn(),
             };
 
-            closeTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, HorizontalPosition, (int)Width);
-            await Task.Delay(RevealAnimationDelay);
+            closeTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, _screenHeight - (int)(Height + FlyoutSpacing), _screenHeight);
+            await Task.Delay(CloseAnimationDelay);
             Close();
         }
 
         public async Task CloseAnimated()
         {
-            await CloseAnimated(RevealAnimationDelay);
+            await CloseAnimated(CloseAnimationDelay);
         }
 
         public void SetHeight(double newHeight)
@@ -181,7 +186,7 @@ namespace PowerSchemaFlyout.Screens
             }
         }
 
-        public static readonly AttachedProperty<int> HorizontalPositionProperty = AvaloniaProperty.RegisterAttached<FlyoutContainer, Control, int>("HorizontalPosition");
+        public static readonly AttachedProperty<int> HorizontalPositionProperty = AvaloniaProperty.RegisterAttached<FlyoutContainer, Control, int>(nameof(HorizontalPosition));
 
         public int HorizontalPosition
         {
@@ -192,16 +197,37 @@ namespace PowerSchemaFlyout.Screens
                 RenderTransform = new TranslateTransform(value, 0);
             }
         }
+
+
+        public static readonly AttachedProperty<int> VerticalPositionProperty = AvaloniaProperty.RegisterAttached<FlyoutContainer, Control, int>(nameof(VerticalPosition));
+
+        public int VerticalPosition
+        {
+            get => GetValue(VerticalPositionProperty);
+            set
+            {
+                SetValue(VerticalPositionProperty, value);
+                Position = new PixelPoint(Position.X, value);
+            }
+        }
         static FlyoutContainer()
         {
-            HorizontalPositionProperty.Changed.Subscribe(IsOpenChanged);
+            HorizontalPositionProperty.Changed.Subscribe(HorizontalPositionChanged);
+            VerticalPositionProperty.Changed.Subscribe(VerticalPositionChanged);
         }
 
-        private static void IsOpenChanged(AvaloniaPropertyChangedEventArgs e)
+        private static void HorizontalPositionChanged(AvaloniaPropertyChangedEventArgs e)
         {
             var flyoutContainer = (FlyoutContainer)e.Sender;
-            var newHorizontalPositionValue = (int)e.NewValue!;
-            flyoutContainer.HorizontalPosition = newHorizontalPositionValue;
+            var newPositionValue = (int)e.NewValue!;
+            flyoutContainer.HorizontalPosition = newPositionValue;
+        }
+
+        private static void VerticalPositionChanged(AvaloniaPropertyChangedEventArgs e)
+        {
+            var flyoutContainer = (FlyoutContainer)e.Sender;
+            var newPositionValue = (int)e.NewValue!;
+            flyoutContainer.VerticalPosition = newPositionValue;
         }
     }
 }

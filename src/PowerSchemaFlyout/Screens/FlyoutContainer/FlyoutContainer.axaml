@@ -11,9 +11,9 @@
                                 Title="Base Flyout"
                                 ShowInTaskbar="false"
                                 CanResize="False"
-                                Topmost="True"
+                                Topmost="False"
                                 SystemDecorations="BorderOnly"
-                                TransparencyLevelHint="Transparent"
+                                TransparencyLevelHint="AcrylicBlur"
                                 ExtendClientAreaToDecorationsHint="True"
                                 ExtendClientAreaChromeHints="NoChrome"
                                 ExtendClientAreaTitleBarHeightHint="-1"
@@ -23,19 +23,20 @@
                                 Height="{Binding FlyoutWindowHeight}"
                                 Width="{Binding FlyoutWindowWidth}"
                                 x:Name="FlyoutWindow">
-	<Panel
-	  HorizontalAlignment="Left"
+
+    <Panel
+      HorizontalAlignment="Left"
 	  VerticalAlignment="Top"
 	  Name="FlyoutPanelContainer"
 	  Width="{Binding FlyoutWidth}"
 	  Height="{Binding FlyoutHeight}">
-		<ExperimentalAcrylicBorder IsHitTestVisible="True" CornerRadius="10">
-			<ExperimentalAcrylicBorder.Material>
+		<ExperimentalAcrylicBorder IsHitTestVisible="True" CornerRadius="10" >
+            <ExperimentalAcrylicBorder.Material>
 				<ExperimentalAcrylicMaterial
 					BackgroundSource="Digger"
-					TintColor="Black"
+					TintColor="Black" 
 					TintOpacity="0.8"
-					MaterialOpacity="0.85"/>
+					MaterialOpacity="0.65"/>
 			</ExperimentalAcrylicBorder.Material>
 			<Border CornerRadius="10 10 10 10"
 					BorderBrush="#414141"
@@ -51,7 +52,6 @@
 
 				<Panel Margin="0 10 0 0 ">
 					<StackPanel>
-
 						<!-- Flyout content Start -->
 						<Panel DockPanel.Dock="Top" Margin="0 15 0 0">
 							<ListBox Items="{Binding PowerSchemas}"  SelectedItem="{Binding SelectedPowerSchema}" >
