@@ -23,7 +23,7 @@ namespace PowerSchemaFlyout.Services
         public void Show()
         {
             _trayIcon.Menu = new NativeMenu();
-            NativeMenuItem exitMenu = new("Exit Base Flyout");
+            NativeMenuItem exitMenu = new("Exit Power Schema Flyout");
             exitMenu.Click += ExitMenu_Click;
             _trayIcon.Menu.Items.Add(exitMenu);
             _trayIcon.IsVisible = true;

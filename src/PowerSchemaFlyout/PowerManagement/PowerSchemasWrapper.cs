@@ -4,6 +4,7 @@
 using PowerSchemaFlyout.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 
@@ -88,11 +89,11 @@ namespace PowerSchemaFlyout.PowerManagement
 
         public void SetActiveGuid(Guid guid)
         {
+            if (guid == GetActiveGuid())
+                return;
+
             var errCode = PowerSchemasWrapperNative.PowerSetActiveScheme(IntPtr.Zero, ref guid);
             if (errCode != 0) { throw new PowerSwitcherWrappersException($"SetActiveGuid() failed with code {errCode}"); }
         }
-
     }
-
-
 }
