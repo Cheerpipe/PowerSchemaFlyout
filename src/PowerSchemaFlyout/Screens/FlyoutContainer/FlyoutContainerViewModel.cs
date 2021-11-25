@@ -66,7 +66,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             UpdatePowerSchemasIndicator();
             BackgroundBrush = CreateBackgroundBrush(GetBackgroundBrushColor());
             FlyoutWindowWidth = MainPageWidth;
-            FlyoutWindowHeight = _powerSchemas.Count * 52 + 165;
+            FlyoutWindowHeight = _powerSchemas.Count * 52 + 150;
         }
 
         private void _powerSchemaWatcherService_PowerPlanChanged(object sender, System.EventArgs e)

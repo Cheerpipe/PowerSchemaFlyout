@@ -50,8 +50,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             PointerReleased += FlyoutPanelContainer_PointerReleased;
             PointerMoved += FlyoutPanelContainer_PointerMoved;
 
-            PropertyChanged += FlyoutWindow_PropertyChanged;
-
             WindowStartupLocation = WindowStartupLocation.Manual;
 
             if (isPreload)
@@ -146,7 +144,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             };
 
             closeTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, VerticalPosition, _screenHeight);
-            await Task.Delay(CloseAnimationDelay);
+            await Task.Delay((int)animationDuration);
             Close();
         }
 
@@ -177,14 +175,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             };
 
             widthTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, Width, newWidth);
-        }
-
-        private void FlyoutWindow_PropertyChanged(object sender, AvaloniaPropertyChangedEventArgs e)
-        {
-            if (e.Property.Name == "Height" || e.Property.Name == "Width" || e.Property.Name == "HorizontalPosition")
-            {
-                Position = new PixelPoint(_screenWidth + (-(int)Width), _screenHeight + (-(int)Height));
-            }
         }
 
         public static readonly AttachedProperty<int> HorizontalPositionProperty = AvaloniaProperty.RegisterAttached<FlyoutContainer, Control, int>(nameof(HorizontalPosition));

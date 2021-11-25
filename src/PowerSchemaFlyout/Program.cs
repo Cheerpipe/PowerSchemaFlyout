@@ -27,6 +27,7 @@ namespace PowerSchemaFlyout
             var builder = AppBuilder.Configure<App>()
                 .UsePlatformDetect()
                 .UseReactiveUI()
+                .UseSkia()
                 .With(new Win32PlatformOptions()
                 {
                     UseWindowsUIComposition = true,
