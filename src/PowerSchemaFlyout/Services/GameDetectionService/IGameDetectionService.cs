@@ -6,7 +6,7 @@ namespace PowerSchemaFlyout.Services.GameDetectionService
 {
     public interface IGameDetectionService
     {
-        public void Start();
+        public void Start(int scanInterval = 5000);
         public void Stop();
         public void RegisterDetector(IProcessTypeDetector processTypeDetector);
         public bool IsRunning();

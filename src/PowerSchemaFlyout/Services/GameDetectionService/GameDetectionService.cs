@@ -19,10 +19,10 @@ namespace PowerSchemaFlyout.Services.GameDetectionService
         private Process _currentForegroundProcess;
         private ProcessDetectionResult _processDetectionResult;
 
-        public GameDetectionService(int scanInterval = 1000)
+        public GameDetectionService()
         {
             _processTypeDetectors = new List<IProcessTypeDetector>();
-            _scannerTimer = new Timer(scanInterval);
+            _scannerTimer = new Timer();
             _scannerTimer.Elapsed += _scannerTimer_Elapsed;
             _processDetectionResult = new ProcessDetectionResult(ProcessType.Unknown, false);
         }
@@ -87,11 +87,12 @@ namespace PowerSchemaFlyout.Services.GameDetectionService
         public event EventHandler Started;
         public event EventHandler Stoped;
 
-        public void Start()
+        public void Start(int scanInterval = 5000)
         {
             if (IsRunning())
                 return;
 
+            _scannerTimer.Interval = scanInterval;
             _scannerTimer.Start();
             _foregroundWindowWatcher = new ForegroundWindowWatcher();
             _foregroundWindowWatcher.ForegroundProcessChanged += _foregroundWindowWatcher_ForegroundProcessChanged;
