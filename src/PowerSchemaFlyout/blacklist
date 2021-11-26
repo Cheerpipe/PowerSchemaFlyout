@@ -1,6 +1,7 @@
 chrome.exe
 explorer.exe
 firefox.exe
+msedge.exe
 opera.exe
 battle.net.exe
 battle.exe
@@ -17,3 +18,6 @@ trine4.exe
 FallGuys_client_game.exe
 FallGuys_client.exe
 \windows\
+SearchHost.exe
+ShellExperienceHost.exe
+StartMenuExperienceHost.exe
