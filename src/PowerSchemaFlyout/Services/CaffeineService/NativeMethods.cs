@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace PowerSchemaFlyout.Services.CaffeineService
+namespace PowerSchemaFlyout.Services
 {
     public static class NativeMethods
     {
@@ -19,7 +19,7 @@ namespace PowerSchemaFlyout.Services.CaffeineService
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern ExecutionState SetThreadExecutionState(ExecutionState esFlags);
 
-        [FlagsAttribute]
+        [Flags]
         private enum ExecutionState : uint
         {
             EsContinuous = 0x80000000,

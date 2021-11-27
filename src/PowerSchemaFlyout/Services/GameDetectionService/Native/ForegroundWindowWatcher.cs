@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using PowerSchemaFlyout.Services.GameDetectionService.Events;
+using PowerSchemaFlyout.Services.Events;
 
-namespace PowerSchemaFlyout.Services.GameDetectionService.Native
+namespace PowerSchemaFlyout.Services.Native
 {
     public class ForegroundWindowWatcher
     {

@@ -1,9 +1,10 @@
 ﻿// https://github.com/petrroll/PowerSwitcher
+
 using System;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
 
-namespace PowerSchemaFlyout.Screens
+namespace PowerSchemaFlyout.Screens.FlyoutContainer
 {
     public class PowerSchemaViewModel
     {

@@ -1,17 +1,17 @@
 ﻿
 // https://github.com/petrroll/PowerSwitcher
 
-using PowerSchemaFlyout.Models;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using PowerSchemaFlyout.Models;
+using PowerSchemaFlyout.PowerManagement;
 
-namespace PowerSchemaFlyout.PowerManagement
+namespace PowerSchemaFlyout.Services
 {
 
-    public class Win32PowSchemasWrapper
+    public class PowerManagementServices : IPowerManagementServices
     {
         public IEnumerable<Guid> GetAllPowerSchemaGuids()
         {
@@ -94,6 +94,9 @@ namespace PowerSchemaFlyout.PowerManagement
 
             var errCode = PowerSchemasWrapperNative.PowerSetActiveScheme(IntPtr.Zero, ref guid);
             if (errCode != 0) { throw new PowerSwitcherWrappersException($"SetActiveGuid() failed with code {errCode}"); }
+            ActiveGuidChanged?.Invoke(this, EventArgs.Empty);
         }
+
+        public event EventHandler ActiveGuidChanged;
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
-using PowerSchemaFlyout.Services.GameDetectionService.Detectors;
-using PowerSchemaFlyout.Services.GameDetectionService.Events;
+using PowerSchemaFlyout.Services.Detectors;
+using PowerSchemaFlyout.Services.Events;
 
-namespace PowerSchemaFlyout.Services.GameDetectionService
+namespace PowerSchemaFlyout.Services
 {
     public interface IGameDetectionService
     {

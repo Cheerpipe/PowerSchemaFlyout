@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace PowerSchemaFlyout.Services.GameDetectionService.Detectors
+namespace PowerSchemaFlyout.Services.Detectors
 {
     public interface IProcessTypeDetector
     {

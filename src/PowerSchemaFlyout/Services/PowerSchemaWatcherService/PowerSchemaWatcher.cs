@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using System.Management;
 
-namespace PowerSchemaFlyout.Services.PowerSchemaWatcherService
+namespace PowerSchemaFlyout.Services
 {
     public class PowerSchemaWatcherService : IPowerSchemaWatcherService, IDisposable
     {

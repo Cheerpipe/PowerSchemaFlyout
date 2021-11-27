@@ -1,4 +1,4 @@
-﻿namespace PowerSchemaFlyout.Services.CaffeineService
+﻿namespace PowerSchemaFlyout.Services
 {
     public class CaffeineService : ICaffeineService
     {

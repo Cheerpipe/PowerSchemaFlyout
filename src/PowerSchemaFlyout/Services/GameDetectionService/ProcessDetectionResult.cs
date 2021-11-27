@@ -1,6 +1,6 @@
-﻿using PowerSchemaFlyout.Services.GameDetectionService.Enums;
+﻿using PowerSchemaFlyout.Services.Enums;
 
-namespace PowerSchemaFlyout.Services.GameDetectionService
+namespace PowerSchemaFlyout.Services
 {
     public class ProcessDetectionResult
     {

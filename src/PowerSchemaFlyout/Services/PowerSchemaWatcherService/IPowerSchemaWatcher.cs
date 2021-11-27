@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PowerSchemaFlyout.Services.PowerSchemaWatcherService
+namespace PowerSchemaFlyout.Services
 {
     public interface IPowerSchemaWatcherService
     {

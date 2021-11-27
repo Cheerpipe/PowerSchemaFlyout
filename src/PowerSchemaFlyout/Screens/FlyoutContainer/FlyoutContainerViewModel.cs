@@ -1,17 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
-using System.Threading;
 using Avalonia;
 using Avalonia.Media;
-using Avalonia.Threading;
 using PowerSchemaFlyout.Models;
-using PowerSchemaFlyout.PowerManagement;
 using PowerSchemaFlyout.Services;
-using PowerSchemaFlyout.Services.CaffeineService;
-using PowerSchemaFlyout.Services.GameDetectionService;
-using PowerSchemaFlyout.Services.PowerSchemaWatcherService;
 using PowerSchemaFlyout.ViewModels;
 using ReactiveUI;
 
@@ -22,25 +17,26 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
         private readonly IFlyoutService _flyoutService;
         private readonly IGameDetectionService _gameDetectionService;
         private readonly ICaffeineService _caffeineService;
-        private Timer _backgroundBrushRefreshTimer;
+        private readonly ISettingsService _settingsService;
 
         // Workaround to avoid cyclic redundancy 
-        private bool _uiChangeOnly;
+        private bool _ignoreChange;
 
         private const int MainPageWidth = 270;
-        Win32PowSchemasWrapper pw;
+        private readonly IPowerManagementServices _powerManagementServices;
 
         public FlyoutContainerViewModel(
             IFlyoutService flyoutService,
             IGameDetectionService gameDetectionService,
             IPowerSchemaWatcherService powerSchemaWatcherService,
-            ICaffeineService cafeCaffeineService)
+            ICaffeineService cafeCaffeineService,
+            ISettingsService settingsService,
+            IPowerManagementServices powerManagementServices)
         {
             _flyoutService = flyoutService;
             _gameDetectionService = gameDetectionService;
             _caffeineService = cafeCaffeineService;
-
-            powerSchemaWatcherService.PowerPlanChanged += _powerSchemaWatcherService_PowerPlanChanged;
+            _settingsService = settingsService;
 
             this.WhenActivated(disposables =>
             {
@@ -49,36 +45,34 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
                     .Create(() =>
                     {
                         /* Handle deactivation */
-                        _backgroundBrushRefreshTimer?.DisposeAsync();
-                        _backgroundBrushRefreshTimer = null;
+                        // _defferedDisableAutomaticModeTimer?.Dispose();
+                        // _defferedDisableAutomaticModeTimer = null;
+
                     })
                     .DisposeWith(disposables);
             });
 
-            pw = new Win32PowSchemasWrapper();
+            _powerManagementServices = powerManagementServices;
             _powerSchemas = new List<PowerSchemaViewModel>();
-            foreach (PowerSchema ps in pw.GetCurrentSchemas().ToList())
+            foreach (PowerSchema ps in _powerManagementServices.GetCurrentSchemas().ToList())
             {
                 _powerSchemas!.Add(new PowerSchemaViewModel(ps.Name, ps.Guid, ps.IsActive));
             }
 
-            _selectedPowerSchema = _powerSchemas!.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
+            _selectedPowerSchema = _powerSchemas!.FirstOrDefault(ps => ps.Guid == _powerManagementServices.GetActiveGuid());
             UpdatePowerSchemasIndicator();
-            BackgroundBrush = CreateBackgroundBrush(GetBackgroundBrushColor());
             FlyoutWindowWidth = MainPageWidth;
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 150;
+            powerSchemaWatcherService.PowerPlanChanged += PowerSchemaWatcherService_PowerPlanChanged;
         }
 
-        private void _powerSchemaWatcherService_PowerPlanChanged(object sender, System.EventArgs e)
+        private void PowerSchemaWatcherService_PowerPlanChanged(object sender, EventArgs e)
         {
-            _uiChangeOnly = true;
-            SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == pw.GetActiveGuid());
-        }
-
-        private void UpdateColorBrush()
-        {
-            Color color = GetBackgroundBrushColor();
-            Dispatcher.UIThread.Post(() => { BackgroundBrush = CreateBackgroundBrush(color); });
+            lock (this)
+            {
+                _ignoreChange = true;
+                SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == _powerManagementServices.GetActiveGuid());
+            }
         }
 
         private LinearGradientBrush CreateBackgroundBrush(Color color)
@@ -91,32 +85,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             brush.GradientStops.Add(new GradientStop(Color.FromArgb(35, (byte)(color.R / 1d), (byte)(color.G / 1d), (byte)(color.B / 1d)), 0d));
             brush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 0, 0, 0), 1d));
             return brush;
-        }
-
-        private Color GetBackgroundBrushColor()
-        {
-            return Colors.Black;
-
-            if (_selectedPowerSchema.Guid == PowerSchema.PowerSchemaSaver ||
-         _selectedPowerSchema.Name!.ToLower().Contains("econom") ||
-         _selectedPowerSchema.Name.ToLower().Contains("saver"))
-                return Colors.Green;
-            else if (_selectedPowerSchema.Guid == PowerSchema.BalancedSchemaGuid ||
-                _selectedPowerSchema.Name.ToLower().Contains("balanc"))
-                return Colors.Yellow;
-            else if (_selectedPowerSchema.Guid == PowerSchema.MaximumPerformanceSchemaGuid ||
-                _selectedPowerSchema.Name.ToLower().Contains("rend") ||
-                _selectedPowerSchema.Name.ToLower().Contains("perf") ||
-                _selectedPowerSchema.Name.ToLower().Contains("ultimat") ||
-                _selectedPowerSchema.Name.ToLower().Contains("razer") ||
-                _selectedPowerSchema.Name.ToLower().Contains("cortex") ||
-                _selectedPowerSchema.Name.ToLower().Contains("max") ||
-                _selectedPowerSchema.Name.ToLower().Contains("gam"))
-                return Colors.Red;
-            else if (_selectedPowerSchema.Name.ToLower().Contains("samsung"))
-                return Colors.Blue;
-            else
-                return Colors.Transparent;
         }
 
         private double _flyoutWindowWidth;
@@ -183,6 +151,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
         private List<PowerSchemaViewModel> _powerSchemas;
         private PowerSchemaViewModel _selectedPowerSchema;
         public List<PowerSchemaViewModel> PowerSchemas => _powerSchemas;
+
         public PowerSchemaViewModel SelectedPowerSchema
         {
             get => _selectedPowerSchema;
@@ -191,28 +160,16 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
                 if (value == null)
                     return;
 
-                this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
-                UpdateColorBrush();
-                if (!_uiChangeOnly)
-                {
-                    pw.SetActiveGuid(value.Guid);
-                    AutomaticModeEnabled = false;
-                }
-                _uiChangeOnly = false;
-            }
-        }
+                _powerManagementServices.SetActiveGuid(value.Guid);
 
-        // TODO: Use settings
-        private void UpdatePowerSchemasIndicator()
-        {
-            foreach (var ps in PowerSchemas)
-            {
-                if (ps.Guid == PowerSchema.BalancedSchemaGuid)
-                    ps.PowerSchemaRol = PowerSchemaRol.Desktop;
-                else if (ps.Guid == PowerSchema.MaximumPerformanceSchemaGuid)
-                    ps.PowerSchemaRol = PowerSchemaRol.Gaming;
-                else
-                    ps.PowerSchemaRol = PowerSchemaRol.Unknown;
+                this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
+
+                lock (this)
+                {
+                    if (!_ignoreChange)
+                        AutomaticModeEnabled = false;
+                    _ignoreChange = false;
+                }
             }
         }
 
@@ -226,9 +183,23 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
                 else
                     _gameDetectionService.Stop();
 
-                UpdateColorBrush();
-
+                _settingsService.SetSetting("AutomaticMode", value);
                 this.RaisePropertyChanged(nameof(AutomaticModeEnabled));
+            }
+        }
+
+        private void UpdatePowerSchemasIndicator()
+        {
+            foreach (var ps in PowerSchemas)
+            {
+                if (ps.Guid == _settingsService.GetSetting("BalancedSchemaGuid", new Guid("381b4222-f694-41f0-9685-ff5bb260df2e")))
+                    ps.PowerSchemaRol = PowerSchemaRol.Desktop;
+                else if (ps.Guid == _settingsService.GetSetting("GamingSchemaGuid", new Guid("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c")))
+                    ps.PowerSchemaRol = PowerSchemaRol.Gaming;
+                else if (ps.Guid == _settingsService.GetSetting("PowerSchemaSaverGuid", new Guid("a1841308-3541-4fab-bc81-f71556f20b4a")))
+                    ps.PowerSchemaRol = PowerSchemaRol.PowerSaving;
+                else
+                    ps.PowerSchemaRol = PowerSchemaRol.Unknown;
             }
         }
 
