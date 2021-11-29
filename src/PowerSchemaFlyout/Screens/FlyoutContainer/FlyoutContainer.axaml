@@ -80,8 +80,8 @@
                                     IsChecked="{Binding AutomaticModeEnabled}">
                                     <avalonia:MaterialIcon
                                         Kind="Speedometer"
-                                        Width="44"
-                                        Height="44"/>
+                                        Width="24"
+                                        Height="24"/>
                                 </ToggleButton>
                                 <ToggleButton
                                     Grid.Row="0"
