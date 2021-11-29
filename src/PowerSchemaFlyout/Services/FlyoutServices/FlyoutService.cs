@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using Ninject;
 using PowerSchemaFlyout.IoC;
-using PowerSchemaFlyout.Screens;
 using PowerSchemaFlyout.Screens.FlyoutContainer;
+
 
 namespace PowerSchemaFlyout.Services
 {
-    public class FlyoutService : IFlyoutService, IDisposable
+    public class FlyoutService : IFlyoutService
     {
         public static FlyoutContainer FlyoutWindowInstance { get; private set; }
         private readonly IKernel _kernel;
@@ -32,10 +32,12 @@ namespace PowerSchemaFlyout.Services
             {
                 _ = CloseAndRelease();
             };
+
             if (animate)
                 await FlyoutWindowInstance.ShowAnimated();
             else
                 FlyoutWindowInstance.Show();
+
             _opening = false;
         }
 
@@ -87,20 +89,17 @@ namespace PowerSchemaFlyout.Services
             _closing = true;
 
             if (animate)
-                await FlyoutWindowInstance?.CloseAnimated()!;
+                await FlyoutWindowInstance.CloseAnimated()!;
             else
-                FlyoutWindowInstance?.Close();
+                FlyoutWindowInstance.Close();
 
             FlyoutWindowInstance = null;
+
+            _closing = false;
+
             GC.Collect();
             GC.WaitForPendingFinalizers();
             GC.Collect();
-            _closing = false;
-        }
-
-        public void Dispose()
-        {
-            _kernel?.Dispose();
         }
     }
 }

@@ -38,7 +38,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
         private readonly int _screenWidth;
 
         public int ShowAnimationDelay { get; set; } = 250;
-        public int CloseAnimationDelay { get; set; } = 200;
+        public int CloseAnimationDelay { get; set; } = 250;
         public int ResizeAnimationDelay { get; set; } = 200;
 
         public int FlyoutSpacing { get; set; } = 12;
@@ -69,7 +69,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             {
                 Property = FlyoutContainer.VerticalPositionProperty,
                 Duration = TimeSpan.FromMilliseconds(ShowAnimationDelay),
-                Easing = new CircularEaseOut()
+                Easing = new ExponentialEaseOut()
             };
 
             showTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, _screenHeight, (_screenHeight - (int)(Height + FlyoutSpacing)));
@@ -140,7 +140,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             {
                 Property = FlyoutContainer.VerticalPositionProperty,
                 Duration = TimeSpan.FromMilliseconds(animationDuration),
-                Easing = new CircularEaseIn(),
+                Easing = new ExponentialEaseIn(),
             };
 
             closeTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, VerticalPosition, _screenHeight);
