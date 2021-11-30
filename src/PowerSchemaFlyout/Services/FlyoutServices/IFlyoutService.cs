@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using PowerSchemaFlyout.ViewModels;
 
 namespace PowerSchemaFlyout.Services
 {
@@ -8,7 +10,9 @@ namespace PowerSchemaFlyout.Services
         Task CloseAndRelease(bool animate = true);
         void SetHeight(double newHeight);
         void SetWidth(double newWidth);
-        Task Preload();
+        Task PreLoad();
         void Toggle();
+
+        void SetPopulateViewModelFunc(Func<ViewModelBase> populateViewModelFunc);
     }
 }

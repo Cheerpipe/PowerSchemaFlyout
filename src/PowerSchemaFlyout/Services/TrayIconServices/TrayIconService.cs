@@ -15,7 +15,6 @@ namespace PowerSchemaFlyout.Services
         public TrayIconService(IFlyoutService flyoutService)
         {
             _flyoutService = flyoutService;
-            _flyoutService.Preload();
             _trayIcon = new AvaloniaTrayIcon();
             _trayIcon.Clicked += TrayIcon_Clicked;
         }

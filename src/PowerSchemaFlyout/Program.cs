@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.PowerManagement;
+using PowerSchemaFlyout.Screens.FlyoutContainer;
 using PowerSchemaFlyout.Services;
 using PowerSchemaFlyout.Services.Detectors;
 using PowerSchemaFlyout.Services.Enums;
@@ -47,6 +48,12 @@ namespace PowerSchemaFlyout
         {
             // Do you startup code here
             Kernel.Initialize(new Bindings());
+
+            IFlyoutService flyoutService = Kernel.Get<IFlyoutService>();
+            flyoutService.SetPopulateViewModelFunc(() =>
+            {
+                return Kernel.Get<FlyoutContainerViewModel>();
+            });
 
             ITrayIconService trayIconService = Kernel.Get<ITrayIconService>();
             IGameDetectionService gameDetectionService = Kernel.Get<IGameDetectionService>();
