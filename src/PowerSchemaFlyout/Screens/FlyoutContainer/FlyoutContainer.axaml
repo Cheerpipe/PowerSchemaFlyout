@@ -50,6 +50,16 @@
 					</Transitions>
 				</Border.Transitions>
 				<Panel>
+                    <Border CornerRadius="0 0 10 10"
+                            BorderBrush="#414141"
+                            BorderThickness="0"
+                            Height="48"
+                            ClipToBounds="True"
+                            Background="#40000000"
+                            VerticalAlignment="Bottom"
+                            DockPanel.Dock="Bottom"
+                            IsVisible="{Binding CommandBarVisibleState}">
+                    </Border>
 					<Panel Name="MainContainerPanel">
 						<StackPanel>
 							<!-- Flyout content Start -->
@@ -146,16 +156,6 @@
                             <!-- Bottom command bar End -->
                         </DockPanel>
 					</Panel>
-                    <Border CornerRadius="0 0 10 10"
-                            BorderBrush="#414141"
-                            BorderThickness="0"
-							Height="48"
-                            ClipToBounds="True"
-                            Background="#40000000" 
-                            VerticalAlignment="Bottom"
-                            DockPanel.Dock="Bottom"
-                            IsVisible="{Binding CommandBarVisibleState}">
-                    </Border>
 				</Panel>
 			</Border>
 		</ExperimentalAcrylicBorder>
