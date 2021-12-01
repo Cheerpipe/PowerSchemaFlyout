@@ -116,7 +116,7 @@
 							<!-- Action buttons -->
 						</StackPanel>
                         <DockPanel 
-                                Background="#40000000" Height="48"
+                                Height="48"
                                 VerticalAlignment="Bottom"
                                 DockPanel.Dock="Bottom">
                             <StackPanel
@@ -149,8 +149,9 @@
                     <Border CornerRadius="0 0 10 10"
                             BorderBrush="#414141"
                             BorderThickness="0"
+							Height="48"
                             ClipToBounds="True"
-                            Background="#40000000"
+                            Background="#40000000" 
                             VerticalAlignment="Bottom"
                             DockPanel.Dock="Bottom"
                             IsVisible="{Binding CommandBarVisibleState}">
