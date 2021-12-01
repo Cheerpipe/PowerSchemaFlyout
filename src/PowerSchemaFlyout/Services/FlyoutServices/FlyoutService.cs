@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Avalonia.Input;
 using Ninject;
 using PowerSchemaFlyout.Screens.FlyoutContainer;
 using PowerSchemaFlyout.ViewModels;
@@ -31,6 +32,12 @@ namespace PowerSchemaFlyout.Services
             FlyoutWindowInstance.Deactivated += (_, _) =>
             {
                 _ = CloseAndRelease();
+            };
+
+            FlyoutWindowInstance.KeyDown += (_, e) =>
+            {
+                if (e.Key == Key.Escape)
+                    _ = CloseAndRelease();
             };
 
             if (animate)
