@@ -86,7 +86,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
                 Duration = TimeSpan.FromMilliseconds(ContentRevealAnimationDelay),
                 Easing = new ExponentialEaseOut()
             };
-            marginTransition.Apply(mainContainerPanel, Avalonia.Animation.Clock.GlobalClock, TransformOperations.Parse("translate(20px)"), TransformOperations.Parse("translate(0px)"));
+            marginTransition.Apply(mainContainerPanel, Avalonia.Animation.Clock.GlobalClock, TransformOperations.Parse("translate(-20px, 0px)"), TransformOperations.Parse("translate(0px, 0px)"));
 
             await Task.Delay(ShowAnimationDelay);
 
