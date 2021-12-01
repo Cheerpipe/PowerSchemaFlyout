@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Media.Transformation;
 using Avalonia.ReactiveUI;
 using ReactiveUI;
 
@@ -38,6 +39,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
         private readonly int _screenWidth;
 
         public int ShowAnimationDelay { get; set; } = 250;
+        public int ContentRevealAnimationDelay { get; set; } = 1000;
         public int CloseAnimationDelay { get; set; } = 250;
         public int ResizeAnimationDelay { get; set; } = 200;
 
@@ -63,17 +65,32 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             }
 
             Show();
+            Activate();
+
 
             Clock = Avalonia.Animation.Clock.GlobalClock;
-            var showTransition = new IntegerTransition()
+            IntegerTransition showTransition = new IntegerTransition()
             {
                 Property = FlyoutContainer.VerticalPositionProperty,
                 Duration = TimeSpan.FromMilliseconds(ShowAnimationDelay),
                 Easing = new ExponentialEaseOut()
             };
 
-            showTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, _screenHeight, (_screenHeight - (int)(Height + FlyoutSpacing)));
+            if (!isPreload)
+                showTransition.Apply(this, Avalonia.Animation.Clock.GlobalClock, _screenHeight, GetTargetVerticalPosition());
+
+            Panel mainContainerPanel = this.Find<Panel>("MainContainerPanel");
+            TransformOperationsTransition marginTransition = new TransformOperationsTransition()
+            {
+                Property = FlyoutContainer.RenderTransformProperty,
+                Duration = TimeSpan.FromMilliseconds(ContentRevealAnimationDelay),
+                Easing = new ExponentialEaseOut()
+            };
+            marginTransition.Apply(mainContainerPanel, Avalonia.Animation.Clock.GlobalClock, TransformOperations.Parse("translate(20px)"), TransformOperations.Parse("translate(0px)"));
+
             await Task.Delay(ShowAnimationDelay);
+
+            Activate();
         }
 
         #region Drag to move
