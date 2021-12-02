@@ -109,6 +109,7 @@ namespace PowerSchemaFlyout.Services
             else
                 FlyoutWindowInstance.Close();
 
+            FlyoutWindowInstance.DataContext = null;
             FlyoutWindowInstance = null;
 
             _closing = false;

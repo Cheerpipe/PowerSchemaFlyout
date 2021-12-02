@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
-using Avalonia;
 using Avalonia.Media;
 using PowerSchemaFlyout.Models;
 using PowerSchemaFlyout.Services;
@@ -18,6 +17,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
         private readonly IGameDetectionService _gameDetectionService;
         private readonly ICaffeineService _caffeineService;
         private readonly ISettingsService _settingsService;
+        private readonly IPowerSchemaWatcherService _powerSchemaWatcherService;
 
         // Workaround to avoid cyclic redundancy 
         private bool _ignoreChange;
@@ -37,22 +37,25 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             _gameDetectionService = gameDetectionService;
             _caffeineService = cafeCaffeineService;
             _settingsService = settingsService;
+            _powerManagementServices = powerManagementServices;
+            _powerSchemaWatcherService = powerSchemaWatcherService;
 
             this.WhenActivated(disposables =>
             {
                 /* Handle activation */
+                powerSchemaWatcherService.PowerPlanChanged += PowerSchemaWatcherService_PowerPlanChanged;
                 Disposable
                     .Create(() =>
                     {
                         /* Handle deactivation */
                         // _defferedDisableAutomaticModeTimer?.Dispose();
                         // _defferedDisableAutomaticModeTimer = null;
+                        _powerSchemaWatcherService.PowerPlanChanged -= PowerSchemaWatcherService_PowerPlanChanged;
 
                     })
                     .DisposeWith(disposables);
             });
 
-            _powerManagementServices = powerManagementServices;
             _powerSchemas = new List<PowerSchemaViewModel>();
             foreach (PowerSchema ps in _powerManagementServices.GetCurrentSchemas().ToList())
             {
@@ -63,7 +66,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             UpdatePowerSchemasIndicator();
             FlyoutWindowWidth = MainPageWidth;
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 150;
-            powerSchemaWatcherService.PowerPlanChanged += PowerSchemaWatcherService_PowerPlanChanged;
         }
 
         private void PowerSchemaWatcherService_PowerPlanChanged(object sender, EventArgs e)
@@ -73,18 +75,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
                 _ignoreChange = true;
                 SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == _powerManagementServices.GetActiveGuid());
             }
-        }
-
-        private LinearGradientBrush CreateBackgroundBrush(Color color)
-        {
-            LinearGradientBrush brush = new LinearGradientBrush
-            {
-                StartPoint = new RelativePoint(0, 1, RelativeUnit.Relative),
-                EndPoint = new RelativePoint(0, 0, RelativeUnit.Relative)
-            };
-            brush.GradientStops.Add(new GradientStop(Color.FromArgb(35, (byte)(color.R / 1d), (byte)(color.G / 1d), (byte)(color.B / 1d)), 0d));
-            brush.GradientStops.Add(new GradientStop(Color.FromArgb(0, 0, 0, 0), 1d));
-            return brush;
         }
 
         private double _flyoutWindowWidth;
@@ -157,15 +147,14 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             get => _selectedPowerSchema;
             set
             {
-                if (value == null)
-                    return;
-
-                _powerManagementServices.SetActiveGuid(value.Guid);
-
-                this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
-
                 lock (this)
                 {
+                    if (value == null)
+                        return;
+
+                    _powerManagementServices.SetActiveGuid(value.Guid);
+                    this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
+
                     if (!_ignoreChange)
                         AutomaticModeEnabled = false;
                     _ignoreChange = false;
@@ -178,13 +167,16 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             get => _gameDetectionService.IsRunning();
             set
             {
-                if (value)
-                    _gameDetectionService.Start();
-                else
-                    _gameDetectionService.Stop();
+                lock (this)
+                {
+                    if (value)
+                        _gameDetectionService.Start();
+                    else
+                        _gameDetectionService.Stop();
 
-                _settingsService.SetSetting("AutomaticMode", value);
-                this.RaisePropertyChanged(nameof(AutomaticModeEnabled));
+                    _settingsService.SetSetting("AutomaticMode", value);
+                    this.RaisePropertyChanged(nameof(AutomaticModeEnabled));
+                }
             }
         }
 
