@@ -17,7 +17,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
         private readonly IGameDetectionService _gameDetectionService;
         private readonly ICaffeineService _caffeineService;
         private readonly ISettingsService _settingsService;
-        private readonly IPowerSchemaWatcherService _powerSchemaWatcherService;
 
         // Workaround to avoid cyclic redundancy 
         private bool _ignoreChange;
@@ -38,7 +37,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             _caffeineService = cafeCaffeineService;
             _settingsService = settingsService;
             _powerManagementServices = powerManagementServices;
-            _powerSchemaWatcherService = powerSchemaWatcherService;
 
             this.WhenActivated(disposables =>
             {
@@ -50,7 +48,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
                         /* Handle deactivation */
                         // _defferedDisableAutomaticModeTimer?.Dispose();
                         // _defferedDisableAutomaticModeTimer = null;
-                        _powerSchemaWatcherService.PowerPlanChanged -= PowerSchemaWatcherService_PowerPlanChanged;
+                        powerSchemaWatcherService.PowerPlanChanged -= PowerSchemaWatcherService_PowerPlanChanged;
 
                     })
                     .DisposeWith(disposables);
