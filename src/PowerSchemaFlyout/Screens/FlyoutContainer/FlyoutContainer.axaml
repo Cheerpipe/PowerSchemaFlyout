@@ -63,7 +63,7 @@
 					<Panel Name="MainContainerPanel">
 						<StackPanel>
 							<!-- Flyout content Start -->
-							<Panel DockPanel.Dock="Top" Margin="15 15 15 0">
+							<Panel DockPanel.Dock="Top" Margin="15 15 15 0" Name="PowerModesPanel">
 								<ListBox Items="{Binding PowerSchemas}"  SelectedItem="{Binding SelectedPowerSchema}" >
 									<ListBox.ItemTemplate>
 										<DataTemplate>
