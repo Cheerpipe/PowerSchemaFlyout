@@ -20,6 +20,12 @@ namespace PowerSchemaFlyout.Services
             _trayIcon.Clicked += TrayIcon_Clicked;
         }
 
+        public void Refresh()
+        {
+            _trayIcon.IsVisible = false;
+            _trayIcon.IsVisible = true;
+        }
+
         public void Show()
         {
             _trayIcon.Menu = new NativeMenu();

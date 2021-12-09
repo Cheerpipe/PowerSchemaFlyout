@@ -1,4 +1,5 @@
-﻿using Ninject.Modules;
+﻿using ArtemisFlyout.Services;
+using Ninject.Modules;
 using PowerSchemaFlyout.Services;
 
 namespace PowerSchemaFlyout.IoC
@@ -7,7 +8,7 @@ namespace PowerSchemaFlyout.IoC
     {
         public override void Load()
         {
-            Bind<ITrayIconService>().To<TrayIconService>().InSingletonScope();
+            Bind<ITrayIconService>().To<WindowsTrayIconService>().InSingletonScope();
             Bind<IFlyoutService>().To<FlyoutService>().InSingletonScope();
             Bind<IGameDetectionService>().To<GameDetectionService>().InSingletonScope();
             Bind<IPowerSchemaWatcherService>().To<PowerSchemaWatcherService>().InSingletonScope();
