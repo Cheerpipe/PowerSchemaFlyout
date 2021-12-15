@@ -20,6 +20,9 @@ zoom.exe:1
 WhatsApp.exe:1
 discord.exe:1
 twitch.exe:1
+gitkraken.exe:1
+msedgewebview2.exe:1
+YouTube Music Desktop App.exe:1
 
 Nino2.exe:2
 nslt.exe:2
@@ -35,6 +38,7 @@ FallGuys_client_game.exe:2
 FallGuys_client.exe:2
 devenv.exe:2
 
+steam.exe:3
 cpuz.exe:3
 prime95.exe:3
 Cinebench.exe:3
