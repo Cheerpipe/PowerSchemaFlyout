@@ -50,7 +50,7 @@
 					</Transitions>
 				</Border.Transitions>
 				<Panel>
-                    <Border CornerRadius="0 0 10 10"
+					<Border CornerRadius="0 0 10 10"
                             BorderBrush="#414141"
                             BorderThickness="0"
                             Height="48"
@@ -59,7 +59,7 @@
                             VerticalAlignment="Bottom"
                             DockPanel.Dock="Bottom"
                             IsVisible="{Binding CommandBarVisibleState}">
-                    </Border>
+					</Border>
 					<Panel Name="MainContainerPanel">
 						<StackPanel>
 							<!-- Flyout content Start -->
@@ -69,7 +69,7 @@
 										<DataTemplate>
 											<Border CornerRadius="4" >
 												<StackPanel Orientation="Horizontal" Spacing="10">
-													<controls:SymbolIcon Symbol="{Binding Icon}" Width="24" Height="24" Foreground="{Binding Foreground}"/>
+													<avalonia:MaterialIcon Kind="{Binding Icon}"  Width="24" Foreground="{Binding Foreground}" Height="24"/>
 													<TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
 												</StackPanel>
 											</Border>
@@ -125,36 +125,36 @@
 							</StackPanel>
 							<!-- Action buttons -->
 						</StackPanel>
-                        <DockPanel 
+						<DockPanel
                                 Height="48"
                                 VerticalAlignment="Bottom"
                                 DockPanel.Dock="Bottom">
-                            <StackPanel
+							<StackPanel
                                 Margin="10 0 0 0"
                                 DockPanel.Dock="Left"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Left"
                                 Height="48">
-                                <!-- Bottom command bar Start -->
-                                <!-- Left buttons here -->
-                            </StackPanel>
-                            <StackPanel
+								<!-- Bottom command bar Start -->
+								<!-- Left buttons here -->
+							</StackPanel>
+							<StackPanel
                                 Margin="0 0 10 0"
                                 DockPanel.Dock="Right"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right">
-                                <controls:Button HorizontalAlignment="Right"
+								<controls:Button HorizontalAlignment="Right"
                                                  Name="BtnRestart"
                                                  Height="36"
                                                  Width="36"
                                                  Background="Transparent"
                                                  BorderBrush="Transparent"
                                                  Command="{Binding GoSettingsCommand}">
-                                    <controls:SymbolIcon Symbol="Setting" Width="16" Height="16"/>
-                                </controls:Button>
-                            </StackPanel>
-                            <!-- Bottom command bar End -->
-                        </DockPanel>
+									<controls:SymbolIcon Symbol="Setting" Width="16" Height="16"/>
+								</controls:Button>
+							</StackPanel>
+							<!-- Bottom command bar End -->
+						</DockPanel>
 					</Panel>
 				</Panel>
 			</Border>

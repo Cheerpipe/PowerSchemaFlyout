@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Timers;
 using PowerSchemaFlyout.Services.Detectors;
 using PowerSchemaFlyout.Services.Enums;
@@ -135,6 +135,12 @@ namespace PowerSchemaFlyout.Services
         {
             Stop();
             _scannerTimer?.Dispose();
+
+            foreach (var d in _processTypeDetectors)
+            {
+                if (d is IDisposable disposable)
+                    disposable.Dispose();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
@@ -18,6 +19,25 @@ namespace PowerSchemaFlyout.Services
             _flyoutService.PreLoad();
             _trayIcon = new AvaloniaTrayIcon();
             _trayIcon.Clicked += TrayIcon_Clicked;
+
+            // Exit menu
+            _trayIcon.Menu = new NativeMenu();
+            NativeMenuItem openPresetsFileMenu = new("Open presets file");
+            openPresetsFileMenu.Click += OpenPresetsFileMenu_Click;
+            _trayIcon.Menu.Items.Add(openPresetsFileMenu);
+
+            //Separator
+            _trayIcon.Menu.Items.Add(new NativeMenuItemSeparator());
+
+            // Exit menu
+            NativeMenuItem exitMenu = new("Exit Power Schema Flyout");
+            exitMenu.Click += ExitMenu_Click;
+            _trayIcon.Menu.Items.Add(exitMenu);
+        }
+
+        private void OpenPresetsFileMenu_Click(object? sender, EventArgs e)
+        {            
+            Process.Start(new ProcessStartInfo(Constants.PresetsFilePath) { UseShellExecute = true });
         }
 
         public void Refresh()
@@ -28,10 +48,7 @@ namespace PowerSchemaFlyout.Services
 
         public void Show()
         {
-            _trayIcon.Menu = new NativeMenu();
-            NativeMenuItem exitMenu = new("Exit Power Schema Flyout");
-            exitMenu.Click += ExitMenu_Click;
-            _trayIcon.Menu.Items.Add(exitMenu);
+         
             _trayIcon.IsVisible = true;
         }
         public void Hide()

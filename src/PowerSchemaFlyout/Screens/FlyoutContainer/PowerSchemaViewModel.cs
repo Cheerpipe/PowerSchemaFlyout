@@ -3,6 +3,8 @@
 using System;
 using Avalonia.Media;
 using FluentAvalonia.UI.Controls;
+using Material.Icons;
+using Material.Icons.Avalonia;
 
 namespace PowerSchemaFlyout.Screens.FlyoutContainer
 {
@@ -12,23 +14,25 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
         public string Name { get; init; }
         public bool IsActive { get; init; }
         public PowerSchemaRol PowerSchemaRol { get; set; }
-     
+
         public PowerSchemaViewModel(string name, Guid guid, bool isActive)
         {
             this.Name = name;
             this.Guid = guid;
         }
 
-        public Symbol Icon
+        public MaterialIconKind Icon
         {
             get
             {
                 switch (this.PowerSchemaRol)
                 {
                     case PowerSchemaRol.Gaming:
-                        return Symbol.Games;
+                        return MaterialIconKind.Speedometer;
                     case PowerSchemaRol.Desktop:
-                        return Symbol.CalendarEmpty;
+                        return MaterialIconKind.SpeedometerMedium;
+                    case PowerSchemaRol.PowerSaving:
+                        return MaterialIconKind.SpeedometerSlow;
                     default:
                         return 0;
                 }
