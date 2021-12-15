@@ -18,7 +18,7 @@ namespace PowerSchemaFlyout.Services
         private readonly Timer _scannerTimer;
         private readonly Process _currentProcess = Process.GetCurrentProcess();
         private ForegroundWindowWatcher _foregroundWindowWatcher;
-        private Process _currentForegroundProcess;
+        private ProcessWatch _currentForegroundProcessWatch;
         private ProcessDetectionResult _processDetectionResult;
 
         public GameDetectionService()
@@ -35,48 +35,59 @@ namespace PowerSchemaFlyout.Services
                 _processDetectionResult.ProcessType != processDetectionResult.ProcessType)
             {
                 ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(processDetectionResult));
+                //Debug.WriteLine("aaa");
             }
             _processDetectionResult = processDetectionResult;
         }
 
-        private void _foregroundWindowWatcher_ForegroundProcessChanged(object sender, ForegroundProcessChangedEventArgs e)
+        private void _foregroundWindowWatcher_ForegroundProcessChanged(object sender, ProcessWatch e)
         {
-            _currentForegroundProcess?.Dispose();
-            _currentForegroundProcess = null;
-            _currentForegroundProcess = e.Process;
+            if (_currentForegroundProcessWatch != null)
+            {
+                _currentForegroundProcessWatch.Process?.Dispose();
+                _currentForegroundProcessWatch.Process = null;
+            }
+            _currentForegroundProcessWatch = e;
             _processDetectionResult.Reset();
-            RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcess));
+            RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcessWatch));
         }
 
         private void _scannerTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcess));
+            RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcessWatch));
         }
 
-        private ProcessDetectionResult CheckCurrentForegroundProcess(Process process)
+        private ProcessDetectionResult CheckCurrentForegroundProcess(ProcessWatch processWatch)
         {
-            if (_processDetectionResult.ScanIsDefinitive || process?.Id == _currentProcess?.Id || !IsRunning())
-                return _processDetectionResult;
-
-            ProcessDetectionResult result = new ProcessDetectionResult(ProcessType.Unknown, false);
-
-            try
+            lock (this)
             {
-                foreach (var localResult in _processTypeDetectors.Select(detector => detector.DetectProcessType(process)))
+                if (processWatch == null)
+                    return new ProcessDetectionResult(ProcessType.Unknown, false);
+
+                if (_processDetectionResult.ScanIsDefinitive || processWatch.Process?.Id == _currentProcess?.Id || !IsRunning())
+                    return _processDetectionResult;
+
+
+                ProcessDetectionResult result = new ProcessDetectionResult(ProcessType.Unknown, false);
+
+                try
                 {
-                    result.ScanIsDefinitive = result.ScanIsDefinitive || localResult.ScanIsDefinitive;
-                    result.ProcessType = localResult.ProcessType > result.ProcessType ? localResult.ProcessType : result.ProcessType;
-                    if (result.ScanIsDefinitive)
-                        break;
+                    foreach (var localResult in _processTypeDetectors.Select(detector => detector.DetectProcessType(processWatch)))
+                    {
+                        result.ScanIsDefinitive = result.ScanIsDefinitive || localResult.ScanIsDefinitive;
+                        result.ProcessType = localResult.ProcessType > result.ProcessType ? localResult.ProcessType : result.ProcessType;
+                        if (result.ScanIsDefinitive)
+                            break;
+                    }
                 }
-            }
-            catch
-            {
-                // A lot od things can go wrong
-                // ignored
-            }
+                catch
+                {
+                    // A lot od things can go wrong
+                    // ignored
+                }
 
-            return result;
+                return result;
+            }
         }
 
         public void RegisterDetector(IProcessTypeDetector processTypeDetector)

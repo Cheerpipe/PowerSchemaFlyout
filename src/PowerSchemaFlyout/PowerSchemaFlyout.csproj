@@ -5,6 +5,7 @@
     <ApplicationIcon>Main.ico</ApplicationIcon>
     <StartupObject>PowerSchemaFlyout.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
@@ -52,10 +53,7 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="blacklist">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="whitelist">
+    <None Update="presets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

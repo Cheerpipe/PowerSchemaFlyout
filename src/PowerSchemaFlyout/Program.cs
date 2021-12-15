@@ -1,12 +1,9 @@
 using System;
 using System.Threading;
-using System.Windows;
-using Accessibility;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
 using PowerSchemaFlyout.IoC;
-using PowerSchemaFlyout.PowerManagement;
 using PowerSchemaFlyout.Screens.FlyoutContainer;
 using PowerSchemaFlyout.Services;
 using PowerSchemaFlyout.Services.Detectors;
@@ -70,7 +67,6 @@ namespace PowerSchemaFlyout
                 {
                     powerManagementServices.SetActiveGuid(settingsService.GetSetting("BalancedSchemaGuid", new Guid("381b4222-f694-41f0-9685-ff5bb260df2e")));
                 }
-
             };
 
             UpdateIcon();
@@ -85,24 +81,24 @@ namespace PowerSchemaFlyout
 
             gameDetectionService.ProcessStateChanged += (_, e) =>
             {
-                lock (powerSchemaWatcher)
+                switch (e.ProcessDetectionResult.ProcessType)
                 {
-                    switch (e.ProcessDetectionResult.ProcessType)
-                    {
-                        case ProcessType.GameProcess:
-                            powerManagementServices.SetActiveGuid(settingsService.GetSetting("GamingSchemaGuid", new Guid("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c")));
-
-                            break;
-                        case ProcessType.Unknown:
-                        case ProcessType.DesktopProcess:
-                        default:
-                            powerManagementServices.SetActiveGuid(settingsService.GetSetting("BalancedSchemaGuid", new Guid("381b4222-f694-41f0-9685-ff5bb260df2e")));
-                            break;
-                    }
+                    case ProcessType.LowDemand:
+                        powerManagementServices.SetActiveGuid(settingsService.GetSetting("PowerSaverGuid", new Guid("a1841308-3541-4fab-bc81-f71556f20b4a")));
+                        break;
+                    case ProcessType.Game:
+                        powerManagementServices.SetActiveGuid(settingsService.GetSetting("GamingSchemaGuid", new Guid("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c")));
+                        break;
+                    case ProcessType.Unknown:
+                        powerManagementServices.SetActiveGuid(settingsService.GetSetting("BalancedSchemaGuid", new Guid("381b4222-f694-41f0-9685-ff5bb260df2e")));
+                        break;
+                    case ProcessType.Desktop:
+                    default:
+                        powerManagementServices.SetActiveGuid(settingsService.GetSetting("BalancedSchemaGuid", new Guid("381b4222-f694-41f0-9685-ff5bb260df2e")));
+                        break;
                 }
             };
-            gameDetectionService.RegisterDetector(new BlackListDetector());
-            gameDetectionService.RegisterDetector(new WhiteListDetector());
+            gameDetectionService.RegisterDetector(new PresetListDetector());
             gameDetectionService.RegisterDetector(new GpuLoadDetector());
 
             if (settingsService.GetSetting("AutomaticMode", true) || settingsService.GetSetting("EnableAutomaticModeOnStartup", true))

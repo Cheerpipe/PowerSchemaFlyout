@@ -1,9 +1,9 @@
-﻿using System.Diagnostics;
+﻿using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {
     public interface IProcessTypeDetector
     {
-        ProcessDetectionResult DetectProcessType(Process process);
+        ProcessDetectionResult DetectProcessType(ProcessWatch process);
     }
 }

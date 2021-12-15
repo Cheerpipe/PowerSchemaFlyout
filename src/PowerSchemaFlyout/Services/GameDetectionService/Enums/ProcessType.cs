@@ -2,8 +2,9 @@
 {
     public enum ProcessType
     {
-        Unknown = 0,
-        DesktopProcess = 1,
-        GameProcess = 2,
+        Unknown,
+        LowDemand,
+        Desktop,
+        Game,
     }
 }

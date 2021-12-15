@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Management;
 using PowerSchemaFlyout.Services.Enums;
+using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {
@@ -14,22 +14,22 @@ namespace PowerSchemaFlyout.Services.Detectors
         {
             _scope.Connect();
         }
-        public ProcessDetectionResult DetectProcessType(Process process)
+        public ProcessDetectionResult DetectProcessType(ProcessWatch processWatch)
         {
-            if (process == null)
+            if (processWatch.Process == null)
                 return new ProcessDetectionResult(ProcessType.Unknown, false);
 
             try
             {
                 SelectQuery searchQuery = new SelectQuery(
-                    $"SELECT * FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine where name like '%{process.Id}%3D' OR name like '%{process.Id}%Graphics_%'");
+                    $"SELECT * FROM Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine where name like 'pid_{processWatch.Process.Id}%3D' OR name like '%pid_{processWatch.Process.Id}%Graphics_%'");
 
                 ManagementObjectSearcher searcher = new ManagementObjectSearcher(_scope, searchQuery);
                 ManagementObjectCollection objects = searcher.Get();
 
                 if ((objects.Count == 0))
                 {
-                    return new ProcessDetectionResult(ProcessType.DesktopProcess, false);
+                    return new ProcessDetectionResult(ProcessType.Desktop, false);
                 }
 
                 foreach (var o in objects)
@@ -37,15 +37,15 @@ namespace PowerSchemaFlyout.Services.Detectors
                     var queryObj = (ManagementObject)o;
                     if ((UInt64)queryObj["UtilizationPercentage"] > 25)
                     {
-                        return new ProcessDetectionResult(ProcessType.GameProcess, false);
+                        return new ProcessDetectionResult(ProcessType.Game, true);
                     }
                 }
                 searcher.Dispose();
-                return new ProcessDetectionResult(ProcessType.DesktopProcess, false);
+                return new ProcessDetectionResult(ProcessType.Desktop, false);
             }
             catch (ManagementException)
             {
-                return new ProcessDetectionResult(ProcessType.DesktopProcess, false);
+                return new ProcessDetectionResult(ProcessType.Desktop, false);
             }
         }
     }

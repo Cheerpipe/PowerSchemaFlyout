@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using PowerSchemaFlyout.Models;
@@ -89,6 +90,7 @@ namespace PowerSchemaFlyout.Services
 
         public void SetActiveGuid(Guid guid)
         {
+            Debug.WriteLine(guid);
             if (guid == GetActiveGuid())
                 return;
 

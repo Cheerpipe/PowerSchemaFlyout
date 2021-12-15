@@ -30,10 +30,9 @@ namespace PowerSchemaFlyout.Services.Native
         [DllImport("user32.dll")]
         private static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
-        public static Process GetForegroundProcess()
+        public static Process GetProcessByWindowHandler(IntPtr hWnd)
         {
             uint processID = 0;
-            IntPtr hWnd = GetForegroundWindow(); // Get foreground window handle
             uint threadID = GetWindowThreadProcessId(hWnd, out processID); // Get PID from window handle
             Process fgProc = Process.GetProcessById(Convert.ToInt32(processID)); // Get it as a C# obj.
             // NOTE: In some rare cases ProcessID will be NULL. Handle this how you want. 
@@ -56,9 +55,54 @@ namespace PowerSchemaFlyout.Services.Native
 
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            ForegroundProcessChanged?.Invoke(this, new ForegroundProcessChangedEventArgs(GetForegroundProcess()));
+            ForegroundProcessChanged?.Invoke(this,new ProcessWatch(hwnd));
         }
 
-        public event EventHandler<ForegroundProcessChangedEventArgs> ForegroundProcessChanged;
+        public event EventHandler<ProcessWatch> ForegroundProcessChanged;
+
+        public static string GetWindowTitle(IntPtr handle)
+        {
+            const int nChars = 256;
+            StringBuilder Buff = new StringBuilder(nChars);
+
+            if (GetWindowText(handle, Buff, nChars) > 0)
+            {
+                return Buff.ToString().Trim();
+            }
+            return string.Empty;
+        }
+    }
+
+    public class ProcessWatch
+    {
+        public Process Process { get; set; }
+        public IntPtr Handler { get; set; }
+        public string Title { get; set; }
+        public string FileName { get; set; }
+        public string FilePath { get; set; }
+
+        public ProcessWatch(IntPtr hWnd)
+        {
+
+            try
+            {
+                Process process = ForegroundWindowWatcher.GetProcessByWindowHandler(hWnd);
+
+                Process = process;
+                Handler = hWnd;
+                Title = ForegroundWindowWatcher.GetWindowTitle(hWnd);
+                FilePath = process.MainModule!.FileName!.ToLower();
+                FileName = System.IO.Path.GetFileName(process.MainModule!.FileName!.ToLower());
+            }
+            catch
+            {
+                Process process = ForegroundWindowWatcher.GetProcessByWindowHandler(hWnd);
+                Process = process;
+                Handler = IntPtr.Zero;
+                Title = String.Empty;
+                FilePath = String.Empty;
+                FileName = String.Empty;
+            }
+        }
     }
 }
