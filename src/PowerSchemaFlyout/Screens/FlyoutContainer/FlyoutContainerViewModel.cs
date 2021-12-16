@@ -13,7 +13,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
     public class FlyoutContainerViewModel : ViewModelBase
     {
         private readonly IFlyoutService _flyoutService;
-        private readonly IGameDetectionService _gameDetectionService;
+        private readonly IPresetDetectionService _gameDetectionService;
         private readonly ICaffeineService _caffeineService;
         private readonly ISettingsService _settingsService;
 
@@ -25,7 +25,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
 
         public FlyoutContainerViewModel(
             IFlyoutService flyoutService,
-            IGameDetectionService gameDetectionService,
+            IPresetDetectionService gameDetectionService,
             IPowerSchemaWatcherService powerSchemaWatcherService,
             ICaffeineService cafeCaffeineService,
             ISettingsService settingsService,
@@ -44,9 +44,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
                 Disposable
                     .Create(() =>
                     {
-                        /* Handle deactivation */
-                        // _defferedDisableAutomaticModeTimer?.Dispose();
-                        // _defferedDisableAutomaticModeTimer = null;
                         powerSchemaWatcherService.PowerPlanChanged -= PowerSchemaWatcherService_PowerPlanChanged;
 
                     })

@@ -4,7 +4,7 @@ using PowerSchemaFlyout.Services.Events;
 
 namespace PowerSchemaFlyout.Services
 {
-    public interface IGameDetectionService
+    public interface IPresetDetectionService
     {
         public void Start(int scanInterval = 5000);
         public void Stop();

@@ -3,8 +3,9 @@
     public enum ProcessType
     {
         Unknown,
-        LowDemand,
-        Desktop,
+        DesktopLow,
+        DesktopMedium,
+        DesktopHigh,
         Game,
     }
 }

@@ -3,7 +3,7 @@
 
 using System;
 
-namespace PowerSchemaFlyout.PowerManagement
+namespace PowerSchemaFlyout.Services
 {
     public class PowerSwitcherWrappersException : Exception
     {

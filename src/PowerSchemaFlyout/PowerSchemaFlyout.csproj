@@ -53,8 +53,8 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="presets.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Update="presets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 </Project>

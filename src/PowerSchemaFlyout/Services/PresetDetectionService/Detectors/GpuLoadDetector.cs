@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Management;
-using PowerSchemaFlyout.Services.Enums;
+using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
@@ -14,10 +14,11 @@ namespace PowerSchemaFlyout.Services.Detectors
         {
             _scope.Connect();
         }
-        public ProcessDetectionResult DetectProcessType(ProcessWatch processWatch)
+
+        public PresetDetectionResult DetectProcessType(ProcessWatch processWatch)
         {
             if (processWatch.Process == null)
-                return new ProcessDetectionResult(ProcessType.Unknown, false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
 
             try
             {
@@ -29,7 +30,7 @@ namespace PowerSchemaFlyout.Services.Detectors
 
                 if ((objects.Count == 0))
                 {
-                    return new ProcessDetectionResult(ProcessType.Desktop, false);
+                    return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
                 }
 
                 foreach (var o in objects)
@@ -37,15 +38,15 @@ namespace PowerSchemaFlyout.Services.Detectors
                     var queryObj = (ManagementObject)o;
                     if ((UInt64)queryObj["UtilizationPercentage"] > 25)
                     {
-                        return new ProcessDetectionResult(ProcessType.Game, true);
+                        return new PresetDetectionResult(Preset.CreateGamePreset(processWatch), true);
                     }
                 }
                 searcher.Dispose();
-                return new ProcessDetectionResult(ProcessType.Desktop, false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
             }
             catch (ManagementException)
             {
-                return new ProcessDetectionResult(ProcessType.Desktop, false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
             }
         }
     }

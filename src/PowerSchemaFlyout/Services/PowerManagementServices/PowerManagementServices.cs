@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using PowerSchemaFlyout.Models;
-using PowerSchemaFlyout.PowerManagement;
 
 namespace PowerSchemaFlyout.Services
 {

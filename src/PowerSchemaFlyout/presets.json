@@ -1,0 +1,365 @@
+{
+  "Presets": [
+
+    {
+      "Name": "Microsoft Excel",
+      "Path": "excel.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Microsoft Word",
+      "Path": "winword.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Microsoft Powerpoint",
+      "Path": "powerpnt.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Notepad",
+      "Path": "notepad.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "SearchHost",
+      "Path": "SearchHost.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "ShellExperienceHost",
+      "Path": "ShellExperienceHost.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "StartMenuExperienceHost",
+      "Path": "StartMenuExperienceHost.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Microsoft Teams",
+      "Path": "teams.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Zoom",
+      "Path": "zoom.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "WhatsApp",
+      "Path": "WhatsApp.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Discord",
+      "Path": "discord.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Twitch",
+      "Path": "twitch.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "YouTube Music Desktop",
+      "Path": "YouTube Music Desktop App.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Creative Soundblaster Command",
+      "Path": "creative.sbcommand.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Microsoft Project",
+      "Path": "winproj.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "IcoFX",
+      "Path": "icofx.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Windows Explorer",
+      "Path": "explorer.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Display Control Flyout",
+      "Path": "display control flyout.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "5000"
+    },
+    {
+      "Name": "Soundblaster G6 Flyout",
+      "Path": "g6audiooutputflyout.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "5000"
+    },
+    {
+      "Name": "Artemis Flyout",
+      "Path": "artemisflyout.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "5000"
+    },
+    {
+      "Name": "Battlenet Launcher",
+      "Path": "battle.net.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "30000"
+    },
+    {
+      "Name": "Battlenet Launcher",
+      "Path": "battle.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "30000"
+    },
+    {
+      "Name": "Git Kraken",
+      "Path": "gitkraken.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Microsoft Edge",
+      "Path": "msedge.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Google Chrome",
+      "Path": "chrome.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "FallGuys",
+      "Path": "FallGuys_client_game.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "FallGuys",
+      "Path": "FallGuys_client.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Microsoft Visual Studio",
+      "Path": "devenv.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "5000"
+    },
+    {
+      "Name": "Artemis",
+      "Path": "artemis.ui.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Winrar",
+      "Path": "winrar.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Microsoft Outlook",
+      "Path": "outlook.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Steam",
+      "Path": "steam.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Cura",
+      "Path": "cura.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Winrar",
+      "Path": "winrar.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "CPU-Z",
+      "Path": "cpuz.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Prime95",
+      "Path": "prime95.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Realbench",
+      "Path": "RealBench.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Cinebench",
+      "Path": "Cinebench.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Yuzu Emu",
+      "Path": "yuzu_ea.exe",
+      "Title": null,
+      "ProcessType": "Game",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Yuzu Emu",
+      "Path": "yuzu.exe",
+      "Title": null,
+      "ProcessType": "Game",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "3DMark",
+      "Path": "3DMark.exe",
+      "Title": null,
+      "ProcessType": "Game",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "World of Warcraft",
+      "Path": "wow.exe",
+      "Title": null,
+      "ProcessType": "Game",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "All games in Games folder",
+      "Path": "//games//",
+      "Title": null,
+      "ProcessType": "Game",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Task manager",
+      "Path": "taskmgr.exe",
+      "Title": null,
+      "ProcessType": "DesktopHigh",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Screen clipping host",
+      "Path": "screenclippinghost.exe",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    }
+  ]
+}

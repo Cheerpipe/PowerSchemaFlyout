@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace PowerSchemaFlyout.PowerManagement
+namespace PowerSchemaFlyout.Services
 {
     public static class PowerSchemasWrapperNative
     {

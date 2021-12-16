@@ -1,0 +1,60 @@
+﻿using System.Diagnostics.CodeAnalysis;
+using PowerSchemaFlyout.Services.Enums;
+using PowerSchemaFlyout.Services.Native;
+
+namespace PowerSchemaFlyout.Models.Configuration
+{
+    public class Preset
+    {
+        public string Name { get; set; }
+        public string Path { get; set; }
+        public string? Title { get; set; }
+        public ProcessType ProcessType { get; set; }
+        public ProcessType InactiveBackProcessType { get; set; }
+        public int InactiveTimeout { get; set; }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Global")]
+        public Preset() { }
+
+
+        public Preset(ProcessWatch processWatch, string name, ProcessType processType, ProcessType inactiveBackProcessType, int inactiveTimeout)
+        {
+            this.Name = name;
+            this.Path = processWatch.FilePath;
+            this.Title = processWatch.Title;
+            this.ProcessType = processType;
+            this.InactiveBackProcessType = inactiveBackProcessType;
+            this.InactiveTimeout = inactiveTimeout;
+        }
+
+        public static Preset CreateUnknownPreset()
+        {
+            return new Preset(ProcessWatch.Empty, string.Empty, ProcessType.Unknown, ProcessType.Unknown, 0);
+        }
+
+        public static Preset CreateLowreset()
+        {
+            return new Preset(ProcessWatch.Empty, string.Empty, ProcessType.DesktopLow, ProcessType.Unknown, 0);
+        }
+
+        public static Preset CreateUnknownPreset(ProcessWatch processWatch)
+        {
+
+            return new Preset(processWatch, string.Empty, ProcessType.Unknown, ProcessType.Unknown, 0);
+        }
+
+        public static Preset CreateUnknownPreset(ProcessType processType)
+        {
+            return new Preset(ProcessWatch.Empty, string.Empty, processType, processType, 0);
+        }
+
+        public static Preset CreateGamePreset(ProcessWatch processWatch)
+        {
+            return new Preset(processWatch, processWatch.Title, ProcessType.Game, ProcessType.Game, 0);
+        }
+        public static Preset CreateMediumPreset(ProcessWatch processWatch)
+        {
+            return new Preset(processWatch, processWatch.Title, ProcessType.DesktopMedium, ProcessType.DesktopMedium, 5000);
+        }
+    }
+}

@@ -4,9 +4,9 @@ namespace PowerSchemaFlyout.Services.Events
 {
     public class ProcessStateChangedArgs : EventArgs
     {
-        public ProcessDetectionResult ProcessDetectionResult { get; set; }
+        public PresetDetectionResult ProcessDetectionResult { get; set; }
 
-        public ProcessStateChangedArgs(ProcessDetectionResult processDetectionResult)
+        public ProcessStateChangedArgs(PresetDetectionResult processDetectionResult)
         {
             ProcessDetectionResult = processDetectionResult;
         }
