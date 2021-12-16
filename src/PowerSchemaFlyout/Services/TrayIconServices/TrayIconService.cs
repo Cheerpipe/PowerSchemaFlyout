@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Platform;
@@ -20,7 +21,7 @@ namespace PowerSchemaFlyout.Services
             _trayIcon = new AvaloniaTrayIcon();
             _trayIcon.Clicked += TrayIcon_Clicked;
 
-            // Exit menu
+            // Open preset file menu
             _trayIcon.Menu = new NativeMenu();
             NativeMenuItem openPresetsFileMenu = new("Open presets file");
             openPresetsFileMenu.Click += OpenPresetsFileMenu_Click;
@@ -35,9 +36,17 @@ namespace PowerSchemaFlyout.Services
             _trayIcon.Menu.Items.Add(exitMenu);
         }
 
-        private void OpenPresetsFileMenu_Click(object? sender, EventArgs e)
-        {            
+        //BUG: Event is being triggered twice
+        private bool _openingPresetsFile = false;
+        private async void OpenPresetsFileMenu_Click(object? sender, EventArgs e)
+        {
+            if (_openingPresetsFile)
+                return;
+            _openingPresetsFile = true;
             Process.Start(new ProcessStartInfo(Constants.PresetsFilePath) { UseShellExecute = true });
+            await Task.Delay(1000);
+            _openingPresetsFile = false;
+
         }
 
         public void Refresh()
@@ -48,7 +57,7 @@ namespace PowerSchemaFlyout.Services
 
         public void Show()
         {
-         
+
             _trayIcon.IsVisible = true;
         }
         public void Hide()
@@ -80,7 +89,7 @@ namespace PowerSchemaFlyout.Services
 
         public void Dispose()
         {
-            _trayIcon?.Dispose();
+            _trayIcon.Dispose();
         }
     }
 }

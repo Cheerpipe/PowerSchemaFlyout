@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Timers;
 using PowerSchemaFlyout.Services.Detectors;
@@ -18,7 +17,7 @@ namespace PowerSchemaFlyout.Services
         private readonly Timer _scannerTimer;
         private readonly Process _currentProcess = Process.GetCurrentProcess();
         private ForegroundWindowWatcher _foregroundWindowWatcher;
-        private ProcessWatch _currentForegroundProcessWatch;
+        private ProcessWatch _currentForegroundProcessWatch = ProcessWatch.Empty;
         private ProcessDetectionResult _processDetectionResult;
 
         public GameDetectionService()
@@ -27,26 +26,27 @@ namespace PowerSchemaFlyout.Services
             _scannerTimer = new Timer();
             _scannerTimer.Elapsed += _scannerTimer_Elapsed;
             _processDetectionResult = new ProcessDetectionResult(ProcessType.Unknown, false);
+            _foregroundWindowWatcher = new ForegroundWindowWatcher();
         }
 
         private void RaiseAndSetPowerStateChangeIfChanged(ProcessDetectionResult processDetectionResult)
         {
-            if (_processDetectionResult.ScanIsDefinitive != processDetectionResult.ScanIsDefinitive ||
-                _processDetectionResult.ProcessType != processDetectionResult.ProcessType)
+            lock (this)
             {
-                ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(processDetectionResult));
-                //Debug.WriteLine("aaa");
+                if (_processDetectionResult.ScanIsDefinitive != processDetectionResult.ScanIsDefinitive ||
+                    _processDetectionResult.ProcessType != processDetectionResult.ProcessType)
+                {
+                    ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(processDetectionResult));
+                }
+
+                _processDetectionResult = processDetectionResult;
             }
-            _processDetectionResult = processDetectionResult;
         }
 
         private void _foregroundWindowWatcher_ForegroundProcessChanged(object sender, ProcessWatch e)
         {
-            if (_currentForegroundProcessWatch != null)
-            {
-                _currentForegroundProcessWatch.Process?.Dispose();
-                _currentForegroundProcessWatch.Process = null;
-            }
+            _currentForegroundProcessWatch.Process?.Dispose();
+            _currentForegroundProcessWatch.Process = null;
             _currentForegroundProcessWatch = e;
             _processDetectionResult.Reset();
             RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcessWatch));
@@ -61,12 +61,8 @@ namespace PowerSchemaFlyout.Services
         {
             lock (this)
             {
-                if (processWatch == null)
-                    return new ProcessDetectionResult(ProcessType.Unknown, false);
-
-                if (_processDetectionResult.ScanIsDefinitive || processWatch.Process?.Id == _currentProcess?.Id || !IsRunning())
+                if (_processDetectionResult.ScanIsDefinitive || processWatch.Process?.Id == _currentProcess.Id || !IsRunning())
                     return _processDetectionResult;
-
 
                 ProcessDetectionResult result = new ProcessDetectionResult(ProcessType.Unknown, false);
 
@@ -97,9 +93,9 @@ namespace PowerSchemaFlyout.Services
 
         public bool IsRunning() => _scannerTimer.Enabled;
 
-        public event EventHandler<ProcessStateChangedArgs> ProcessStateChanged;
-        public event EventHandler Started;
-        public event EventHandler Stoped;
+        public event EventHandler<ProcessStateChangedArgs>? ProcessStateChanged;
+        public event EventHandler? Started;
+        public event EventHandler? Stopped;
 
         public void Start(int scanInterval = 5000)
         {
@@ -110,7 +106,6 @@ namespace PowerSchemaFlyout.Services
             {
                 _scannerTimer.Interval = scanInterval;
                 _scannerTimer.Start();
-                _foregroundWindowWatcher = new ForegroundWindowWatcher();
                 _foregroundWindowWatcher.ForegroundProcessChanged += _foregroundWindowWatcher_ForegroundProcessChanged;
                 _foregroundWindowWatcher.Start();
                 Started?.Invoke(this, EventArgs.Empty);
@@ -127,14 +122,14 @@ namespace PowerSchemaFlyout.Services
                 _scannerTimer.Stop();
                 _foregroundWindowWatcher.ForegroundProcessChanged -= _foregroundWindowWatcher_ForegroundProcessChanged;
                 _foregroundWindowWatcher.Stop();
-                Stoped?.Invoke(this, EventArgs.Empty);
+                Stopped?.Invoke(this, EventArgs.Empty);
             }
         }
 
         public void Dispose()
         {
             Stop();
-            _scannerTimer?.Dispose();
+            _scannerTimer.Dispose();
 
             foreach (var d in _processTypeDetectors)
             {

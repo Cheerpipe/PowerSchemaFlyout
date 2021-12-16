@@ -23,6 +23,14 @@ twitch.exe:1
 gitkraken.exe:1
 msedgewebview2.exe:1
 YouTube Music Desktop App.exe:1
+cura.exe:1
+display control flyout.exe:1
+g6audiooutputflyout.exe:1
+artemisflyout.exe:1
+creative.sbcommand.exe:1
+winproj.exe:1
+applicationframehost.exe:1:Calculator
+applicationframehost.exe:1:Settings
 
 Nino2.exe:2
 nslt.exe:2
@@ -37,6 +45,7 @@ trine4.exe:2
 FallGuys_client_game.exe:2
 FallGuys_client.exe:2
 devenv.exe:2
+explorer.exe:2
 
 steam.exe:3
 cpuz.exe:3
@@ -47,4 +56,5 @@ wow.exe:3
 RealBench.exe:3
 yuzu_ea.exe:3
 yuzu.exe:3
+winrar.exe:3
 //games//:3

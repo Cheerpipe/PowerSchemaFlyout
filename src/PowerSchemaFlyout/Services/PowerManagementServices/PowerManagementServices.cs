@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using PowerSchemaFlyout.Models;
@@ -57,7 +56,7 @@ namespace PowerSchemaFlyout.Services
                 if (bufferPointer != IntPtr.Zero) { Marshal.FreeHGlobal(bufferPointer); }
             }
 
-            return name;
+            return name ?? string.Empty;
         }
 
         public List<PowerSchema> GetCurrentSchemas()
@@ -90,7 +89,6 @@ namespace PowerSchemaFlyout.Services
 
         public void SetActiveGuid(Guid guid)
         {
-            Debug.WriteLine(guid);
             if (guid == GetActiveGuid())
                 return;
 
@@ -99,6 +97,6 @@ namespace PowerSchemaFlyout.Services
             ActiveGuidChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler ActiveGuidChanged;
+        public event EventHandler? ActiveGuidChanged;
     }
 }

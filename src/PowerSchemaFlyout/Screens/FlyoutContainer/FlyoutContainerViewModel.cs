@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
-using Avalonia.Media;
 using PowerSchemaFlyout.Models;
 using PowerSchemaFlyout.Services;
 using PowerSchemaFlyout.ViewModels;
@@ -57,10 +56,10 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             _powerSchemas = new List<PowerSchemaViewModel>();
             foreach (PowerSchema ps in _powerManagementServices.GetCurrentSchemas().ToList())
             {
-                _powerSchemas!.Add(new PowerSchemaViewModel(ps.Name, ps.Guid, ps.IsActive));
+                _powerSchemas.Add(new PowerSchemaViewModel(ps.Name, ps.Guid, ps.IsActive));
             }
 
-            _selectedPowerSchema = _powerSchemas!.FirstOrDefault(ps => ps.Guid == _powerManagementServices.GetActiveGuid());
+            _selectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == _powerManagementServices.GetActiveGuid())!;
             UpdatePowerSchemasIndicator();
             FlyoutWindowWidth = MainPageWidth;
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 150;
@@ -71,7 +70,7 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             lock (this)
             {
                 _ignoreChange = true;
-                SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == _powerManagementServices.GetActiveGuid());
+                SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == _powerManagementServices.GetActiveGuid())!;
             }
         }
 
@@ -87,16 +86,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             }
         }
 
-        private LinearGradientBrush _backgroundBrush;
-        public LinearGradientBrush BackgroundBrush
-        {
-            get => _backgroundBrush;
-            set
-            {
-                _backgroundBrush = value;
-                this.RaisePropertyChanged(nameof(BackgroundBrush));
-            }
-        }
         public bool Caffeine
         {
             get => _caffeineService.IsActive();
@@ -147,9 +136,6 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             {
                 lock (this)
                 {
-                    if (value == null)
-                        return;
-
                     _powerManagementServices.SetActiveGuid(value.Guid);
                     this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
 

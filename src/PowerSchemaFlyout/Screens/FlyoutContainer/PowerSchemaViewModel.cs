@@ -2,9 +2,7 @@
 
 using System;
 using Avalonia.Media;
-using FluentAvalonia.UI.Controls;
 using Material.Icons;
-using Material.Icons.Avalonia;
 
 namespace PowerSchemaFlyout.Screens.FlyoutContainer
 {
@@ -15,10 +13,17 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
         public bool IsActive { get; init; }
         public PowerSchemaRol PowerSchemaRol { get; set; }
 
+        public PowerSchemaViewModel(string name, Guid guid)
+        {
+            this.Name = name;
+            this.Guid = guid;
+        }
+
         public PowerSchemaViewModel(string name, Guid guid, bool isActive)
         {
             this.Name = name;
             this.Guid = guid;
+            this.IsActive = isActive;
         }
 
         public MaterialIconKind Icon

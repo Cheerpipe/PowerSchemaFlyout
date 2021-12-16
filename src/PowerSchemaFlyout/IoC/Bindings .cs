@@ -1,5 +1,4 @@
-﻿using ArtemisFlyout.Services;
-using Ninject.Modules;
+﻿using Ninject.Modules;
 using PowerSchemaFlyout.Services;
 
 namespace PowerSchemaFlyout.IoC

@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using PowerSchemaFlyout.Platform.Windows;
-using PowerSchemaFlyout.Services;
 
-namespace ArtemisFlyout.Services
+namespace PowerSchemaFlyout.Services
 {
     internal class WindowsTrayIconService : TrayIconService, IDisposable
     {
@@ -25,7 +24,7 @@ namespace ArtemisFlyout.Services
         public new void Dispose()
         {
             base.Dispose();
-            _win32MessageGrabber?.Dispose();
+            _win32MessageGrabber.Dispose();
         }
     }
 }

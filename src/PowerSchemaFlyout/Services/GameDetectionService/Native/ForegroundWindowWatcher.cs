@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using PowerSchemaFlyout.Services.Events;
+using Avalonia.Data.Core;
 
 namespace PowerSchemaFlyout.Services.Native
 {
@@ -55,7 +55,7 @@ namespace PowerSchemaFlyout.Services.Native
 
         public void WinEventProc(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime)
         {
-            ForegroundProcessChanged?.Invoke(this,new ProcessWatch(hwnd));
+            ForegroundProcessChanged?.Invoke(this, new ProcessWatch(hwnd));
         }
 
         public event EventHandler<ProcessWatch> ForegroundProcessChanged;
@@ -75,15 +75,16 @@ namespace PowerSchemaFlyout.Services.Native
 
     public class ProcessWatch
     {
-        public Process Process { get; set; }
+        public Process? Process { get; set; }
         public IntPtr Handler { get; set; }
         public string Title { get; set; }
         public string FileName { get; set; }
         public string FilePath { get; set; }
 
+        private ProcessWatch() { }
+
         public ProcessWatch(IntPtr hWnd)
         {
-
             try
             {
                 Process process = ForegroundWindowWatcher.GetProcessByWindowHandler(hWnd);
@@ -102,6 +103,21 @@ namespace PowerSchemaFlyout.Services.Native
                 Title = String.Empty;
                 FilePath = String.Empty;
                 FileName = String.Empty;
+            }
+        }
+
+        public static ProcessWatch Empty
+        {
+            get
+            {
+                return new ProcessWatch
+                {
+                    Process = null,
+                    Handler = IntPtr.Zero,
+                    Title = String.Empty,
+                    FileName = String.Empty,
+                    FilePath = String.Empty
+                };
             }
         }
     }

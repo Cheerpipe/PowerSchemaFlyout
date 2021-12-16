@@ -13,6 +13,6 @@ namespace PowerSchemaFlyout.Services
 
         event EventHandler<ProcessStateChangedArgs> ProcessStateChanged;
         event EventHandler Started;
-        event EventHandler Stoped;
+        event EventHandler Stopped;
     }
 }

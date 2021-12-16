@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Avalonia;
 using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 
@@ -10,7 +11,7 @@ namespace PowerSchemaFlyout.Services.Detectors
     public class PresetListDetector : IProcessTypeDetector, IDisposable
     {
         private List<Preset> _presets = new List<Preset>();
-        private readonly ProcessDetectionResult DefaultResult = new ProcessDetectionResult(ProcessType.Desktop, false);
+        private readonly ProcessDetectionResult _defaultResult = new ProcessDetectionResult(ProcessType.Desktop, false);
         private readonly FileSystemWatcher _presetsFileWatcher = new FileSystemWatcher();
 
         public PresetListDetector()
@@ -35,7 +36,6 @@ namespace PowerSchemaFlyout.Services.Detectors
                 List<string> lines = new List<string>();
                 using FileStream fs = new FileStream(Constants.PresetsFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 using StreamReader sr = new StreamReader(fs);
-                List<String> lst = new List<string>();
                 while (!sr.EndOfStream)
                     lines.Add(sr.ReadLine());
 
@@ -80,22 +80,41 @@ namespace PowerSchemaFlyout.Services.Detectors
             lock (this)
             {
                 // Get presets for process
-                List<Preset> _processPresets = _presets.Where(preset => processWatch.FileName.Contains(preset.Path)).ToList();
+                List<Preset> processPresets = _presets.Where(preset => processWatch.FileName.Contains(preset.Path)).ToList();
 
                 // Return default (Desktop) mode if there are no profiles.
-                if (_processPresets.Count == 0)
-                    return DefaultResult;
+                if (processPresets.Count == 0)
+                {
+                    // To detect applications without preset.
+                    // TODO: Proper IO write - Unique values - Clear values with presets
+                    lock (Application.Current)
+                    {
+                        File.AppendAllText("withoutpreset.txt", processWatch.FilePath + Environment.NewLine);
+                    }
+                    return _defaultResult;
+                }
 
                 //First, Check if process match any preset with title
-                if (_processPresets.FirstOrDefault(preset => processWatch.FileName.Contains(preset.Path) && processWatch.Title == preset.Title) is Preset thePresetWithTitle)
+                if (processPresets.FirstOrDefault(preset => processWatch.FileName.Contains(preset.Path) && processWatch.Title == preset.Title) is { } thePresetWithTitle)
                     return new ProcessDetectionResult(thePresetWithTitle.ProcessType, true);
 
                 //Second, Check if process match any preset without title
-                if (_processPresets.FirstOrDefault(preset => processWatch.FileName.ToLower().Contains(preset.Path) && preset.Title == null) is Preset thePresetWithoutTitle)
+                if (processPresets.FirstOrDefault(preset => processWatch.FileName.ToLower().Contains(preset.Path) && preset.Title == null) is { } thePresetWithoutTitle)
                     return new ProcessDetectionResult(thePresetWithoutTitle.ProcessType, true);
 
-                // If dectection don't dive any resutls, result default result
-                return DefaultResult;
+
+                // If dectection don't dive any results, result default result
+                // To detect applications without preset.
+                // TODO: Proper IO write - Unique values - Clear values with presets
+                lock (Application.Current)
+                {
+                    File.AppendAllText("withoutpreset.txt",
+                        $"{processWatch.FilePath} - {processWatch.Title}" + Environment.NewLine);
+                }
+
+
+                // If detection don't dive any resutls, result default result
+                return _defaultResult;
             }
         }
 
@@ -107,7 +126,7 @@ namespace PowerSchemaFlyout.Services.Detectors
 
     public class Preset
     {
-        public string Path { get; set; }
+        public string Path { get; set; } = string.Empty;
         public ProcessType ProcessType { get; set; }
         public string? Title { get; set; }
     }
