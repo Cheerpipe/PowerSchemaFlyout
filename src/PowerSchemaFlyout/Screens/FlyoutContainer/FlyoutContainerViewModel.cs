@@ -13,26 +13,23 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
     public class FlyoutContainerViewModel : ViewModelBase
     {
         private readonly IFlyoutService _flyoutService;
-        private readonly IPresetDetectionService _gameDetectionService;
+        private readonly IPresetDetectionService _presetDetectionService;
         private readonly ICaffeineService _caffeineService;
         private readonly ISettingsService _settingsService;
-
-        // Workaround to avoid cyclic redundancy 
-        private bool _ignoreChange;
 
         private const int MainPageWidth = 270;
         private readonly IPowerManagementServices _powerManagementServices;
 
         public FlyoutContainerViewModel(
             IFlyoutService flyoutService,
-            IPresetDetectionService gameDetectionService,
+            IPresetDetectionService presetDetectionService,
             IPowerSchemaWatcherService powerSchemaWatcherService,
             ICaffeineService cafeCaffeineService,
             ISettingsService settingsService,
             IPowerManagementServices powerManagementServices)
         {
             _flyoutService = flyoutService;
-            _gameDetectionService = gameDetectionService;
+            _presetDetectionService = presetDetectionService;
             _caffeineService = cafeCaffeineService;
             _settingsService = settingsService;
             _powerManagementServices = powerManagementServices;
@@ -41,10 +38,14 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             {
                 /* Handle activation */
                 powerSchemaWatcherService.PowerPlanChanged += PowerSchemaWatcherService_PowerPlanChanged;
-                Disposable
+                _presetDetectionService.Started += _presetDetectionService_Started;
+                _presetDetectionService.Stopped += _presetDetectionService_Stopped;
+                    Disposable
                     .Create(() =>
                     {
                         powerSchemaWatcherService.PowerPlanChanged -= PowerSchemaWatcherService_PowerPlanChanged;
+                        _presetDetectionService.Started -= _presetDetectionService_Started;
+                        _presetDetectionService.Stopped -= _presetDetectionService_Stopped;
 
                     })
                     .DisposeWith(disposables);
@@ -62,11 +63,20 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             FlyoutWindowHeight = _powerSchemas.Count * 52 + 150;
         }
 
+        private void _presetDetectionService_Stopped(object? sender, EventArgs e)
+        {
+            AutomaticModeEnabled = false;
+        }
+
+        private void _presetDetectionService_Started(object? sender, EventArgs e)
+        {
+            AutomaticModeEnabled = true;
+        }
+
         private void PowerSchemaWatcherService_PowerPlanChanged(object sender, EventArgs e)
         {
             lock (this)
             {
-                _ignoreChange = true;
                 SelectedPowerSchema = _powerSchemas.FirstOrDefault(ps => ps.Guid == _powerManagementServices.GetActiveGuid())!;
             }
         }
@@ -135,25 +145,21 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
                 {
                     _powerManagementServices.SetActiveGuid(value.Guid);
                     this.RaiseAndSetIfChanged(ref _selectedPowerSchema, value);
-
-                    if (!_ignoreChange)
-                        AutomaticModeEnabled = false;
-                    _ignoreChange = false;
                 }
             }
         }
 
         public bool AutomaticModeEnabled
         {
-            get => _gameDetectionService.IsRunning();
+            get => _presetDetectionService.IsRunning();
             set
             {
                 lock (this)
                 {
                     if (value)
-                        _gameDetectionService.Start();
+                        _presetDetectionService.Start();
                     else
-                        _gameDetectionService.Stop();
+                        _presetDetectionService.Stop();
 
                     _settingsService.SetSetting("AutomaticMode", value);
                     this.RaisePropertyChanged(nameof(AutomaticModeEnabled));

@@ -10,6 +10,8 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.ReactiveUI;
+using PowerSchemaFlyout.IoC;
+using PowerSchemaFlyout.Services;
 using ReactiveUI;
 
 // ReSharper disable UnusedParameter.Local
@@ -51,6 +53,9 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             PointerPressed += FlyoutPanelContainer_PointerPressed;
             PointerReleased += FlyoutPanelContainer_PointerReleased;
             PointerMoved += FlyoutPanelContainer_PointerMoved;
+
+            ListBox powerSchemaList = this.Find<ListBox>("PowerSchemaList");
+            powerSchemaList.Tapped += PowerSchemaList_Tapped;
 
             WindowStartupLocation = WindowStartupLocation.Manual;
 
@@ -102,6 +107,11 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             await Task.Delay(ShowAnimationDelay);
 
             Activate();
+        }
+
+        private void PowerSchemaList_Tapped(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            Kernel.Get<IPresetDetectionService>().Stop();
         }
 
         #region Drag to move
@@ -164,6 +174,11 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
 
         public async Task CloseAnimated(double animationDuration)
         {
+
+            PointerPressed -= FlyoutPanelContainer_PointerPressed;
+            PointerReleased -= FlyoutPanelContainer_PointerReleased;
+            PointerMoved -= FlyoutPanelContainer_PointerMoved;
+
             var closeTransition = new IntegerTransition()
             {
                 Property = FlyoutContainer.VerticalPositionProperty,

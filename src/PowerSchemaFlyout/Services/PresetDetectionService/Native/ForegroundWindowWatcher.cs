@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-using PowerSchemaFlyout.Services.Enums;
 
 namespace PowerSchemaFlyout.Services.Native
 {

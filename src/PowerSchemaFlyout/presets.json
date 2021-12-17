@@ -1,6 +1,37 @@
 {
   "Presets": [
-
+    {
+      "Name": "Cisco Webex",
+      "Path": "atcliun.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Open with dialog",
+      "Path": "openwith.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "Nvidia Broadcast UI",
+      "Path": "nvidia broadcast ui.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
+    {
+      "Name": "VSCode",
+      "Path": "code.exe",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
+    },
     {
       "Name": "Microsoft Excel",
       "Path": "excel.exe",
@@ -136,6 +167,14 @@
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Taskbar",
+      "Path": "explorer.exe",
+      "Title": "",
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "0"
     },
     {
       "Name": "Display Control Flyout",

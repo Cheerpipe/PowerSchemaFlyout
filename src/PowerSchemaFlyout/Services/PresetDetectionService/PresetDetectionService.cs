@@ -8,7 +8,6 @@ using PowerSchemaFlyout.Services.Detectors;
 using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Events;
 using PowerSchemaFlyout.Services.Native;
-using Timer = System.Timers.Timer;
 
 namespace PowerSchemaFlyout.Services
 {
@@ -39,26 +38,32 @@ namespace PowerSchemaFlyout.Services
         private bool _idleState;
         private void _idleTimeTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            // This apply only for non games processes. Also ignore if process is already in power save mode
-            if (_currentProcessDetectionResult.Preset.ProcessType is ProcessType.Game or ProcessType.DesktopLow || _currentProcessDetectionResult.Preset.InactiveTimeout == 0)
-                return;
-
-            if (IdleTimeFinder.GetIdleTime() > _currentProcessDetectionResult.Preset.InactiveTimeout)
+            lock (this)
             {
-                if (_idleState) return;
-                _idleTimeTimer.Interval = 100;
-                _proactiveScannerTimer.Stop();
-                ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(new PresetDetectionResult(Preset.CreateUnknownPreset(_currentProcessDetectionResult.Preset.InactiveBackProcessType), true)));
-                _idleState = true;
-            }
-            else
-            {
-                if (!_idleState) return;
-                _idleTimeTimer.Interval = 500;
-                _proactiveScannerTimer.Start();
-                ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(CheckCurrentForegroundProcess(_currentForegroundProcessWatch, true)));
+                // This apply only for non games processes. Also ignore if process is already in power save mode
+                if (_currentProcessDetectionResult.Preset.ProcessType is ProcessType.Game or ProcessType.DesktopLow ||
+                _currentProcessDetectionResult.Preset.InactiveTimeout == 0 ||
+                _currentProcessDetectionResult.Preset.ProcessType == _currentProcessDetectionResult.Preset.InactiveBackProcessType)
+                    return;
 
-                _idleState = false;
+                if (IdleTimeFinder.GetIdleTime() > _currentProcessDetectionResult.Preset.InactiveTimeout)
+                {
+                    if (_idleState) return;
+                    _idleState = true;
+                    _idleTimeTimer.Interval = 100;
+                    _proactiveScannerTimer.Stop();
+                    ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(new PresetDetectionResult(Preset.CreateUnknownPreset(_currentProcessDetectionResult.Preset.InactiveBackProcessType), true)));
+
+                }
+                else
+                {
+                    if (!_idleState) return;
+                    _idleState = false;
+                    _idleTimeTimer.Interval = 500;
+                    _proactiveScannerTimer.Start();
+                    ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(CheckCurrentForegroundProcess(_currentForegroundProcessWatch, true)));
+
+                }
             }
         }
 
@@ -77,16 +82,22 @@ namespace PowerSchemaFlyout.Services
 
         private void _foregroundWindowWatcher_ForegroundProcessChanged(object sender, ProcessWatch e)
         {
-            _currentForegroundProcessWatch.Process?.Dispose();
-            _currentForegroundProcessWatch.Process = null;
-            _currentForegroundProcessWatch = e;
-            _currentProcessDetectionResult.Reset();
-            RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcessWatch));
+            lock (this)
+            {
+                _currentForegroundProcessWatch.Process?.Dispose();
+                _currentForegroundProcessWatch.Process = null;
+                _currentForegroundProcessWatch = e;
+                _currentProcessDetectionResult.Reset();
+                RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcessWatch));
+            }
         }
 
         private void _proactiveScannerTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcessWatch));
+            lock (this)
+            {
+                RaiseAndSetPowerStateChangeIfChanged(CheckCurrentForegroundProcess(_currentForegroundProcessWatch));
+            }
         }
 
         private PresetDetectionResult CheckCurrentForegroundProcess(ProcessWatch processWatch, bool force = false)

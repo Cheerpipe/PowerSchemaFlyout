@@ -64,7 +64,7 @@
 						<StackPanel>
 							<!-- Flyout content Start -->
 							<Panel DockPanel.Dock="Top" Margin="15 15 15 0" Name="PowerModesPanel">
-								<ListBox Items="{Binding PowerSchemas}"  SelectedItem="{Binding SelectedPowerSchema}" >
+								<ListBox Items="{Binding PowerSchemas}"  SelectedItem="{Binding SelectedPowerSchema}" Name="PowerSchemaList">
 									<ListBox.ItemTemplate>
 										<DataTemplate>
 											<Border CornerRadius="4" >
