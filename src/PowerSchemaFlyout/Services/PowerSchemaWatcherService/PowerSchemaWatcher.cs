@@ -26,13 +26,13 @@ namespace PowerSchemaFlyout.Services
 
         public void StopPlanWatcher()
         {
-            _currentPowerPlanWatcher?.Stop();
-            _currentPowerPlanWatcher?.Dispose();
+            _currentPowerPlanWatcher.Stop();
+            _currentPowerPlanWatcher.Dispose();
         }
 
         private void CurrentPowerPlanWatcher_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            PowerPlanChanged?.Invoke(this, EventArgs.Empty);
+            PowerPlanChanged.Invoke(this, EventArgs.Empty);
         }
 
         public void Dispose()

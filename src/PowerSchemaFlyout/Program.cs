@@ -53,7 +53,7 @@ namespace PowerSchemaFlyout
             });
 
             ITrayIconService trayIconService = Kernel.Get<ITrayIconService>();
-            IPresetDetectionService gameDetectionService = Kernel.Get<IPresetDetectionService>();
+            IPresetDetectionService presetDetectionService = Kernel.Get<IPresetDetectionService>();
             IPowerSchemaWatcherService powerSchemaWatcher = Kernel.Get<IPowerSchemaWatcherService>();
             ICaffeineService caffeineService = Kernel.Get<ICaffeineService>();
             ISettingsService settingsService = Kernel.Get<ISettingsService>();
@@ -61,7 +61,7 @@ namespace PowerSchemaFlyout
 
             caffeineService.Stop();
 
-            gameDetectionService.Started += (_, _) =>
+            presetDetectionService.Started += (_, _) =>
             {
                 lock (powerSchemaWatcher)
                 {
@@ -79,7 +79,7 @@ namespace PowerSchemaFlyout
                 UpdateIcon();
             };
 
-            gameDetectionService.ProcessStateChanged += (_, e) =>
+            presetDetectionService.ProcessStateChanged += (_, e) =>
             {
                 switch (e.ProcessDetectionResult.Preset.ProcessType)
                 {
@@ -104,13 +104,13 @@ namespace PowerSchemaFlyout
                 }
             };
 
-            gameDetectionService.RegisterDetector(new PresetFileDetector());
-            gameDetectionService.RegisterDetector(new GpuLoadDetector());
-            gameDetectionService.RegisterDetector(new DefaultDetector());
+            presetDetectionService.RegisterDetector(new PresetFileDetector());
+            presetDetectionService.RegisterDetector(new GpuLoadDetector());
+            presetDetectionService.RegisterDetector(new DefaultDetector());
 
             if (settingsService.GetSetting("AutomaticMode", true) || settingsService.GetSetting("EnableAutomaticModeOnStartup", true))
             {
-                gameDetectionService.Start();
+                presetDetectionService.Start();
             }
 
             // Start the main loop
@@ -119,7 +119,7 @@ namespace PowerSchemaFlyout
             // Stop things
             trayIconService.Hide();
             powerSchemaWatcher.StopPlanWatcher();
-            gameDetectionService.Stop();
+            presetDetectionService.Stop();
         }
 
         public static void UpdateIcon()
