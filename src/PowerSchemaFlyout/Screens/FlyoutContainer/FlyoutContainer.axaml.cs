@@ -60,18 +60,11 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             WindowStartupLocation = WindowStartupLocation.Manual;
 
             if (isPreload)
-            {
-                this.WindowState = WindowState.Minimized;
-                HorizontalPosition = Screens.All.Sum(s => s.WorkingArea.Width);
-            }
-            else
-            {
-                Position = new PixelPoint(_screenWidth - (int)(Width + 12), Position.Y);
-            }
+                WindowState = WindowState.Minimized;
+
+            Position = new PixelPoint(_screenWidth - (int)(Width + 12), Position.Y);
 
             Show();
-            Activate();
-
 
             Clock = Avalonia.Animation.Clock.GlobalClock;
             IntegerTransition showTransition = new IntegerTransition()

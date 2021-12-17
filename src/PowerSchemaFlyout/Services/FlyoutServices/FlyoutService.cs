@@ -9,7 +9,7 @@ namespace PowerSchemaFlyout.Services
 {
     public class FlyoutService : IFlyoutService
     {
-        public static FlyoutContainer FlyoutWindowInstance { get; private set; }
+        public static FlyoutContainer? FlyoutWindowInstance { get; private set; }
         private readonly IKernel _kernel;
         private Func<ViewModelBase> _populateViewModelFunc;
         private bool _opening;
