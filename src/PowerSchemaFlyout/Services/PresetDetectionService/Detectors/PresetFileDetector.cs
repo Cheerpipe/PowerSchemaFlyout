@@ -6,6 +6,7 @@ using Avalonia;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
+using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
@@ -35,6 +36,11 @@ namespace PowerSchemaFlyout.Services.Detectors
             lock (this)
             {
                 _presets = Kernel.Get<IConfigurationService>().Get().Presets;
+                _presets.ForEach(p =>
+                {
+                    p.ProcessName = p.ProcessName.Trim().ToLower();
+                    if (p.Title != null) p.Title = p.Title.ToLower().Trim();
+                });
             }
         }
 
@@ -46,7 +52,7 @@ namespace PowerSchemaFlyout.Services.Detectors
             lock (this)
             {
                 // Get presets for process
-                List<Preset> processPresets = _presets.Where(preset => processWatch.FileName.ToLower().Contains(preset.Path.ToLower())).ToList();
+                List<Preset> processPresets = _presets.Where(preset => processWatch.ProcessName == preset.ProcessName).ToList();
 
                 // Return default (Desktop) mode if there are no profiles.
                 if (processPresets.Count == 0)
@@ -56,18 +62,18 @@ namespace PowerSchemaFlyout.Services.Detectors
                     lock (Application.Current)
                     {
                         File.AppendAllText("withoutpreset.txt",
-                            $"{processWatch.FilePath} - {processWatch.Title}" + Environment.NewLine);
+                            $"{processWatch.ProcessName} - {processWatch.Title}" + Environment.NewLine);
                     }
 
                     return _defaultResult;
                 }
 
                 //First, Check if process match any preset with title
-                if (processPresets.FirstOrDefault(preset => processWatch.FileName.Contains(preset.Path.ToLower()) && String.Equals(processWatch.Title, preset.Title, StringComparison.CurrentCultureIgnoreCase)) is { } thePresetWithTitle)
+                if (processPresets.FirstOrDefault(preset => processWatch.ProcessName == preset.ProcessName && String.Equals(processWatch.Title, preset.Title, StringComparison.CurrentCultureIgnoreCase)) is { } thePresetWithTitle)
                     return new PresetDetectionResult(thePresetWithTitle, true);
 
                 //Second, Check if process match any preset without title
-                if (processPresets.FirstOrDefault(preset => processWatch.FileName.ToLower().Contains(preset.Path.ToLower()) && preset.Title == null) is { } thePresetWithoutTitle)
+                if (processPresets.FirstOrDefault(preset => processWatch.ProcessName == preset.ProcessName && preset.Title == null) is { } thePresetWithoutTitle)
                     return new PresetDetectionResult(thePresetWithoutTitle, true);
 
 
@@ -77,7 +83,7 @@ namespace PowerSchemaFlyout.Services.Detectors
                 lock (Application.Current)
                 {
                     File.AppendAllText("withoutpreset.txt",
-                        $"{processWatch.FilePath} - {processWatch.Title}" + Environment.NewLine);
+                        $"{processWatch.ProcessName} - {processWatch.Title}" + Environment.NewLine);
                 }
 
 
@@ -88,7 +94,7 @@ namespace PowerSchemaFlyout.Services.Detectors
 
         public void Dispose()
         {
-
+            _presetsFileWatcher.Dispose();
         }
     }
 }

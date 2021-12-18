@@ -7,7 +7,7 @@ namespace PowerSchemaFlyout.Models.Configuration
     public class Preset
     {
         public string Name { get; set; }
-        public string Path { get; set; }
+        public string ProcessName { get; set; }
         public string? Title { get; set; }
         public ProcessType ProcessType { get; set; }
         public ProcessType InactiveBackProcessType { get; set; }
@@ -20,7 +20,7 @@ namespace PowerSchemaFlyout.Models.Configuration
         public Preset(ProcessWatch processWatch, string name, ProcessType processType, ProcessType inactiveBackProcessType, int inactiveTimeout)
         {
             this.Name = name;
-            this.Path = processWatch.FilePath;
+            this.ProcessName = processWatch.ProcessName;
             this.Title = processWatch.Title;
             this.ProcessType = processType;
             this.InactiveBackProcessType = inactiveBackProcessType;

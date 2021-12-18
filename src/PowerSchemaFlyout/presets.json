@@ -2,7 +2,7 @@
   "Presets": [
     {
       "Name": "Cisco Webex",
-      "Path": "atcliun.exe",
+      "ProcessName": "atcliun",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -10,7 +10,7 @@
     },
     {
       "Name": "Open with dialog",
-      "Path": "openwith.exe",
+      "ProcessName": "openwith",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -18,7 +18,7 @@
     },
     {
       "Name": "Nvidia Broadcast UI",
-      "Path": "nvidia broadcast ui.exe",
+      "ProcessName": "nvidia broadcast ui",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -26,7 +26,7 @@
     },
     {
       "Name": "VSCode",
-      "Path": "code.exe",
+      "ProcessName": "code",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -34,7 +34,7 @@
     },
     {
       "Name": "Microsoft Excel",
-      "Path": "excel.exe",
+      "ProcessName": "excel",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -42,7 +42,7 @@
     },
     {
       "Name": "Microsoft Word",
-      "Path": "winword.exe",
+      "ProcessName": "winword",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -50,7 +50,7 @@
     },
     {
       "Name": "Microsoft Powerpoint",
-      "Path": "powerpnt.exe",
+      "ProcessName": "powerpnt",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -58,15 +58,15 @@
     },
     {
       "Name": "Notepad",
-      "Path": "notepad.exe",
+      "ProcessName": "notepad",
       "Title": null,
-      "ProcessType": "DesktopLow",
-      "InactiveBackProcessType": "DesktopLow",
+      "ProcessType": "Game",
+      "InactiveBackProcessType": "Game",
       "InactiveTimeout": "0"
     },
     {
       "Name": "SearchHost",
-      "Path": "SearchHost.exe",
+      "ProcessName": "SearchHost",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -74,7 +74,7 @@
     },
     {
       "Name": "ShellExperienceHost",
-      "Path": "ShellExperienceHost.exe",
+      "ProcessName": "ShellExperienceHost",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -82,7 +82,7 @@
     },
     {
       "Name": "StartMenuExperienceHost",
-      "Path": "StartMenuExperienceHost.exe",
+      "ProcessName": "StartMenuExperienceHost",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -90,7 +90,7 @@
     },
     {
       "Name": "Microsoft Teams",
-      "Path": "teams.exe",
+      "ProcessName": "teams",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -98,7 +98,7 @@
     },
     {
       "Name": "Zoom",
-      "Path": "zoom.exe",
+      "ProcessName": "zoom",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -106,7 +106,7 @@
     },
     {
       "Name": "WhatsApp",
-      "Path": "WhatsApp.exe",
+      "ProcessName": "WhatsApp",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -114,7 +114,7 @@
     },
     {
       "Name": "Discord",
-      "Path": "discord.exe",
+      "ProcessName": "discord",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -122,7 +122,7 @@
     },
     {
       "Name": "Twitch",
-      "Path": "twitch.exe",
+      "ProcessName": "twitch",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -130,7 +130,7 @@
     },
     {
       "Name": "YouTube Music Desktop",
-      "Path": "YouTube Music Desktop App.exe",
+      "ProcessName": "YouTube Music Desktop App",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -138,7 +138,7 @@
     },
     {
       "Name": "Creative Soundblaster Command",
-      "Path": "creative.sbcommand.exe",
+      "ProcessName": "creative.sbcommand",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -146,7 +146,7 @@
     },
     {
       "Name": "Microsoft Project",
-      "Path": "winproj.exe",
+      "ProcessName": "winproj",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -154,7 +154,7 @@
     },
     {
       "Name": "IcoFX",
-      "Path": "icofx.exe",
+      "ProcessName": "icofx",
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -162,7 +162,7 @@
     },
     {
       "Name": "Windows Explorer",
-      "Path": "explorer.exe",
+      "ProcessName": "explorer",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -170,7 +170,7 @@
     },
     {
       "Name": "Taskbar",
-      "Path": "explorer.exe",
+      "ProcessName": "explorer",
       "Title": "",
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
@@ -178,7 +178,7 @@
     },
     {
       "Name": "Display Control Flyout",
-      "Path": "display control flyout.exe",
+      "ProcessName": "display control flyout",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -186,7 +186,7 @@
     },
     {
       "Name": "Soundblaster G6 Flyout",
-      "Path": "g6audiooutputflyout.exe",
+      "ProcessName": "g6audiooutputflyout",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -194,7 +194,7 @@
     },
     {
       "Name": "Artemis Flyout",
-      "Path": "artemisflyout.exe",
+      "ProcessName": "artemisflyout",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -202,7 +202,7 @@
     },
     {
       "Name": "Battlenet Launcher",
-      "Path": "battle.net.exe",
+      "ProcessName": "battle.net",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -210,7 +210,7 @@
     },
     {
       "Name": "Battlenet Launcher",
-      "Path": "battle.exe",
+      "ProcessName": "battle",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -218,7 +218,7 @@
     },
     {
       "Name": "Git Kraken",
-      "Path": "gitkraken.exe",
+      "ProcessName": "gitkraken",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -226,7 +226,7 @@
     },
     {
       "Name": "Microsoft Edge",
-      "Path": "msedge.exe",
+      "ProcessName": "msedge",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -234,7 +234,7 @@
     },
     {
       "Name": "Google Chrome",
-      "Path": "chrome.exe",
+      "ProcessName": "chrome",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -242,7 +242,7 @@
     },
     {
       "Name": "FallGuys",
-      "Path": "FallGuys_client_game.exe",
+      "ProcessName": "FallGuys_client_game",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -250,7 +250,7 @@
     },
     {
       "Name": "FallGuys",
-      "Path": "FallGuys_client.exe",
+      "ProcessName": "FallGuys_client",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -258,7 +258,7 @@
     },
     {
       "Name": "Microsoft Visual Studio",
-      "Path": "devenv.exe",
+      "ProcessName": "devenv",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -266,7 +266,7 @@
     },
     {
       "Name": "Artemis",
-      "Path": "artemis.ui.exe",
+      "ProcessName": "artemis.ui",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
@@ -274,7 +274,7 @@
     },
     {
       "Name": "Winrar",
-      "Path": "winrar.exe",
+      "ProcessName": "winrar",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -282,7 +282,7 @@
     },
     {
       "Name": "Microsoft Outlook",
-      "Path": "outlook.exe",
+      "ProcessName": "outlook",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -290,7 +290,7 @@
     },
     {
       "Name": "Steam",
-      "Path": "steam.exe",
+      "ProcessName": "steam",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -298,7 +298,7 @@
     },
     {
       "Name": "Cura",
-      "Path": "cura.exe",
+      "ProcessName": "cura",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -306,7 +306,7 @@
     },
     {
       "Name": "Winrar",
-      "Path": "winrar.exe",
+      "ProcessName": "winrar",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -314,7 +314,7 @@
     },
     {
       "Name": "CPU-Z",
-      "Path": "cpuz.exe",
+      "ProcessName": "cpuz",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -322,7 +322,7 @@
     },
     {
       "Name": "Prime95",
-      "Path": "prime95.exe",
+      "ProcessName": "prime95",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -330,7 +330,7 @@
     },
     {
       "Name": "Realbench",
-      "Path": "RealBench.exe",
+      "ProcessName": "RealBench",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -338,7 +338,7 @@
     },
     {
       "Name": "Cinebench",
-      "Path": "Cinebench.exe",
+      "ProcessName": "Cinebench",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -346,7 +346,7 @@
     },
     {
       "Name": "Yuzu Emu",
-      "Path": "yuzu_ea.exe",
+      "ProcessName": "yuzu_ea",
       "Title": null,
       "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
@@ -354,7 +354,7 @@
     },
     {
       "Name": "Yuzu Emu",
-      "Path": "yuzu.exe",
+      "ProcessName": "yuzu",
       "Title": null,
       "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
@@ -362,7 +362,7 @@
     },
     {
       "Name": "3DMark",
-      "Path": "3DMark.exe",
+      "ProcessName": "3DMark",
       "Title": null,
       "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
@@ -370,7 +370,7 @@
     },
     {
       "Name": "World of Warcraft",
-      "Path": "wow.exe",
+      "ProcessName": "wow",
       "Title": null,
       "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
@@ -378,7 +378,7 @@
     },
     {
       "Name": "All games in Games folder",
-      "Path": "//games//",
+      "ProcessName": "//games//",
       "Title": null,
       "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
@@ -386,7 +386,7 @@
     },
     {
       "Name": "Task manager",
-      "Path": "taskmgr.exe",
+      "ProcessName": "taskmgr",
       "Title": null,
       "ProcessType": "DesktopHigh",
       "InactiveBackProcessType": "DesktopLow",
@@ -394,7 +394,7 @@
     },
     {
       "Name": "Screen clipping host",
-      "Path": "screenclippinghost.exe",
+      "ProcessName": "screenclippinghost",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",

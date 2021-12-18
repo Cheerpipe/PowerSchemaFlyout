@@ -13,7 +13,10 @@ namespace PowerSchemaFlyout.Services
 {
     public class PresetDetectionService : IPresetDetectionService, IDisposable
     {
+
         private readonly List<IProcessTypeDetector> _processTypeDetectors;
+        private readonly List<IMultiProcessTypeDetector> _multiProcessTypeDetectors;
+
         private readonly Timer _proactiveScannerTimer;
         private readonly Timer _idleTimeTimer;
         private readonly Process _thisProcess = Process.GetCurrentProcess();
@@ -24,6 +27,7 @@ namespace PowerSchemaFlyout.Services
         public PresetDetectionService()
         {
             _processTypeDetectors = new List<IProcessTypeDetector>();
+            _multiProcessTypeDetectors = new List<IMultiProcessTypeDetector>();
 
             _currentProcessDetectionResult = new PresetDetectionResult(Preset.CreateUnknownPreset(), false);
             _foregroundWindowWatcher = new ForegroundWindowWatcher();
@@ -45,7 +49,7 @@ namespace PowerSchemaFlyout.Services
                     // This apply only for non games processes. Also ignore if process is already in power save mode
                     if (_currentProcessDetectionResult.Preset.ProcessType is ProcessType.Game or ProcessType.DesktopLow ||
                         _currentProcessDetectionResult.Preset.InactiveTimeout == 0 ||
-                        _currentProcessDetectionResult.Preset.ProcessType == _currentProcessDetectionResult.Preset.InactiveBackProcessType||
+                        _currentProcessDetectionResult.Preset.ProcessType == _currentProcessDetectionResult.Preset.InactiveBackProcessType ||
                         _idleState)
                         return;
 
@@ -107,6 +111,15 @@ namespace PowerSchemaFlyout.Services
                 if ((_currentProcessDetectionResult.ScanIsDefinitive || processWatch.Process?.Id == _thisProcess.Id || !IsRunning()) && !force)
                     return _currentProcessDetectionResult;
 
+
+                foreach (var md in _multiProcessTypeDetectors)
+                {
+                    if (md.DetectProcessType(ProcessType.Game))
+                    {
+                        return new PresetDetectionResult(Preset.CreateGamePreset(_currentForegroundProcessWatch), true);
+                    }
+                }
+
                 PresetDetectionResult result = new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
 
                 try
@@ -132,6 +145,11 @@ namespace PowerSchemaFlyout.Services
         public void RegisterDetector(IProcessTypeDetector processTypeDetector)
         {
             _processTypeDetectors.Add(processTypeDetector);
+        }
+
+        public void RegisterMultiDetector(IMultiProcessTypeDetector processTypeDetector)
+        {
+            _multiProcessTypeDetectors.Add(processTypeDetector);
         }
 
         public bool IsRunning() => _proactiveScannerTimer.Enabled;

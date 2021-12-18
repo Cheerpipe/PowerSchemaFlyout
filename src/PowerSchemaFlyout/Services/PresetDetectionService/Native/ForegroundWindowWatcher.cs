@@ -73,10 +73,21 @@ namespace PowerSchemaFlyout.Services.Native
     {
         public Process? Process { get; set; }
         public IntPtr Handler { get; set; }
-        public string Title { get; set; }
-        public string FileName { get; set; }
-        public string FilePath { get; set; }
 
+        private string _title;
+        public string Title
+        {
+            get => _title;
+            set => _title = value.Trim().ToLower();
+        }
+
+        private string _processName;
+        public string ProcessName
+        {
+            get => _processName;
+            set => _processName = value.Trim().ToLower();
+        }
+        
         // ReSharper disable once NotNullMemberIsNotInitialized
         private ProcessWatch() { }
 
@@ -89,8 +100,7 @@ namespace PowerSchemaFlyout.Services.Native
                 Process = process;
                 Handler = hWnd;
                 Title = ForegroundWindowWatcher.GetWindowTitle(hWnd);
-                FilePath = process.MainModule!.FileName!.ToLower();
-                FileName = System.IO.Path.GetFileName(process.MainModule!.FileName!.ToLower());
+                ProcessName = System.IO.Path.GetFileName(process.ProcessName.Trim().ToLower());
             }
             catch
             {
@@ -98,24 +108,17 @@ namespace PowerSchemaFlyout.Services.Native
                 Process = process;
                 Handler = IntPtr.Zero;
                 Title = String.Empty;
-                FilePath = String.Empty;
-                FileName = String.Empty;
+                ProcessName = String.Empty;
             }
         }
 
-        public static ProcessWatch Empty
-        {
-            get
+        public static ProcessWatch Empty =>
+            new ProcessWatch
             {
-                return new ProcessWatch
-                {
-                    Process = null,
-                    Handler = IntPtr.Zero,
-                    Title = String.Empty,
-                    FileName = String.Empty,
-                    FilePath = String.Empty
-                };
-            }
-        }
+                Process = null,
+                Handler = IntPtr.Zero,
+                Title = String.Empty,
+                ProcessName = String.Empty,
+            };
     }
 }

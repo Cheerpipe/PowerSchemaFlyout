@@ -107,6 +107,7 @@ namespace PowerSchemaFlyout
             presetDetectionService.RegisterDetector(new PresetFileDetector());
             presetDetectionService.RegisterDetector(new GpuLoadDetector());
             presetDetectionService.RegisterDetector(new DefaultDetector());
+            presetDetectionService.RegisterMultiDetector(new PresetFileMultiDetector());
 
             if (settingsService.GetSetting("AutomaticMode", true) || settingsService.GetSetting("EnableAutomaticModeOnStartup", true))
             {

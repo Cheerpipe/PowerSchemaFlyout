@@ -9,6 +9,7 @@ namespace PowerSchemaFlyout.Services
         public void Start(int scanInterval = 5000);
         public void Stop();
         public void RegisterDetector(IProcessTypeDetector processTypeDetector);
+        public void RegisterMultiDetector(IMultiProcessTypeDetector processTypeDetector);
         public bool IsRunning();
 
         event EventHandler<ProcessStateChangedArgs> ProcessStateChanged;
