@@ -6,6 +6,7 @@ using Avalonia.ReactiveUI;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Screens.FlyoutContainer;
 using PowerSchemaFlyout.Services;
+using PowerSchemaFlyout.Services.Configuration;
 using PowerSchemaFlyout.Services.Detectors;
 using PowerSchemaFlyout.Services.Enums;
 using Application = Avalonia.Application;
@@ -51,6 +52,9 @@ namespace PowerSchemaFlyout
             {
                 return Kernel.Get<FlyoutContainerViewModel>();
             });
+
+            IConfigurationService configurationService= Kernel.Get<IConfigurationService>();
+            configurationService.Load();
 
             ITrayIconService trayIconService = Kernel.Get<ITrayIconService>();
             IPresetDetectionService presetDetectionService = Kernel.Get<IPresetDetectionService>();

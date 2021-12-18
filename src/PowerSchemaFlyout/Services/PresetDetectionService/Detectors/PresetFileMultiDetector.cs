@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using Avalonia;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
@@ -14,11 +13,12 @@ namespace PowerSchemaFlyout.Services.Detectors
     public class PresetFileMultiDetector : IMultiProcessTypeDetector, IDisposable
     {
         private List<Preset> _gamesPresets = new List<Preset>();
-        private readonly PresetDetectionResult _defaultResult = new PresetDetectionResult(Preset.CreateUnknownPreset(), false);
         private readonly FileSystemWatcher _presetsFileWatcher = new FileSystemWatcher();
+        private readonly IConfigurationService _configurationService;
 
         public PresetFileMultiDetector()
         {
+            _configurationService = Kernel.Get<IConfigurationService>();
             PopulatePresets();
 
             _presetsFileWatcher.Path = Constants.PresetsFileDirectory;
@@ -33,8 +33,8 @@ namespace PowerSchemaFlyout.Services.Detectors
 
         private void PopulatePresets()
         {
-            Kernel.Get<IConfigurationService>().Load();
-            _gamesPresets = Kernel.Get<IConfigurationService>().Get().Presets.Where(p => p.ProcessType == ProcessType.Game).ToList();
+            _configurationService.Load();
+            _gamesPresets = _configurationService.Get().Presets.Where(p => p.ProcessType == ProcessType.Game).ToList();
             _gamesPresets.ForEach(p =>
             {
                 p.ProcessName = p.ProcessName.Trim().ToLower();

@@ -6,7 +6,6 @@ using Avalonia;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
-using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
@@ -16,9 +15,11 @@ namespace PowerSchemaFlyout.Services.Detectors
         private List<Preset> _presets = new List<Preset>();
         private readonly PresetDetectionResult _defaultResult = new PresetDetectionResult(Preset.CreateUnknownPreset(), false);
         private readonly FileSystemWatcher _presetsFileWatcher = new FileSystemWatcher();
+        private readonly IConfigurationService _configurationService;
 
         public PresetFileDetector()
         {
+            _configurationService = Kernel.Get<IConfigurationService>();
             PopulatePresets();
 
             _presetsFileWatcher.Path = Constants.PresetsFileDirectory;
@@ -33,8 +34,8 @@ namespace PowerSchemaFlyout.Services.Detectors
 
         private void PopulatePresets()
         {
-            Kernel.Get<IConfigurationService>().Load();
-            _presets = Kernel.Get<IConfigurationService>().Get().Presets;
+            _configurationService.Load();
+            _presets = _configurationService.Get().Presets;
             _presets.ForEach(p =>
             {
                 p.ProcessName = p.ProcessName.Trim().ToLower();
