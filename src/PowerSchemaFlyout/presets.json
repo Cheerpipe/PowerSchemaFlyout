@@ -60,8 +60,8 @@
       "Name": "Notepad",
       "ProcessName": "notepad",
       "Title": null,
-      "ProcessType": "Game",
-      "InactiveBackProcessType": "Game",
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "0"
     },
     {

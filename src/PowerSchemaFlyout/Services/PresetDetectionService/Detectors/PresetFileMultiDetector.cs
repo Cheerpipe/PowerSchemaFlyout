@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Avalonia;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
@@ -32,10 +33,13 @@ namespace PowerSchemaFlyout.Services.Detectors
 
         private void PopulatePresets()
         {
-            lock (this)
+            Kernel.Get<IConfigurationService>().Load();
+            _gamesPresets = Kernel.Get<IConfigurationService>().Get().Presets.Where(p => p.ProcessType == ProcessType.Game).ToList();
+            _gamesPresets.ForEach(p =>
             {
-                _gamesPresets = Kernel.Get<IConfigurationService>().Get().Presets.Where(p => p.ProcessType == ProcessType.Game).ToList(); ;
-            }
+                p.ProcessName = p.ProcessName.Trim().ToLower();
+                if (p.Title != null) p.Title = p.Title.ToLower().Trim();
+            });
         }
 
         public void Dispose()
@@ -48,7 +52,7 @@ namespace PowerSchemaFlyout.Services.Detectors
 
             foreach (Preset gamePreset in _gamesPresets)
             {
-                if (Process.GetProcessesByName("notepad").Length > 0)
+                if (Process.GetProcessesByName(gamePreset.ProcessName).Length > 0)
                     return true;
             }
             return false;

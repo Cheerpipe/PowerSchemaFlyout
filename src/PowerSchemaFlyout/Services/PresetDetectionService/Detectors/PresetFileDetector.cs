@@ -33,15 +33,13 @@ namespace PowerSchemaFlyout.Services.Detectors
 
         private void PopulatePresets()
         {
-            lock (this)
+            Kernel.Get<IConfigurationService>().Load();
+            _presets = Kernel.Get<IConfigurationService>().Get().Presets;
+            _presets.ForEach(p =>
             {
-                _presets = Kernel.Get<IConfigurationService>().Get().Presets;
-                _presets.ForEach(p =>
-                {
-                    p.ProcessName = p.ProcessName.Trim().ToLower();
-                    if (p.Title != null) p.Title = p.Title.ToLower().Trim();
-                });
-            }
+                p.ProcessName = p.ProcessName.Trim().ToLower();
+                if (p.Title != null) p.Title = p.Title.ToLower().Trim();
+            });
         }
 
         public PresetDetectionResult DetectProcessType(ProcessWatch processWatch)
