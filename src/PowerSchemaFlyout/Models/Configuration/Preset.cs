@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using PowerSchemaFlyout.Services.Enums;
+﻿using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Models.Configuration
@@ -11,9 +10,8 @@ namespace PowerSchemaFlyout.Models.Configuration
         public string? Title { get; set; }
         public ProcessType ProcessType { get; set; }
         public ProcessType InactiveBackProcessType { get; set; }
-        public int InactiveTimeout { get; set; }
+        public int InactiveTimeout { get; init; }
 
-        [SuppressMessage("ReSharper", "UnusedMember.Global")]
         public Preset() { }
 
 
@@ -55,6 +53,20 @@ namespace PowerSchemaFlyout.Models.Configuration
         public static Preset CreateMediumPreset(ProcessWatch processWatch)
         {
             return new Preset(processWatch, processWatch.Title, ProcessType.DesktopMedium, ProcessType.DesktopMedium, 5000);
+        }
+
+        public Preset Clone()
+        {
+            return new Preset()
+            {
+
+                Name = this.Name,
+                ProcessName = this.ProcessName,
+                Title = this.Title,
+                ProcessType = this.ProcessType,
+                InactiveBackProcessType = this.InactiveBackProcessType,
+                InactiveTimeout = this.InactiveTimeout,
+            };
         }
     }
 }

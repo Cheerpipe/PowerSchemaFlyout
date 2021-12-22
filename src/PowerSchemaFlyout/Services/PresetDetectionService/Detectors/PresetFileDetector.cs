@@ -7,7 +7,6 @@ using Avalonia;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
-using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 using PowerSchemaFlyout.Utiles;
 
@@ -72,28 +71,26 @@ namespace PowerSchemaFlyout.Services.Detectors
                 //First, Check if process match any preset with title
                 if (processPresets.FirstOrDefault(preset => processWatch.ProcessName == preset.ProcessName && String.Equals(processWatch.Title, preset.Title, StringComparison.CurrentCultureIgnoreCase)) is { } thePresetWithTitle)
                 {
-                    thePresetWithTitle.ProcessType = IComparableUtiles.Max(thePresetWithTitle.ProcessType, currentResult.Preset.ProcessType);
-                    return new PresetDetectionResult(thePresetWithTitle, true);
+                    Preset resultPresetWithTitle = thePresetWithTitle.Clone();
+                    resultPresetWithTitle.ProcessType = IComparableUtiles.Max(resultPresetWithTitle.ProcessType, currentResult.Preset.ProcessType);
+                    return new PresetDetectionResult(resultPresetWithTitle, true);
                 }
-
 
                 //Second, Check if process match any preset without title
                 if (processPresets.FirstOrDefault(preset => processWatch.ProcessName == preset.ProcessName && preset.Title == null) is { } thePresetWithoutTitle)
                 {
-                    thePresetWithoutTitle.ProcessType = IComparableUtiles.Max(thePresetWithoutTitle.ProcessType, currentResult.Preset.ProcessType);
-                    return new PresetDetectionResult(thePresetWithoutTitle, true);
+                    Preset resultPresetWithoutTitle = thePresetWithoutTitle.Clone();
+                    resultPresetWithoutTitle.ProcessType = IComparableUtiles.Max(resultPresetWithoutTitle.ProcessType, currentResult.Preset.ProcessType);
+                    return new PresetDetectionResult(resultPresetWithoutTitle, true);
                 }
 
-
-
-                // If dectection don't dive any results, result default result
+                // If detection don't dive any results, result default result
                 // To detect applications without preset.
                 lock (Application.Current)
                 {
                     File.AppendAllText("withoutpreset.txt",
                         $"{processWatch.ProcessName} - {processWatch.Title}" + Environment.NewLine);
                 }
-
 
                 // If detection don't dive any results, result default result
                 return _defaultResult;
@@ -102,6 +99,7 @@ namespace PowerSchemaFlyout.Services.Detectors
 
         public void Dispose()
         {
+            _presetsFileWatcher.EnableRaisingEvents = false;
             _presetsFileWatcher.Dispose();
         }
     }

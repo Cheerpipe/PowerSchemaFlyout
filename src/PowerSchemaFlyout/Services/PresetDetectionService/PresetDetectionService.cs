@@ -110,7 +110,6 @@ namespace PowerSchemaFlyout.Services
                 if ((_currentProcessDetectionResult.ScanIsDefinitive || processWatch.Process?.Id == _thisProcess.Id || !IsRunning()) && !force)
                     return _currentProcessDetectionResult;
 
-
                 //TODO: Generalize
                 if (_multiProcessTypeDetectors.Any(md => md.DetectProcessType(ProcessType.Game)))
                 {
