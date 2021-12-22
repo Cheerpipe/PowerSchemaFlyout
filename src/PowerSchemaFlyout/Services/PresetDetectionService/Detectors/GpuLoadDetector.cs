@@ -3,6 +3,7 @@ using System.Management;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
+using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
@@ -19,7 +20,7 @@ namespace PowerSchemaFlyout.Services.Detectors
             _scope.Connect();
         }
 
-        public PresetDetectionResult DetectProcessType(ProcessWatch processWatch)
+        public PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
         {
             if (processWatch.Process == null)
                 return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);

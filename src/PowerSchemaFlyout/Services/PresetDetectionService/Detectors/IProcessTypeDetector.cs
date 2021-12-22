@@ -4,6 +4,6 @@ namespace PowerSchemaFlyout.Services.Detectors
 {
     public interface IProcessTypeDetector
     {
-        PresetDetectionResult DetectProcessType(ProcessWatch process);
+        PresetDetectionResult DetectProcessType(ProcessWatch process, PresetDetectionResult currentResult);
     }
 }

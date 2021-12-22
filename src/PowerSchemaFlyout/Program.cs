@@ -53,7 +53,7 @@ namespace PowerSchemaFlyout
                 return Kernel.Get<FlyoutContainerViewModel>();
             });
 
-            IConfigurationService configurationService= Kernel.Get<IConfigurationService>();
+            IConfigurationService configurationService = Kernel.Get<IConfigurationService>();
             configurationService.Load();
 
             ITrayIconService trayIconService = Kernel.Get<ITrayIconService>();
@@ -108,12 +108,15 @@ namespace PowerSchemaFlyout
                 }
             };
 
-            presetDetectionService.RegisterDetector(new CpuUsageDetector());
-            presetDetectionService.RegisterDetector(new PresetFileDetector());
-            presetDetectionService.RegisterDetector(new GpuLoadDetector());
-            presetDetectionService.RegisterDetector(new DefaultDetector());
+            // Multi detectors. This detector will override all other detectors
             presetDetectionService.RegisterMultiDetector(new PresetFileMultiDetector());
 
+            // This detectors will be executed in the same order as registered
+            presetDetectionService.RegisterDetector(new CpuUsageDetector());    //Will set value if result is higher than current result
+            presetDetectionService.RegisterDetector(new PresetFileDetector());  //Will set value if result is higher than current result //This is a definitive detector. This means if there is a match here detectors below won't be used.
+            presetDetectionService.RegisterDetector(new GpuLoadDetector());     //Will set a game value and will act as a definitive if match.
+            presetDetectionService.RegisterDetector(new DefaultDetector());     //Will set value if current result is unknown.
+            
             if (settingsService.GetSetting("AutomaticMode", true) || settingsService.GetSetting("EnableAutomaticModeOnStartup", true))
             {
                 presetDetectionService.Start();

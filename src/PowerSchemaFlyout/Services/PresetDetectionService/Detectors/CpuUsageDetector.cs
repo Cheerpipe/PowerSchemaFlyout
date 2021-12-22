@@ -2,7 +2,9 @@
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
+using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
+using PowerSchemaFlyout.Utiles;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {
@@ -15,12 +17,15 @@ namespace PowerSchemaFlyout.Services.Detectors
             _configurationService = Kernel.Get<IConfigurationService>();
         }
 
-        public PresetDetectionResult DetectProcessType(ProcessWatch process)
+        public PresetDetectionResult DetectProcessType(ProcessWatch process, PresetDetectionResult currentResult)
         {
             float cpuUsage = _cpuCounter.NextValue();
+
+            ProcessType returnType = IComparableUtiles.Max(currentResult.Preset.ProcessType, _configurationService.Get().CpuUsageDetector.Schema);
+
             if (cpuUsage > _configurationService.Get().CpuUsageDetector.CpuUsageThreshold)
                 return new PresetDetectionResult(
-                    new Preset(process, process.ProcessName, _configurationService.Get().CpuUsageDetector.Schema, _configurationService.Get().CpuUsageDetector.Schema, 0),
+                    new Preset(process, process.ProcessName, returnType, returnType, 0),
                     false);
             return new PresetDetectionResult(Preset.CreateUnknownPreset(), false);
         }

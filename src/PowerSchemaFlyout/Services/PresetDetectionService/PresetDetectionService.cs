@@ -66,7 +66,6 @@ namespace PowerSchemaFlyout.Services
                     _idleTimeTimer.Interval = 500;
                     _proactiveScannerTimer.Start();
                     ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(CheckCurrentForegroundProcess(_currentForegroundProcessWatch, true)));
-
                 }
             }
         }
@@ -112,23 +111,21 @@ namespace PowerSchemaFlyout.Services
                     return _currentProcessDetectionResult;
 
 
-                foreach (var md in _multiProcessTypeDetectors)
+                //TODO: Generalize
+                if (_multiProcessTypeDetectors.Any(md => md.DetectProcessType(ProcessType.Game)))
                 {
-                    if (md.DetectProcessType(ProcessType.Game))
-                    {
-                        return new PresetDetectionResult(Preset.CreateGamePreset(_currentForegroundProcessWatch), true);
-                    }
+                    return new PresetDetectionResult(Preset.CreateGamePreset(_currentForegroundProcessWatch), true);
                 }
 
                 PresetDetectionResult result = new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
 
                 try
                 {
-                    foreach (var localResult in _processTypeDetectors.Select(detector => detector.DetectProcessType(processWatch)))
+                    foreach (var localResult in _processTypeDetectors.Select(detector => detector.DetectProcessType(processWatch, result)))
                     {
-                        result.ScanIsDefinitive = result.ScanIsDefinitive;
-                        result.Preset = (localResult.Preset.ProcessType > result.Preset.ProcessType) ? localResult.Preset : result.Preset;
-                        if (result.ScanIsDefinitive || result.Preset.ProcessType != ProcessType.Unknown)
+                        result.ScanIsDefinitive = localResult.ScanIsDefinitive;
+                        result.Preset = localResult.Preset;
+                        if (result.ScanIsDefinitive)
                             break;
                     }
                 }

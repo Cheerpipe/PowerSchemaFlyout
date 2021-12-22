@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Avalonia;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
+using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
+using PowerSchemaFlyout.Utiles;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {
@@ -43,7 +46,7 @@ namespace PowerSchemaFlyout.Services.Detectors
             });
         }
 
-        public PresetDetectionResult DetectProcessType(ProcessWatch processWatch)
+        public PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
         {
             if (processWatch.Process == null)
                 return new PresetDetectionResult(Preset.CreateUnknownPreset(), false);
@@ -68,11 +71,19 @@ namespace PowerSchemaFlyout.Services.Detectors
 
                 //First, Check if process match any preset with title
                 if (processPresets.FirstOrDefault(preset => processWatch.ProcessName == preset.ProcessName && String.Equals(processWatch.Title, preset.Title, StringComparison.CurrentCultureIgnoreCase)) is { } thePresetWithTitle)
+                {
+                    thePresetWithTitle.ProcessType = IComparableUtiles.Max(thePresetWithTitle.ProcessType, currentResult.Preset.ProcessType);
                     return new PresetDetectionResult(thePresetWithTitle, true);
+                }
+
 
                 //Second, Check if process match any preset without title
                 if (processPresets.FirstOrDefault(preset => processWatch.ProcessName == preset.ProcessName && preset.Title == null) is { } thePresetWithoutTitle)
+                {
+                    thePresetWithoutTitle.ProcessType = IComparableUtiles.Max(thePresetWithoutTitle.ProcessType, currentResult.Preset.ProcessType);
                     return new PresetDetectionResult(thePresetWithoutTitle, true);
+                }
+
 
 
                 // If dectection don't dive any results, result default result
