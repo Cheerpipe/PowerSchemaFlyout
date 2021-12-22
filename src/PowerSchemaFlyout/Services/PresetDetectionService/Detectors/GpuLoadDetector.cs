@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Management;
+using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
+using PowerSchemaFlyout.Services.Configuration;
 using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
@@ -9,9 +11,11 @@ namespace PowerSchemaFlyout.Services.Detectors
     {
         // ReSharper disable once StringLiteralTypo
         private readonly ManagementScope _scope = new(@"\\" + "." + @"\root\cimv2");
+        private readonly IConfigurationService _configurationService;
 
         public GpuLoadDetector()
         {
+            _configurationService = Kernel.Get<IConfigurationService>();
             _scope.Connect();
         }
 
@@ -36,7 +40,7 @@ namespace PowerSchemaFlyout.Services.Detectors
                 foreach (var o in objects)
                 {
                     var queryObj = (ManagementObject)o;
-                    if ((UInt64)queryObj["UtilizationPercentage"] > 25)
+                    if ((UInt64)queryObj["UtilizationPercentage"] > (UInt64)_configurationService.Get().GpuUsageDetector.Schema)
                     {
                         return new PresetDetectionResult(Preset.CreateGamePreset(processWatch), true);
                     }

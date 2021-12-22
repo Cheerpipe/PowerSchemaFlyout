@@ -1,4 +1,11 @@
 {
+  "CpuUsageDetector": {
+    "CpuUsageThreshold": 30,
+    "Schema": "DesktopMedium"
+  },
+  "GpuUsageDetector": {
+    "GpuUsageThreshold": 25
+  },
   "Presets": [
     {
       "Name": "Cisco Webex",

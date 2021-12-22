@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using PowerSchemaFlyout.Services.Enums;
-using PowerSchemaFlyout.Services.Native;
+﻿using PowerSchemaFlyout.Services.Enums;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {

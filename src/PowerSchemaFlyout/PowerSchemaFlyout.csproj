@@ -47,7 +47,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Update="presets.json">
+    <None Update="settings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

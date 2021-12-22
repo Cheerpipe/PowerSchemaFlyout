@@ -57,7 +57,6 @@ namespace PowerSchemaFlyout.Services.Detectors
                 if (processPresets.Count == 0)
                 {
                     // To detect applications without preset.
-                    // TODO: Proper IO write - Unique values - Clear values with presets
                     lock (Application.Current)
                     {
                         File.AppendAllText("withoutpreset.txt",
@@ -78,7 +77,6 @@ namespace PowerSchemaFlyout.Services.Detectors
 
                 // If dectection don't dive any results, result default result
                 // To detect applications without preset.
-                // TODO: Proper IO write - Unique values - Clear values with presets
                 lock (Application.Current)
                 {
                     File.AppendAllText("withoutpreset.txt",
