@@ -127,7 +127,7 @@ namespace PowerSchemaFlyout.Services
                     foreach (var localResult in _processTypeDetectors.Select(detector => detector.DetectProcessType(processWatch)))
                     {
                         result.ScanIsDefinitive = result.ScanIsDefinitive;
-                        result.Preset = localResult.Preset;
+                        result.Preset = (localResult.Preset.ProcessType > result.Preset.ProcessType) ? localResult.Preset : result.Preset;
                         if (result.ScanIsDefinitive || result.Preset.ProcessType != ProcessType.Unknown)
                             break;
                     }

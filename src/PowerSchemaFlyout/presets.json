@@ -4,25 +4,25 @@
       "Name": "Cisco Webex",
       "ProcessName": "atcliun",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Open with dialog",
       "ProcessName": "openwith",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Nvidia Broadcast UI",
       "ProcessName": "nvidia broadcast ui",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "VSCode",
@@ -30,31 +30,31 @@
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Microsoft Excel",
       "ProcessName": "excel",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Microsoft Word",
       "ProcessName": "winword",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Microsoft Powerpoint",
       "ProcessName": "powerpnt",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Notepad",
@@ -62,47 +62,47 @@
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "SearchHost",
       "ProcessName": "SearchHost",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "ShellExperienceHost",
       "ProcessName": "ShellExperienceHost",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "StartMenuExperienceHost",
       "ProcessName": "StartMenuExperienceHost",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Microsoft Teams",
       "ProcessName": "teams",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Zoom",
       "ProcessName": "zoom",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "WhatsApp",
@@ -110,55 +110,55 @@
       "Title": null,
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Discord",
       "ProcessName": "discord",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Twitch",
       "ProcessName": "twitch",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "YouTube Music Desktop",
       "ProcessName": "YouTube Music Desktop App",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Creative Soundblaster Command",
       "ProcessName": "creative.sbcommand",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Microsoft Project",
       "ProcessName": "winproj",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "IcoFX",
       "ProcessName": "icofx",
       "Title": null,
-      "ProcessType": "DesktopLow",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Windows Explorer",
@@ -174,7 +174,7 @@
       "Title": "",
       "ProcessType": "DesktopLow",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Display Control Flyout",
@@ -246,7 +246,7 @@
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "FallGuys",
@@ -254,7 +254,7 @@
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Microsoft Visual Studio",
@@ -262,7 +262,7 @@
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "5000"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Artemis",
@@ -270,21 +270,21 @@
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Winrar",
       "ProcessName": "winrar",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Microsoft Outlook",
       "ProcessName": "outlook",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "3000"
     },
@@ -292,7 +292,7 @@
       "Name": "Steam",
       "ProcessName": "steam",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "3000"
     },
@@ -300,7 +300,7 @@
       "Name": "Cura",
       "ProcessName": "cura",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "3000"
     },
@@ -308,9 +308,9 @@
       "Name": "Winrar",
       "ProcessName": "winrar",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "CPU-Z",
@@ -350,7 +350,7 @@
       "Title": null,
       "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "Yuzu Emu",
@@ -358,7 +358,7 @@
       "Title": null,
       "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
-      "InactiveTimeout": "0"
+      "InactiveTimeout": "3000"
     },
     {
       "Name": "3DMark",
@@ -395,6 +395,30 @@
     {
       "Name": "Screen clipping host",
       "ProcessName": "screenclippinghost",
+      "Title": null,
+      "ProcessType": "DesktopMedium",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Halo Infinite",
+      "ProcessName": "haloinfinite",
+      "Title": null,
+      "ProcessType": "Game",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Idle time",
+      "ProcessName": "idle",
+      "Title": null,
+      "ProcessType": "DesktopLow",
+      "InactiveBackProcessType": "DesktopLow",
+      "InactiveTimeout": "3000"
+    },
+    {
+      "Name": "Media Player Classic",
+      "ProcessName": "mpc-hc64",
       "Title": null,
       "ProcessType": "DesktopMedium",
       "InactiveBackProcessType": "DesktopLow",

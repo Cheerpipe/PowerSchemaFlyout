@@ -108,6 +108,7 @@ namespace PowerSchemaFlyout
                 }
             };
 
+            presetDetectionService.RegisterDetector(new CpuUsageDetector());
             presetDetectionService.RegisterDetector(new PresetFileDetector());
             presetDetectionService.RegisterDetector(new GpuLoadDetector());
             presetDetectionService.RegisterDetector(new DefaultDetector());
