@@ -44,6 +44,7 @@ namespace PowerSchemaFlyout.Services
         {
             lock (this)
             {
+                Debug.WriteLine(_currentProcessDetectionResult.Preset.InactiveTimeout);
                 if (IdleTimeFinder.GetIdleTime() > _currentProcessDetectionResult.Preset.InactiveTimeout)
                 {
                     // This apply only for non games processes. Also ignore if process is already in power save mode
@@ -61,7 +62,8 @@ namespace PowerSchemaFlyout.Services
                 }
                 else
                 {
-                    if (!_idleState) return;
+                    if (!_idleState)
+                        return;
                     _idleState = false;
                     _idleTimeTimer.Interval = 500;
                     _proactiveScannerTimer.Start();
@@ -110,10 +112,10 @@ namespace PowerSchemaFlyout.Services
                 if ((_currentProcessDetectionResult.ScanIsDefinitive || processWatch.Process?.Id == _thisProcess.Id || !IsRunning()) && !force)
                     return _currentProcessDetectionResult;
 
-                //TODO: Generalize
+
                 if (_multiProcessTypeDetectors.Any(md => md.DetectProcessType(ProcessType.Game)))
                 {
-                    return new PresetDetectionResult(Preset.CreateGamePreset(_currentForegroundProcessWatch), true);
+                    return new PresetDetectionResult(Preset.CreateGamePreset(_currentForegroundProcessWatch), true); //TODO: Generalize
                 }
 
                 PresetDetectionResult result = new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
@@ -122,8 +124,16 @@ namespace PowerSchemaFlyout.Services
                 {
                     foreach (var localResult in _processTypeDetectors.Select(detector => detector.DetectProcessType(processWatch, result)))
                     {
+
                         result.ScanIsDefinitive = localResult.ScanIsDefinitive;
-                        result.Preset = localResult.Preset;
+
+                        //Copy preset and apply some logic
+                        result.Preset.ProcessType = localResult.Preset.ProcessType;
+                        result.Preset.Title = localResult.Preset.Title;
+                        result.Preset.ProcessName = localResult.Preset.ProcessName;
+                        result.Preset.InactiveBackProcessType=localResult.Preset.InactiveBackProcessType;
+                        result.Preset.InactiveTimeout = Math.Max(localResult.Preset.InactiveTimeout, result.Preset.InactiveTimeout);
+
                         if (result.ScanIsDefinitive)
                             break;
                     }

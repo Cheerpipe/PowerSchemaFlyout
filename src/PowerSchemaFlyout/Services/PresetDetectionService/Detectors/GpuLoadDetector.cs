@@ -43,7 +43,7 @@ namespace PowerSchemaFlyout.Services.Detectors
                     var queryObj = (ManagementObject)o;
                     if ((UInt64)queryObj["UtilizationPercentage"] > (UInt64)_configurationService.Get().GpuUsageDetector.Schema)
                     {
-                        return new PresetDetectionResult(Preset.CreateGamePreset(processWatch), true);
+                        return new PresetDetectionResult(new Preset(processWatch, processWatch.Title, ProcessType.Game, ProcessType.Game, 0), true);
                     }
                 }
                 searcher.Dispose();

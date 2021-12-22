@@ -25,7 +25,7 @@ namespace PowerSchemaFlyout.Services.Detectors
 
             if (cpuUsage > _configurationService.Get().CpuUsageDetector.CpuUsageThreshold)
                 return new PresetDetectionResult(
-                    new Preset(process, process.ProcessName, returnType, returnType, 0),
+                    new Preset(process, process.ProcessName, returnType, returnType, int.MaxValue),
                     false);
             return new PresetDetectionResult(Preset.CreateUnknownPreset(), false);
         }

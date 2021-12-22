@@ -1,4 +1,4 @@
-﻿using PowerSchemaFlyout.Services.Enums;
+using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Models.Configuration
@@ -10,29 +10,24 @@ namespace PowerSchemaFlyout.Models.Configuration
         public string? Title { get; set; }
         public ProcessType ProcessType { get; set; }
         public ProcessType InactiveBackProcessType { get; set; }
-        public int InactiveTimeout { get; init; }
+        public int InactiveTimeout { get; set; }
 
         public Preset() { }
 
 
         public Preset(ProcessWatch processWatch, string name, ProcessType processType, ProcessType inactiveBackProcessType, int inactiveTimeout)
         {
-            this.Name = name;
-            this.ProcessName = processWatch.ProcessName;
-            this.Title = processWatch.Title;
-            this.ProcessType = processType;
-            this.InactiveBackProcessType = inactiveBackProcessType;
-            this.InactiveTimeout = inactiveTimeout;
+            Name = name;
+            ProcessName = processWatch.ProcessName;
+            Title = processWatch.Title;
+            ProcessType = processType;
+            InactiveBackProcessType = inactiveBackProcessType;
+            InactiveTimeout = inactiveTimeout;
         }
 
         public static Preset CreateUnknownPreset()
         {
             return new Preset(ProcessWatch.Empty, string.Empty, ProcessType.Unknown, ProcessType.Unknown, 0);
-        }
-
-        public static Preset CreateLowreset()
-        {
-            return new Preset(ProcessWatch.Empty, string.Empty, ProcessType.DesktopLow, ProcessType.Unknown, 0);
         }
 
         public static Preset CreateUnknownPreset(ProcessWatch processWatch)
@@ -49,10 +44,6 @@ namespace PowerSchemaFlyout.Models.Configuration
         public static Preset CreateGamePreset(ProcessWatch processWatch)
         {
             return new Preset(processWatch, processWatch.Title, ProcessType.Game, ProcessType.Game, 0);
-        }
-        public static Preset CreateMediumPreset(ProcessWatch processWatch)
-        {
-            return new Preset(processWatch, processWatch.Title, ProcessType.DesktopMedium, ProcessType.DesktopMedium, 5000);
         }
 
         public Preset Clone()
