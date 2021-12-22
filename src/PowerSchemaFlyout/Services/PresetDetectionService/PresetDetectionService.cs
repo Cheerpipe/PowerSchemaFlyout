@@ -44,12 +44,12 @@ namespace PowerSchemaFlyout.Services
         {
             lock (this)
             {
-                Debug.WriteLine(_currentProcessDetectionResult.Preset.InactiveTimeout);
                 if (IdleTimeFinder.GetIdleTime() > _currentProcessDetectionResult.Preset.InactiveTimeout)
                 {
                     // This apply only for non games processes. Also ignore if process is already in power save mode
                     if (_currentProcessDetectionResult.Preset.ProcessType is ProcessType.Game or ProcessType.DesktopLow ||
                         _currentProcessDetectionResult.Preset.InactiveTimeout == 0 ||
+                        _currentProcessDetectionResult.Preset.InactiveTimeout == int.MaxValue ||
                         _currentProcessDetectionResult.Preset.ProcessType == _currentProcessDetectionResult.Preset.InactiveBackProcessType ||
                         _idleState)
                         return;
@@ -131,7 +131,7 @@ namespace PowerSchemaFlyout.Services
                         result.Preset.ProcessType = localResult.Preset.ProcessType;
                         result.Preset.Title = localResult.Preset.Title;
                         result.Preset.ProcessName = localResult.Preset.ProcessName;
-                        result.Preset.InactiveBackProcessType=localResult.Preset.InactiveBackProcessType;
+                        result.Preset.InactiveBackProcessType = localResult.Preset.InactiveBackProcessType;
                         result.Preset.InactiveTimeout = Math.Max(localResult.Preset.InactiveTimeout, result.Preset.InactiveTimeout);
 
                         if (result.ScanIsDefinitive)

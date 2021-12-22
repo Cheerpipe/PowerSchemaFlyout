@@ -1,4 +1,9 @@
 {
+  "DefaultProfile": {
+    "ProcessType": "DesktopMedium",
+    "InactiveBackProcessType": "DesktopLow",
+    "InactiveTimeout": "3000"
+  },
   "CpuUsageDetector": {
     "CpuUsageThreshold": 30,
     "Schema": "DesktopMedium"
