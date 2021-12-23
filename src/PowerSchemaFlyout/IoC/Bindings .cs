@@ -1,6 +1,9 @@
 ﻿using Ninject.Modules;
 using PowerSchemaFlyout.Services;
 using PowerSchemaFlyout.Services.Configuration;
+using PowerSchemaFlyout.Services.LoggerService;
+using Serilog;
+using Serilog.Core;
 
 namespace PowerSchemaFlyout.IoC
 {
@@ -16,6 +19,7 @@ namespace PowerSchemaFlyout.IoC
             Bind<ISettingsService>().To<SettingsService>().InSingletonScope();
             Bind<IPowerManagementServices>().To<PowerManagementServices>().InSingletonScope();
             Bind<IConfigurationService>().To<ConfigurationService>().InSingletonScope();
+            Bind<ILogger>().ToProvider<LoggerProvider>().InSingletonScope();
         }
     }
 }

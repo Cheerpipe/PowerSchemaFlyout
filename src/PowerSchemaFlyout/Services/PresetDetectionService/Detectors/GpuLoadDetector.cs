@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Management;
-using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
-using PowerSchemaFlyout.Services.Configuration;
 using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {
-    internal class GpuLoadDetector : IProcessTypeDetector
+    internal class GpuLoadDetector : BaseProcessTypeDetector
     {
         // ReSharper disable once StringLiteralTypo
         private readonly ManagementScope _scope = new(@"\\" + "." + @"\root\cimv2");
-        private readonly IConfigurationService _configurationService;
 
         public GpuLoadDetector()
         {
-            _configurationService = Kernel.Get<IConfigurationService>();
             _scope.Connect();
         }
 
-        public PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
+        public override PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
         {
             if (processWatch.Process == null)
-                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
 
             try
             {
@@ -35,23 +31,23 @@ namespace PowerSchemaFlyout.Services.Detectors
 
                 if ((objects.Count == 0))
                 {
-                    return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
+                    return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
                 }
 
                 foreach (var o in objects)
                 {
                     var queryObj = (ManagementObject)o;
-                    if ((UInt64)queryObj["UtilizationPercentage"] > (UInt64)_configurationService.Get().GpuUsageDetector.Schema)
+                    if ((UInt64)queryObj["UtilizationPercentage"] > (UInt64)ConfigurationService.Get().GpuUsageDetector.Schema)
                     {
-                        return new PresetDetectionResult(new Preset(processWatch, processWatch.Title, ProcessType.Game, ProcessType.Game, 0), true);
+                        return new PresetDetectionResult(new Preset(processWatch, processWatch.Title, ProcessType.Game, ProcessType.Game, 0), processWatch, true);
                     }
                 }
                 searcher.Dispose();
-                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
             }
             catch (ManagementException)
             {
-                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
             }
         }
     }

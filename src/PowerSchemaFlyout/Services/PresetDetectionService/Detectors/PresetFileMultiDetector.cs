@@ -7,6 +7,7 @@ using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
 using PowerSchemaFlyout.Services.Configuration;
 using PowerSchemaFlyout.Services.Enums;
+using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {
@@ -47,15 +48,9 @@ namespace PowerSchemaFlyout.Services.Detectors
             _presetsFileWatcher.Dispose();
         }
 
-        public bool DetectProcessType(ProcessType processType)
+        public List<ProcessWatch> DetectProcessType(ProcessType processType)
         {
-
-            foreach (Preset gamePreset in _gamesPresets)
-            {
-                if (Process.GetProcessesByName(gamePreset.ProcessName).Length > 0)
-                    return true;
-            }
-            return false;
+            return (from gp in _gamesPresets from p in Process.GetProcessesByName(gp.ProcessName) select new ProcessWatch(p.MainWindowHandle)).ToList();
         }
     }
 }

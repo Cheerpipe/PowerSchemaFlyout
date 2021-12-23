@@ -8,6 +8,7 @@ using PowerSchemaFlyout.Services.Detectors;
 using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Events;
 using PowerSchemaFlyout.Services.Native;
+using Serilog;
 
 namespace PowerSchemaFlyout.Services
 {
@@ -21,15 +22,18 @@ namespace PowerSchemaFlyout.Services
         private readonly Timer _idleTimeTimer;
         private readonly Process _thisProcess = Process.GetCurrentProcess();
         private readonly ForegroundWindowWatcher _foregroundWindowWatcher;
+        private readonly ILogger _logger;
         private ProcessWatch _currentForegroundProcessWatch = ProcessWatch.Empty;
         private PresetDetectionResult _currentProcessDetectionResult;
 
-        public PresetDetectionService()
+
+        public PresetDetectionService(ILogger logger)
         {
+            _logger = logger;
             _processTypeDetectors = new List<IProcessTypeDetector>();
             _multiProcessTypeDetectors = new List<IMultiProcessTypeDetector>();
 
-            _currentProcessDetectionResult = new PresetDetectionResult(Preset.CreateUnknownPreset(), false);
+            _currentProcessDetectionResult = new PresetDetectionResult(Preset.CreateUnknownPreset(), ProcessWatch.Empty, false);
             _foregroundWindowWatcher = new ForegroundWindowWatcher();
 
             _proactiveScannerTimer = new Timer();
@@ -57,8 +61,8 @@ namespace PowerSchemaFlyout.Services
                     _idleState = true;
                     _idleTimeTimer.Interval = 100;
                     _proactiveScannerTimer.Stop();
-                    ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(new PresetDetectionResult(Preset.CreateUnknownPreset(_currentProcessDetectionResult.Preset.InactiveBackProcessType), true)));
-
+                    ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(new PresetDetectionResult(Preset.CreateUnknownPreset(_currentProcessDetectionResult.Preset.InactiveBackProcessType), _currentProcessDetectionResult.ProcessWatch, true)));
+                    _logger.Verbose($"Going into idle state for {_currentProcessDetectionResult.ProcessWatch.ProcessName}");
                 }
                 else
                 {
@@ -68,6 +72,7 @@ namespace PowerSchemaFlyout.Services
                     _idleTimeTimer.Interval = 500;
                     _proactiveScannerTimer.Start();
                     ProcessStateChanged?.Invoke(this, new ProcessStateChangedArgs(CheckCurrentForegroundProcess(_currentForegroundProcessWatch, true)));
+                    _logger.Verbose($"Exiting from idle state with {_currentProcessDetectionResult.ProcessWatch.ProcessName}");
                 }
             }
         }
@@ -85,6 +90,7 @@ namespace PowerSchemaFlyout.Services
             }
         }
 
+        //TODO: _currentProcessDetectionResult name and title are resulting in an empty fields
         private void _foregroundWindowWatcher_ForegroundProcessChanged(object sender, ProcessWatch e)
         {
             lock (this)
@@ -113,12 +119,13 @@ namespace PowerSchemaFlyout.Services
                     return _currentProcessDetectionResult;
 
 
-                if (_multiProcessTypeDetectors.Any(md => md.DetectProcessType(ProcessType.Game)))
+
+                foreach (var backgroundProcesses in _multiProcessTypeDetectors.Select(multioMultiProcessTypeDetector => multioMultiProcessTypeDetector.DetectProcessType(ProcessType.Game)).Where(backgroundProcesses => backgroundProcesses.Count > 0))
                 {
-                    return new PresetDetectionResult(Preset.CreateGamePreset(_currentForegroundProcessWatch), true); //TODO: Generalize
+                    return new PresetDetectionResult(Preset.CreateGamePreset(backgroundProcesses.First()), backgroundProcesses.First(), true); //TODO: Generalize and use returned process
                 }
 
-                PresetDetectionResult result = new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), false);
+                PresetDetectionResult result = new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
 
                 try
                 {
@@ -134,8 +141,9 @@ namespace PowerSchemaFlyout.Services
                         result.Preset.InactiveBackProcessType = localResult.Preset.InactiveBackProcessType;
                         result.Preset.InactiveTimeout = Math.Max(localResult.Preset.InactiveTimeout, result.Preset.InactiveTimeout);
 
-                        if (result.ScanIsDefinitive)
-                            break;
+                        if (!result.ScanIsDefinitive) continue;
+                        _logger.Verbose($"Definitive detection found for {_currentProcessDetectionResult.ProcessWatch.ProcessName} with process type {result.Preset.ProcessType}");
+                        break;
                     }
                 }
                 catch
@@ -180,7 +188,8 @@ namespace PowerSchemaFlyout.Services
                 _foregroundWindowWatcher.ForegroundProcessChanged += _foregroundWindowWatcher_ForegroundProcessChanged;
                 _foregroundWindowWatcher.Start();
                 Started?.Invoke(this, EventArgs.Empty);
-                RaiseAndSetPowerStateChangeIfChanged(new PresetDetectionResult(Preset.CreateUnknownPreset(), false));
+                RaiseAndSetPowerStateChangeIfChanged(new PresetDetectionResult(Preset.CreateUnknownPreset(), ProcessWatch.Empty, false)); // Is this necessary?
+                _logger.Information("Preset detection service started");
             }
         }
         public void Stop()
@@ -196,6 +205,7 @@ namespace PowerSchemaFlyout.Services
                 _foregroundWindowWatcher.ForegroundProcessChanged -= _foregroundWindowWatcher_ForegroundProcessChanged;
                 _foregroundWindowWatcher.Stop();
                 Stopped?.Invoke(this, EventArgs.Empty);
+                _logger.Information("Preset detection service stopped");
             }
         }
 

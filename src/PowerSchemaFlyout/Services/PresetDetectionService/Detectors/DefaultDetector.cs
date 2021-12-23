@@ -6,21 +6,15 @@ using PowerSchemaFlyout.Services.Native;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {
-    internal class DefaultDetector : IProcessTypeDetector
+    internal class DefaultDetector : BaseProcessTypeDetector
     {
-        private readonly IConfigurationService _configurationService;
 
-        public DefaultDetector()
-        {
-            _configurationService = Kernel.Get<IConfigurationService>();
-        }
-
-        public PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
+        public override PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
         {
             if (currentResult.Preset.ProcessType != ProcessType.Unknown) return currentResult;
-            Preset defaultPreset = new Preset(processWatch, processWatch.Title, _configurationService.Get().DefaultProfile.InactiveBackProcessType, _configurationService.Get().DefaultProfile.InactiveBackProcessType,
-                _configurationService.Get().DefaultProfile.InactiveTimeout);
-            return new PresetDetectionResult(defaultPreset, false);
+            Preset defaultPreset = new Preset(processWatch, processWatch.Title, ConfigurationService.Get().DefaultProfile.InactiveBackProcessType, ConfigurationService.Get().DefaultProfile.InactiveBackProcessType,
+                ConfigurationService.Get().DefaultProfile.InactiveTimeout);
+            return new PresetDetectionResult(defaultPreset, processWatch, false);
 
         }
     }

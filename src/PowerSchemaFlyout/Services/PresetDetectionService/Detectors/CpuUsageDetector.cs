@@ -1,33 +1,25 @@
 ﻿using System.Diagnostics;
-using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
-using PowerSchemaFlyout.Services.Configuration;
 using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 using PowerSchemaFlyout.Utiles;
 
 namespace PowerSchemaFlyout.Services.Detectors
 {
-    public class CpuUsageDetector : IProcessTypeDetector
+    public class CpuUsageDetector : BaseProcessTypeDetector
     {
         private readonly PerformanceCounter _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-        private readonly IConfigurationService _configurationService;
-        public CpuUsageDetector()
-        {
-            _configurationService = Kernel.Get<IConfigurationService>();
-        }
 
-        public PresetDetectionResult DetectProcessType(ProcessWatch process, PresetDetectionResult currentResult)
+        public override PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
         {
             float cpuUsage = _cpuCounter.NextValue();
 
-            ProcessType returnType = IComparableUtiles.Max(currentResult.Preset.ProcessType, _configurationService.Get().CpuUsageDetector.Schema);
+            ProcessType returnType = IComparableUtiles.Max(currentResult.Preset.ProcessType, ConfigurationService.Get().CpuUsageDetector.Schema);
 
-            if (cpuUsage > _configurationService.Get().CpuUsageDetector.CpuUsageThreshold)
+            if (cpuUsage > ConfigurationService.Get().CpuUsageDetector.CpuUsageThreshold)
                 return new PresetDetectionResult(
-                    new Preset(process, process.ProcessName, returnType, returnType, int.MaxValue),
-                    false);
-            return new PresetDetectionResult(Preset.CreateUnknownPreset(), false);
+                    new Preset(processWatch, processWatch.ProcessName, returnType, returnType, int.MaxValue), processWatch, false);
+            return new PresetDetectionResult(Preset.CreateUnknownPreset(), processWatch, false);
         }
     }
 }

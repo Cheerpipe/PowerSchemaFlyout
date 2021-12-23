@@ -9,6 +9,7 @@ using PowerSchemaFlyout.Services;
 using PowerSchemaFlyout.Services.Configuration;
 using PowerSchemaFlyout.Services.Detectors;
 using PowerSchemaFlyout.Services.Enums;
+using Serilog;
 using Application = Avalonia.Application;
 
 namespace PowerSchemaFlyout
@@ -62,6 +63,8 @@ namespace PowerSchemaFlyout
             ICaffeineService caffeineService = Kernel.Get<ICaffeineService>();
             ISettingsService settingsService = Kernel.Get<ISettingsService>();
             IPowerManagementServices powerManagementServices = Kernel.Get<IPowerManagementServices>();
+            ILogger logger = Kernel.Get<ILogger>();
+
 
             caffeineService.Stop();
 
@@ -85,6 +88,7 @@ namespace PowerSchemaFlyout
 
             presetDetectionService.ProcessStateChanged += (_, e) =>
             {
+                logger.Verbose($"Setting power mode {e.ProcessDetectionResult.Preset.ProcessType} for {e.ProcessDetectionResult.ProcessWatch.ProcessName}");
                 switch (e.ProcessDetectionResult.Preset.ProcessType)
                 {
                     case ProcessType.DesktopLow:
@@ -116,15 +120,16 @@ namespace PowerSchemaFlyout
             presetDetectionService.RegisterDetector(new PresetFileDetector());  //Will set value if result is higher than current result //This is a definitive detector. This means if there is a match here detectors below won't be used.
             presetDetectionService.RegisterDetector(new GpuLoadDetector());     //Will set a game value and will act as a definitive if match.
             presetDetectionService.RegisterDetector(new DefaultDetector());     //Will set value if current result is unknown.
-            
+
             if (settingsService.GetSetting("AutomaticMode", true) || settingsService.GetSetting("EnableAutomaticModeOnStartup", true))
             {
                 presetDetectionService.Start();
             }
 
             // Start the main loop
+            logger.Information("Power Schema Flyout started");
             app.Run(RunCancellationToken);
-
+            logger.Information("Power Schema Flyout stopped");
             // Stop things
             trayIconService.Hide();
             powerSchemaWatcher.StopPlanWatcher();

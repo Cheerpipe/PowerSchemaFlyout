@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Text;
 using PowerSchemaFlyout.Services.Enums;
 using PowerSchemaFlyout.Services.Native;
 
@@ -45,7 +47,7 @@ namespace PowerSchemaFlyout.Models.Configuration
         {
             return new Preset(processWatch, processWatch.Title, ProcessType.Game, ProcessType.Game, 0);
         }
-
+      
         public Preset Clone()
         {
             return new Preset()
