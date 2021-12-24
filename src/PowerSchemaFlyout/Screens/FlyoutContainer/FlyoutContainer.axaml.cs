@@ -10,6 +10,7 @@ using Avalonia.Media;
 using Avalonia.Media.Transformation;
 using Avalonia.ReactiveUI;
 using PowerSchemaFlyout.IoC;
+using PowerSchemaFlyout.Platform.Windows;
 using PowerSchemaFlyout.Services;
 using ReactiveUI;
 
@@ -228,6 +229,11 @@ namespace PowerSchemaFlyout.Screens.FlyoutContainer
             get => GetValue(VerticalPositionProperty);
             set
             {
+                if (PlatformImpl != null)
+                {
+                    NativeMethods.SetWindowRgn(PlatformImpl.Handle.Handle, NativeMethods.CreateRectRgn(0, 0, (int)Width, _screenHeight - value), true);
+                }
+
                 SetValue(VerticalPositionProperty, value);
                 Position = new PixelPoint(Position.X, value);
             }
