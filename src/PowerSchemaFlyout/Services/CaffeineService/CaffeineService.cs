@@ -1,18 +1,31 @@
-﻿namespace PowerSchemaFlyout.Services
+﻿using PowerSchemaFlyout.Platform.Windows;
+
+namespace PowerSchemaFlyout.Services
 {
     public class CaffeineService : ICaffeineService
     {
         private bool _state;
         public void Start()
         {
-            NativeMethods.PreventSleep();
+            PreventSleep();
             _state = true;
         }
 
         public void Stop()
         {
-            NativeMethods.PreventSleep();
+            PreventSleep();
             _state = false;
+        }
+
+        private static void PreventSleep()
+        {
+            NativeMethods.SetThreadExecutionState(ExecutionState.EsContinuous | ExecutionState.EsSystemRequired);
+        }
+
+        private static void AllowSleep()
+        {
+
+            NativeMethods.SetThreadExecutionState(ExecutionState.EsContinuous);
         }
 
         public bool IsActive()
