@@ -3,6 +3,7 @@ using System.Threading;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.ReactiveUI;
+using FluentAvalonia.Styling;
 using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Screens.FlyoutContainer;
 using PowerSchemaFlyout.Services;
@@ -77,6 +78,11 @@ namespace PowerSchemaFlyout
             };
 
             UpdateIcon();
+
+            var thm = AvaloniaLocator.Current.GetService<FluentAvaloniaTheme>();
+
+            //TODO: Theme service
+            thm.RequestedTheme = "Dark";
 
             trayIconService.Show();
 

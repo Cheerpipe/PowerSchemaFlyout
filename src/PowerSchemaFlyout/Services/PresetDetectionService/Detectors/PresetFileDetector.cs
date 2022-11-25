@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Avalonia;
-using PowerSchemaFlyout.IoC;
 using PowerSchemaFlyout.Models.Configuration;
-using PowerSchemaFlyout.Services.Configuration;
 using PowerSchemaFlyout.Services.Native;
 using PowerSchemaFlyout.Utiles;
 
@@ -14,11 +12,12 @@ namespace PowerSchemaFlyout.Services.Detectors
     public class PresetFileDetector : BaseProcessTypeDetector, IDisposable
     {
         private List<Preset> _presets = new List<Preset>();
-        private readonly PresetDetectionResult _defaultResult = new PresetDetectionResult(Preset.CreateUnknownPreset(), ProcessWatch.Empty, false);
+        private readonly PresetDetectionResult _defaultResult;
         private readonly FileSystemWatcher _presetsFileWatcher = new FileSystemWatcher();
 
         public PresetFileDetector() : base()
         {
+            _defaultResult = new PresetDetectionResult(Preset.CreateUnknownPreset(), ProcessWatch.Empty, false, this);
             PopulatePresets();
 
             _presetsFileWatcher.Path = Constants.PresetsFileDirectory;
@@ -45,7 +44,7 @@ namespace PowerSchemaFlyout.Services.Detectors
         public override PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
         {
             if (processWatch.Process == null)
-                return new PresetDetectionResult(Preset.CreateUnknownPreset(), processWatch, false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(), processWatch, false, this);
 
             lock (this)
             {
@@ -70,7 +69,7 @@ namespace PowerSchemaFlyout.Services.Detectors
                 {
                     Preset resultPresetWithTitle = thePresetWithTitle.Clone();
                     resultPresetWithTitle.ProcessType = IComparableUtiles.Max(resultPresetWithTitle.ProcessType, currentResult.Preset.ProcessType);
-                    return new PresetDetectionResult(resultPresetWithTitle, processWatch, true);
+                    return new PresetDetectionResult(resultPresetWithTitle, processWatch, true, this);
                 }
 
                 //Second, Check if process match any preset without title
@@ -78,7 +77,7 @@ namespace PowerSchemaFlyout.Services.Detectors
                 {
                     Preset resultPresetWithoutTitle = thePresetWithoutTitle.Clone();
                     resultPresetWithoutTitle.ProcessType = IComparableUtiles.Max(resultPresetWithoutTitle.ProcessType, currentResult.Preset.ProcessType);
-                    return new PresetDetectionResult(resultPresetWithoutTitle, processWatch, true);
+                    return new PresetDetectionResult(resultPresetWithoutTitle, processWatch, true, this);
                 }
 
                 // If detection don't dive any results, result default result

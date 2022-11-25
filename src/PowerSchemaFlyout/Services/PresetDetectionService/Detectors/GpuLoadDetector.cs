@@ -19,7 +19,7 @@ namespace PowerSchemaFlyout.Services.Detectors
         public override PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
         {
             if (processWatch.Process == null)
-                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false, this);
 
             try
             {
@@ -31,7 +31,7 @@ namespace PowerSchemaFlyout.Services.Detectors
 
                 if ((objects.Count == 0))
                 {
-                    return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
+                    return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false, this);
                 }
 
                 foreach (var o in objects)
@@ -39,15 +39,15 @@ namespace PowerSchemaFlyout.Services.Detectors
                     var queryObj = (ManagementObject)o;
                     if ((UInt64)queryObj["UtilizationPercentage"] > (UInt64)ConfigurationService.Get().GpuUsageDetector.Schema)
                     {
-                        return new PresetDetectionResult(new Preset(processWatch, processWatch.Title, ProcessType.Game, ProcessType.Game, 0), processWatch, true);
+                        return new PresetDetectionResult(new Preset(processWatch, processWatch.Title, ProcessType.Game, ProcessType.Game, 0), processWatch, true, this);
                     }
                 }
                 searcher.Dispose();
-                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false, this);
             }
             catch (ManagementException)
             {
-                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false);
+                return new PresetDetectionResult(Preset.CreateUnknownPreset(processWatch), processWatch, false, this);
             }
         }
     }

@@ -12,9 +12,9 @@ namespace PowerSchemaFlyout.Services.Detectors
         public override PresetDetectionResult DetectProcessType(ProcessWatch processWatch, PresetDetectionResult currentResult)
         {
             if (currentResult.Preset.ProcessType != ProcessType.Unknown) return currentResult;
-            Preset defaultPreset = new Preset(processWatch, processWatch.Title, ConfigurationService.Get().DefaultProfile.InactiveBackProcessType, ConfigurationService.Get().DefaultProfile.InactiveBackProcessType,
+            Preset defaultPreset = new Preset(processWatch, processWatch.Title, ConfigurationService.Get().DefaultProfile.ProcessType, ConfigurationService.Get().DefaultProfile.InactiveBackProcessType,
                 ConfigurationService.Get().DefaultProfile.InactiveTimeout);
-            return new PresetDetectionResult(defaultPreset, processWatch, false);
+            return new PresetDetectionResult(defaultPreset, processWatch, false, this);
 
         }
     }

@@ -8,18 +8,20 @@ namespace PowerSchemaFlyout.Services
         public Preset Preset { get; set; }
         public ProcessWatch ProcessWatch { get; set; }
         public bool ScanIsDefinitive { get; set; }
+        public string DetectorName { get; set; }
 
-        public PresetDetectionResult(Preset preset, ProcessWatch processWatch, bool scanIsDefinitive)
+        public PresetDetectionResult(Preset preset, ProcessWatch processWatch, bool scanIsDefinitive, object detector)
         {
             Preset = preset;
             ScanIsDefinitive = scanIsDefinitive;
             ProcessWatch = processWatch;
+            DetectorName = detector.GetType().FullName;
         }
 
         public PresetDetectionResult Reset()
         {
             Preset = Preset.CreateUnknownPreset();
-            ProcessWatch=ProcessWatch.Empty;
+            ProcessWatch = ProcessWatch.Empty;
             ScanIsDefinitive = false;
             return this;
         }

@@ -6,7 +6,6 @@ using Ninject;
 using PowerSchemaFlyout.Platform.Windows;
 using PowerSchemaFlyout.Screens.FlyoutContainer;
 using PowerSchemaFlyout.ViewModels;
-using WindowStyles = FluentAvalonia.Interop.WindowStyles;
 
 namespace PowerSchemaFlyout.Services
 {

@@ -9,7 +9,8 @@
     "Schema": "DesktopMedium"
   },
   "GpuUsageDetector": {
-    "GpuUsageThreshold": 25
+    "GpuUsageThreshold": 30,
+    "GpuUsageProfile": "DesktopHigh"
   },
   "Presets": [
     {
@@ -328,7 +329,7 @@
       "Name": "CPU-Z",
       "ProcessName": "cpuz",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "0"
     },
@@ -336,7 +337,7 @@
       "Name": "Prime95",
       "ProcessName": "prime95",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "0"
     },
@@ -344,7 +345,7 @@
       "Name": "Realbench",
       "ProcessName": "RealBench",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "0"
     },
@@ -352,7 +353,7 @@
       "Name": "Cinebench",
       "ProcessName": "Cinebench",
       "Title": null,
-      "ProcessType": "DesktopHigh",
+      "ProcessType": "Game",
       "InactiveBackProcessType": "DesktopLow",
       "InactiveTimeout": "0"
     },
@@ -365,7 +366,7 @@
       "InactiveTimeout": "3000"
     },
     {
-      "Name": "Yuzu Emu",
+      "Name": "Yuzu Emu EA",
       "ProcessName": "yuzu",
       "Title": null,
       "ProcessType": "Game",

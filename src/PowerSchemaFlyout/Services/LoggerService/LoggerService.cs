@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Ninject.Activation;
 using Serilog;
 
@@ -10,7 +11,7 @@ namespace PowerSchemaFlyout.Services.LoggerService
         {
             //TODO: Fine tune settings
             ILogger _logger = new LoggerConfiguration()
-                .WriteTo.File(Path.Combine("logs", "log-.log"), rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10, fileSizeLimitBytes: 8192)
+                .WriteTo.File(Path.Combine("logs", "log-.log"), rollingInterval: RollingInterval.Day, retainedFileCountLimit: 10, fileSizeLimitBytes: 819200, flushToDiskInterval: TimeSpan.FromSeconds(5))
                 .MinimumLevel.Verbose()
                 .CreateLogger();
             return _logger;
